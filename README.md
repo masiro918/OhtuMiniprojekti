@@ -1,0 +1,2 @@
+# OhtuMiniprojekti
+Ohjelmistotuotanto -kurssin miniprojekti.
