@@ -14,10 +14,18 @@ application {
     mainClass = 'project.main.Main'
 }
 
+project.ext {
+    junitVersion = '4.13'
+    cucumberVersion = '6.8.1'
+}
+
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation 'com.sparkjava:spark-core:2.9.3'
+    testCompile 'junit:junit:' + junitVersion
+    testCompile 'io.cucumber:cucumber-java:' + cucumberVersion
+    testCompile 'io.cucumber:cucumber-junit:' + cucumberVersion
 }
 
 test {
