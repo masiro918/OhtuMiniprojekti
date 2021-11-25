@@ -1,5 +1,5 @@
 
-package project.authentication;
+package project.logic;
 
 public class Authentication {
     
