@@ -34,7 +34,7 @@ public class SQLBlogDAO {
         ArrayList<String> tags = blogRecommendation.getTags();
         
         // kesken!!
-        String sql = "INSERT INTO BlogRexommendation (Id, Headline, Type, Url, course_id, tag_id) values (9999, 'empty', 'empty' 'empty', 9999, 9999);";
+        String sql = "INSERT INTO BlogRecommendation (Id, Headline, Type, Url, course_id, tag_id) values (9999, 'empty', 'empty' 'empty', 9999, 9999);";
 
         statement.executeUpdate(sql);
         this.closeConnection();
