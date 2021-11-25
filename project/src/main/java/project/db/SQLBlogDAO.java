@@ -47,7 +47,7 @@ public class SQLBlogDAO {
      * @throws Exception
      */
     public void remove(BlogRecommendation blogRecommendation) throws Exception {
-
+        boolean checking = blogRecommendationExists(blogRecommendation.url);
     }
 
     /**
@@ -69,5 +69,13 @@ public class SQLBlogDAO {
         
         this.connection = null;
         this.statement = null;
+    }
+
+    /**
+     * Tarkistaa, että blogimerkintä löytyy tietokannasta.
+     * @param url blogin-url osoite (tämä riittää, koska url-osoitteet ovat uniikkeja)
+     */
+    private void blogRecommendationExists(String url) {
+        
     }
 }
