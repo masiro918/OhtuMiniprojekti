@@ -26,6 +26,15 @@ public class SQLBlogDAO {
     public void add(BlogRecommendation blogRecommendation) throws Exception {
         this.createConnection();
 
+        String headline = blogRecommendation.getHeadline();
+        String type = blogRecommendation.getType();
+        String print = blogRecommendation.getPrint();
+        String url = blogRecommendation.getURL();
+
+        ArrayList<String> courses = blogRecommendation.getRelatedCourses();
+        ArrayList<String> tags = blogRecommendation.getTags();
+        
+        //TODO: sql-lause
         String sql = "";
 
         statement.executeUpdate(sql);
