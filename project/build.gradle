@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'org.example'
@@ -9,9 +10,14 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = 'project.main.Main'
+}
+
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation 'com.sparkjava:spark-core:2.9.3'
 }
 
 test {
