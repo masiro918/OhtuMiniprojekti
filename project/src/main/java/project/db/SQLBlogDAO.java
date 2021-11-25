@@ -28,14 +28,13 @@ public class SQLBlogDAO {
 
         String headline = blogRecommendation.getHeadline();
         String type = blogRecommendation.getType();
-        String print = blogRecommendation.getPrint();
         String url = blogRecommendation.getURL();
 
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
         
-        //TODO: sql-lause
-        String sql = "";
+        // kesken!!
+        String sql = "INSERT INTO BlogRexommendation (Id, Headline, Type, Url, course_id, tag_id) values (9999, 'empty', 'empty' 'empty', 9999, 9999);";
 
         statement.executeUpdate(sql);
         this.closeConnection();
@@ -47,7 +46,7 @@ public class SQLBlogDAO {
      * @throws Exception
      */
     public void remove(BlogRecommendation blogRecommendation) throws Exception {
-        boolean checking = blogRecommendationExists(blogRecommendation.url);
+        boolean checking = blogRecommendationExists(blogRecommendation.getURL());
     }
 
     /**
@@ -76,6 +75,6 @@ public class SQLBlogDAO {
      * @param url blogin-url osoite (tämä riittää, koska url-osoitteet ovat uniikkeja)
      */
     private void blogRecommendationExists(String url) {
-        
+
     }
 }
