@@ -4,6 +4,7 @@ package project.DAO;
 import java.util.ArrayList;
 
 public interface ReadingRecommendationDAO {
+    public void setWriter(String writer);
     public String getHeadline();
     public void addCourse(String course);
     public ArrayList getRelatedCourses();

@@ -6,10 +6,11 @@ import project.DAO.ReadingRecommendationDAO;
 
 
 public class ReadingRecommendation implements ReadingRecommendationDAO {
-    private String headline;
-    private String type;
-    private ArrayList<String> relatedCourses;
-    private ArrayList<String> tags;
+    public String headline;
+    public String type;
+    public String writer;
+    public ArrayList<String> relatedCourses;
+    public ArrayList<String> tags;
     
     public ReadingRecommendation(String o, String t) {
         this.headline = o;
@@ -18,31 +19,50 @@ public class ReadingRecommendation implements ReadingRecommendationDAO {
         this.tags = new ArrayList<>();
     }
     
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
+    
+    @Override
     public String getHeadline() {
         return this.headline;
     }
     
+    @Override
     public void addCourse(String course) {
         this.relatedCourses.add(course);
     }
     
+    @Override
     public ArrayList getRelatedCourses() {
         return this.relatedCourses;
     }
     
+    @Override
     public String getType() {
         return this.type;
     }
     
+    @Override
     public void addTags(String tag) {
         this.tags.add(tag);
     }
     
+    @Override
     public ArrayList getTags() {
         return this.tags;
     }
     
+    @Override
     public String getPrint() {
-        return "Otsikko: " + this.headline +"\nTyyppi: " + this.type + "\nRelated courses: " + this.relatedCourses;
+        String print = "Otsikko: " + this.headline +
+                "\nTyyppi: " + this.type;
+        if (!this.tags.isEmpty()) {
+            print += "\nTagit: " + this.tags;
+        }
+        if (!this.relatedCourses.isEmpty()) {
+            print += "\nRelated courses: " + this.relatedCourses;
+        }
+        return print;
     }
 }
