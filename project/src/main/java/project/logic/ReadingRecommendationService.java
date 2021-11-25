@@ -9,7 +9,7 @@ import project.domain.BlogRecommendation;
 public class ReadingRecommendationService {
     private ArrayList<ReadingRecommendationDAO> recommendations;
     
-    public ReadingRecommendationService(ArrayList recommendations) {
+    public ReadingRecommendationService(ArrayList<ReadingRecommendationDAO> recommendations) {
         this.recommendations = recommendations;
     }
     
@@ -44,7 +44,7 @@ public class ReadingRecommendationService {
         return null;
     }
     
-    public ArrayList getAllRecommendations() {
+    public ArrayList<ReadingRecommendationDAO> getAllRecommendations() {
         return this.recommendations;
     }
 }
