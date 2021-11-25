@@ -1,3 +1,7 @@
 .idea
 .gradle
 .project
+project/build
+project/bin
+.classpath
+.project
