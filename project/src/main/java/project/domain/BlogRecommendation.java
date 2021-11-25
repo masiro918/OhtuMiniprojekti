@@ -24,6 +24,9 @@ public class BlogRecommendation extends ReadingRecommendation {
         if (!this.relatedCourses.isEmpty()) {
             print += "\nRelated courses: " + this.relatedCourses;
         }
+        if (this.comment != null) {
+            print += "\nKommentti: " + this.comment;
+        }
         return print;
     }
     
