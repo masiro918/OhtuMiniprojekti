@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'checkstyle'
 }
 
 group 'org.example'
@@ -30,4 +31,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+checkstyle {
+    ignoreFailures = true
+    checkstyleMain.source = "src"
+    // checkstyleMain.exclude('some/path/*.java')
 }
