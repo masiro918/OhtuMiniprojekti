@@ -25,9 +25,13 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation 'com.sparkjava:spark-core:2.9.3'
+<<<<<<< HEAD
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'io.cucumber:cucumber-java:' + cucumberVersion
     testImplementation 'io.cucumber:cucumber-junit:' + cucumberVersion
+=======
+    implementation 'com.sparkjava:spark-template-thymeleaf:2.7.1'
+>>>>>>> sparkConfig
 }
 
 test {
