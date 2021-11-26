@@ -78,4 +78,13 @@ public class SQLBlogDAO {
     private void blogRecommendationExists(String url) {
 
     }
+
+    /**
+     * Tarkistaa, onko ReadingRecommendation-taulu olemassa.
+     * @return true, jos on olemassa, muulloin false
+     * @throws Exception
+     */
+    private boolean tableExists() throws Exception {
+        return false;
+    }
 }
