@@ -1,4 +1,4 @@
-
+// Lukuvinkki-olioiden käyttölogiikasta vastaava luokka
 package project.logic;
 
 import java.util.ArrayList;
@@ -35,6 +35,14 @@ public class ReadingRecommendationService {
         
     }
     
+    public void removeRecommendation(String headline) {
+        int index = findIndex(headline);
+        if (index >= 0) {
+            this.recommendations.remove(index);
+        }
+    }
+    
+    // korvattavissa alla olevalla metodilla findIndex?
     public ReadingRecommendationDAO findRecommendation(String headline) {
         for (ReadingRecommendationDAO r : this.recommendations) {
             if (r.getHeadline().equals(headline)) {
@@ -42,6 +50,18 @@ public class ReadingRecommendationService {
             }
         }
         return null;
+    }
+    
+    // palauttaa halutun lukuvinkki-olion indeksin listassa, negatiivinen jos oliota ei löydy
+    public int findIndex(String headline) {
+        int index = -1;
+        for (int i = 0; i < this.recommendations.size(); i++) {
+            if (this.recommendations.get(i).getHeadline().equals(headline)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
     
     public ArrayList<ReadingRecommendationDAO> getAllRecommendations() {
