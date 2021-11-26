@@ -3,10 +3,11 @@ package project.DAO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import project.domain.Comment;
 
 public interface ReadingRecommendationDAO {
-    public void setWriter(String writer);
     public void setComment(String comment);
+    public Comment getComment();
     public String getHeadline();
     public void addCourse(String course);
     public ArrayList<String> getRelatedCourses();

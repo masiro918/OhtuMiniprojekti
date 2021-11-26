@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public class BookRecommendation extends ReadingRecommendation {
     private String ISBN;
+    private String writer;
     
     public BookRecommendation(String headline, String type, String writer) {
         super(headline,type);
@@ -17,6 +18,14 @@ public class BookRecommendation extends ReadingRecommendation {
     
     public String getISBN() {
         return this.ISBN;
+    }
+    
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
+    
+    public String getWriter() {
+        return this.writer;
     }
     
     @Override
@@ -43,7 +52,7 @@ public class BookRecommendation extends ReadingRecommendation {
             print += "\nRelated courses: " + this.relatedCourses;
         }
         if (this.comment != null) {
-            print += "\nKommentti: " + this.comment;
+            print += "\nKommentti: " + this.comment.getComment();
         }
         return print;
     }

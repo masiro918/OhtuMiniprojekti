@@ -9,8 +9,7 @@ import project.DAO.ReadingRecommendationDAO;
 public class ReadingRecommendation implements ReadingRecommendationDAO {
     public String headline;
     public String type;
-    public String writer;
-    public Comment comment;
+    public Comment comment; // pitääkö kommentin olla erillinen olio, ei String?
     public ArrayList<String> relatedCourses;
     public ArrayList<String> tags;
     
@@ -22,13 +21,13 @@ public class ReadingRecommendation implements ReadingRecommendationDAO {
     }
     
     @Override
-    public void setWriter(String writer) {
-        this.writer = writer;
+    public void setComment(String comment) {
+        this.comment = new Comment(comment);
     }
     
     @Override
-    public void setComment(String comment) {
-        this.comment = new Comment(comment);
+    public Comment getComment() {
+        return this.comment;
     }
     
     @Override
@@ -61,13 +60,11 @@ public class ReadingRecommendation implements ReadingRecommendationDAO {
         return this.tags;
     }
     
+    @Override
     public HashMap<String, String> getInfo() {
         HashMap<String, String> info = new HashMap<>();
         info.put("headline",this.headline);
         info.put("type", this.type);
-        if (this.writer != null) {
-            info.put("writer", this.writer);
-        }
         if (this.comment != null) {
             info.put("comment", this.comment.getComment());
         }
@@ -85,7 +82,7 @@ public class ReadingRecommendation implements ReadingRecommendationDAO {
             print += "\nRelated courses: " + this.relatedCourses;
         }
         if (this.comment != null) {
-            print += "\nKommentti: " + this.comment;
+            print += "\nKommentti: " + this.comment.getComment();
         }
         return print;
     }
