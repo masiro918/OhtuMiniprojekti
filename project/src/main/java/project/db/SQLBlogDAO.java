@@ -2,6 +2,7 @@ package project.db;
 
 import project.domain.BlogRecommendation;
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * Luokka käsittelee BlogRecommendation-olioden tallennuksen
@@ -34,7 +35,7 @@ public class SQLBlogDAO {
         ArrayList<String> tags = blogRecommendation.getTags();
         
         // kesken!!
-        String sql = "INSERT INTO BlogRecommendation (Id, Headline, Type, Url, course_id, tag_id) values (9999, 'empty', 'empty' 'empty', 9999, 9999);";
+        String sql = "INSERT INTO ReadingRecommendation (id, headline, type, url, comment_id, course_id, tag_id) values (9999, 'empty', 'empty' 'empty', 9999, 9999, 9999);";
 
         statement.executeUpdate(sql);
         this.closeConnection();
