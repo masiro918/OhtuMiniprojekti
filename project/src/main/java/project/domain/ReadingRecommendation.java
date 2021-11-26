@@ -2,6 +2,7 @@
 package project.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import project.DAO.ReadingRecommendationDAO;
 
 
@@ -58,6 +59,19 @@ public class ReadingRecommendation implements ReadingRecommendationDAO {
     @Override
     public ArrayList getTags() {
         return this.tags;
+    }
+    
+    public HashMap<String, String> getInfo() {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("headline",this.headline);
+        info.put("type", this.type);
+        if (this.writer != null) {
+            info.put("writer", this.writer);
+        }
+        if (this.comment != null) {
+            info.put("comment", this.comment.getComment());
+        }
+        return info;
     }
     
     @Override

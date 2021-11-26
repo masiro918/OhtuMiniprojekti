@@ -1,6 +1,8 @@
 
 package project.domain;
 
+import java.util.HashMap;
+
 public class BlogRecommendation extends ReadingRecommendation {
     private String url;
     
@@ -14,10 +16,19 @@ public class BlogRecommendation extends ReadingRecommendation {
     }
     
     @Override
+    public HashMap<String, String> getInfo() {
+        HashMap<String, String> info = super.getInfo();
+        info.put("url", this.url);
+        return info;
+    }
+    
+    @Override
     public String getPrint() {
-        String print = "Otsikko: " + this.headline +
-                "\nUrl: " + this.url +
-                "\nTyyppi: " + this.type;
+        String print = "Otsikko: " + this.headline;
+        if (this.writer != null) {
+            print += "\n Kirjoittaja: " + this.writer;
+        }
+        print += "\nUrl: " + this.url + "\nTyyppi: " + this.type;
         if (!this.tags.isEmpty()) {
             print += "\nTagit: " + this.tags;
         }
