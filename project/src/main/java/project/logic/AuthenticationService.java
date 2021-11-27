@@ -19,6 +19,16 @@ public class AuthenticationService {
         return null;
     }
     
+    //testeja varten, voi poistaa kunhan olemassa sopiva rajapinta tietokannalle
+    public void setUsers(ArrayList<UserDAO> users) {
+        this.users = users;
+    }
+    
+    //testeja varten, voi poistaa kunhan tietokannan rajapinta kaytossa
+    public ArrayList<UserDAO> getUsers() {
+        return this.users;
+    }
+    
     public void saveUser(UserDAO u) {
         //TODO: kommunikointi databasen kanssa
         //tallentaa kayttajan tietokantaan
@@ -43,16 +53,25 @@ public class AuthenticationService {
         return false;
     }
     
+    public UserDAO findUser(String username) {
+        for (UserDAO u : this.users) {
+            if (u.getUsername().equals(username)) {
+                return u;
+            }
+        }
+        return null;
+    }
+    
     public boolean creationStatus(String username, String password) {
         if (invalidUsername(username)) { //epakelpo kayttajanimi, TODO: virheviesti
             return false;
         }
         
-        if (this.users.contains(username)) { //kayttajanimi otettu, TODO: virheviesti
+        if (invalidPassword(password)) { //epakelpo salasana, TODO: virheviesti
             return false;
         }
         
-        if (invalidPassword(password)) { //epakelpo salasana, TODO: virheviesti
+        if (findUser(username) != null) { //kayttajanimi otettu, TODO: virheviesti
             return false;
         }
         
@@ -64,9 +83,11 @@ public class AuthenticationService {
         if (!username.matches("[a-zA-Z]+")) {
             return true;
         }
+        
         if (username.length() < 3) {
             return true;
         }
+        
         return false;
     }
     
