@@ -29,6 +29,11 @@ public class ReadingRecommendationService {
         //TODO: kommunikointi databasen kanssa
         //tallenna lukuvinkit kayttajan osoittamaan tauluun
     }
+    
+    //testeja varten, korjataan sitten kun database on maaritelty
+    public void setRecommendations(ArrayList<ReadingRecommendationDAO> recommendations) {
+        this.recommendations = recommendations;
+    }
 
     public void addRecommendation(ReadingRecommendationDAO recommendation) {
         this.recommendations.add(recommendation);

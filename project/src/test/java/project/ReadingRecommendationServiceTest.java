@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import project.domain.User;
 
 public class ReadingRecommendationServiceTest {
     
@@ -19,6 +20,7 @@ public class ReadingRecommendationServiceTest {
     ArrayList<ReadingRecommendationDAO> recommendations;
     HashMap<String, String> blogInfo;
     HashMap<String, String> bookInfo;
+    User user;
 
     @Before
     public void setUp() {
@@ -27,6 +29,8 @@ public class ReadingRecommendationServiceTest {
 
         recommendation = new ReadingRecommendation(headline, type);
         recommendations = new ArrayList<>();
+        
+        user = new User("pekka", "salasana1");
 
         //Basic info for blog
         blogInfo = new HashMap<>();
@@ -41,7 +45,8 @@ public class ReadingRecommendationServiceTest {
         bookInfo.put("writer", "Kirjoittaja");
 
 
-        service = new ReadingRecommendationService(recommendations);
+        service = new ReadingRecommendationService(user);
+        service.setRecommendations(recommendations);
     }
 
     @Test
