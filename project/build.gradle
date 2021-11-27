@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id 'application'
+    id 'checkstyle'
+    id 'jacoco'
 }
 
 group 'org.example'
@@ -23,11 +25,18 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation 'com.sparkjava:spark-core:2.9.3'
+    implementation 'com.sparkjava:spark-template-thymeleaf:2.7.1'
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'io.cucumber:cucumber-java:' + cucumberVersion
     testImplementation 'io.cucumber:cucumber-junit:' + cucumberVersion
 }
 
 test {
-    useJUnitPlatform()
+
+}
+
+checkstyle {
+    ignoreFailures = true
+    checkstyleMain.source = "src"
+    // checkstyleMain.exclude('some/path/*.java')
 }
