@@ -1,7 +1,9 @@
 
 package project.domain;
 
-public class User {
+import project.DAO.UserDAO;
+
+public class User implements UserDAO {
     private String username;
     private String password;
     

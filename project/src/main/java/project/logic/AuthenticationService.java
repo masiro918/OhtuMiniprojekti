@@ -1,56 +1,84 @@
 
 package project.logic;
 
+import java.util.ArrayList;
 import project.DAO.UserDAO;
 import project.domain.User;
 
 public class AuthenticationService {
-    private UserDAO users;
+    private ArrayList<UserDAO> users;
+    // oliomuuttujana SQLUserdatabaseDAO tms. josta haetaan kayttajat
     
-    public AuthenticationService(UserDAO u) {
-        this.users = u;
+    public AuthenticationService() {
+        this.users = loadUsers();
     }
     
-    public boolean login(String username, String password) {
-        for (User u : this.users.getUsers()) {
+    public ArrayList<UserDAO> loadUsers() {
+        //TODO: kommunikointi databasen kanssa
+        //lataa kayttajat listaan ja palauta lista
+        return null;
+    }
+    
+    public void saveUser(UserDAO u) {
+        //TODO: kommunikointi databasen kanssa
+        //tallentaa kayttajan tietokantaan
+    }
+    
+    public UserDAO login(String username, String password) {
+        for (UserDAO u : this.users) {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
-                return true;
+                return u;
             }
+        }
+        return null;
+    }
+    
+    public boolean createUser(String username, String password) {
+        if (creationStatus(username, password)) {
+            User user = new User(username, password);
+            saveUser(user);
+            this.users.add(user);
+            return true;
         }
         return false;
     }
     
-    public boolean createUser(String username, String password) {
-        if (invalidUsername(username)) { //epäkelpo käyttäjänimi, TODO: virheviesti
+    public boolean creationStatus(String username, String password) {
+        if (invalidUsername(username)) { //epakelpo kayttajanimi, TODO: virheviesti
             return false;
         }
         
-        if (invalidPassword(password)) { //epäkelpo salasana, TODO: virheviesti
+        if (this.users.contains(username)) { //kayttajanimi otettu, TODO: virheviesti
             return false;
         }
         
-        if (this.users.getUsers().contains(username)) { //käyttäjänimi otettu, TODO: virheviesti
+        if (invalidPassword(password)) { //epakelpo salasana, TODO: virheviesti
             return false;
         }
-        User user = new User(username, password);
-        this.users.getUsers().add(user);
+        
         return true;
     }
     
+    //palauttaa true, jos huono kayttajanimi
     public boolean invalidUsername(String username) {
         if (!username.matches("[a-zA-Z]+")) {
-            return false;
+            return true;
         }
         if (username.length() < 3) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
     
+    //palauttaa true, jos huono salasana
     public boolean invalidPassword(String password) {
-        if (password.length() < 8) {
-            return false;
+        if (password.matches("[a-zA-Z]+")) {
+            return true;
         }
-        return true;
+        
+        if (password.length() < 8) {
+            return true;
+        }
+        return false;
     }
 }

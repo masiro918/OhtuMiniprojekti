@@ -9,7 +9,7 @@ import project.DAO.ReadingRecommendationDAO;
 public class ReadingRecommendation implements ReadingRecommendationDAO {
     public String headline;
     public String type;
-    public Comment comment; // pitääkö kommentin olla erillinen olio, ei String?
+    public Comment comment; // pitaako kommentin olla erillinen olio, ei String?
     public ArrayList<String> relatedCourses;
     public ArrayList<String> tags;
     
