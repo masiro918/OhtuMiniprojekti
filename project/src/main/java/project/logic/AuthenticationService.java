@@ -3,35 +3,33 @@ package project.logic;
 
 import java.util.ArrayList;
 import project.DAO.UserDAO;
+import project.db.SQLUserDAO;
 import project.domain.User;
 
 public class AuthenticationService {
     private ArrayList<UserDAO> users;
-    // oliomuuttujana SQLUserdatabaseDAO tms. josta haetaan kayttajat
+    private SQLUserDAO userDb = new SQLUserDAO();
     
     public AuthenticationService() {
         this.users = loadUsers();
     }
     
     public ArrayList<UserDAO> loadUsers() {
-        //TODO: kommunikointi databasen kanssa
-        //lataa kayttajat listaan ja palauta lista
-        return null;
+        return userDb.fetchAllUsers();
     }
-    
+
     //testeja varten, voi poistaa kunhan olemassa sopiva rajapinta tietokannalle
     public void setUsers(ArrayList<UserDAO> users) {
         this.users = users;
     }
-    
+
     //testeja varten, voi poistaa kunhan tietokannan rajapinta kaytossa
     public ArrayList<UserDAO> getUsers() {
         return this.users;
     }
     
     public void saveUser(UserDAO u) {
-        //TODO: kommunikointi databasen kanssa
-        //tallentaa kayttajan tietokantaan
+        userDb.add(u);
     }
     
     public UserDAO login(String username, String password) {
