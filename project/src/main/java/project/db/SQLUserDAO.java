@@ -52,7 +52,7 @@ public class SQLUserDAO {
      * Hae käyttäjän tiedot tietokannasta.
      * @throws Exception
      */
-    private boolean login(User user) throws Exception {
+    public boolean login(User user) throws Exception {
         this.createConnection();
 
         PreparedStatement pstmt = connection.prepareStatement("SELECT username, password FROM Users WHERE username=? AND password=?");
@@ -65,7 +65,7 @@ public class SQLUserDAO {
         return rs.next();
     }
 
-    private boolean userExists(User user) throws Exception {
+    public boolean userExists(User user) throws Exception {
         this.createConnection();
 
         PreparedStatement pstmt = connection.prepareStatement("SELECT COUNT(username) FROM Users WHERE username=?");
@@ -99,7 +99,7 @@ public class SQLUserDAO {
      * @return true, jos on olemassa, muulloin false
      * @throws Exception
      */
-    private boolean tableExists() throws Exception {
+    public boolean tableExists() throws Exception {
         return false;
     }
 }
