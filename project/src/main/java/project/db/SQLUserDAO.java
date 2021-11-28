@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * ja poiston tietokannassa.
  */
 public class SQLUserDAO {
+    private String dbUrl = "jdbc:sqlite:database.db";
     private Connection connection = null;
 
     public SQLUserDAO() {
@@ -19,19 +20,31 @@ public class SQLUserDAO {
     }
 
     /**
+     * Muodostaa yhteyden muuhun, kuin default-tietokantaan.
+     * @param dbUrl tietokannan osoite muotoa jdbc:sqlite:database.db
+     */
+    public SQLUserDAO(String dbUrl) {
+        this.dbUrl = dbUrl;
+    }
+
+    /**
      * Tallentaa käyttäjän tietokantaan.
      * @param user lisättävä olio
      *  @throws Exception
      */
-    public void add(UserDAO user) throws Exception {
-        this.createConnection();
+    public void add(UserDAO user) {
+        try {
+            this.createConnection();
 
-        PreparedStatement pstmt = connection.prepareStatement("INSERT INTO Users (username, password) VALUES (? ?)");
-        pstmt.setString(1, user.getUsername());
-        pstmt.setString(2, user.getPassword());
+            PreparedStatement pstmt = connection.prepareStatement("INSERT INTO Users (username, password) VALUES (? ?)");
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getPassword());
 
-        pstmt.executeUpdate();
-        this.closeConnection();
+            pstmt.executeUpdate();
+            this.closeConnection();
+        } catch (Exception e) {
+
+        }
     }
 
     /**
@@ -66,19 +79,22 @@ public class SQLUserDAO {
         return rs.next();
     }
 
-    public ArrayList<UserDAO> fetchAllUsers() throws Exception {
-        this.createConnection();
-
-        PreparedStatement pstmt = connection.prepareStatement("SELECT username, password FROM Users");
-
-        ResultSet rs = pstmt.executeQuery();
-        this.closeConnection();
-
+    public ArrayList<UserDAO> fetchAllUsers() {
         ArrayList<UserDAO> users = new ArrayList<>();
-        while (rs.next()) {
-            users.add(new User(rs.getString(1), rs.getString(2)));
-        }
+        try {
+            this.createConnection();
 
+            PreparedStatement pstmt = connection.prepareStatement("SELECT username, password FROM Users");
+
+            ResultSet rs = pstmt.executeQuery();
+            this.closeConnection();
+
+            while (rs.next()) {
+                users.add(new User(rs.getString(1), rs.getString(2)));
+            }
+        } catch (Exception e) {
+
+        }
         return users;
     }
 
@@ -87,7 +103,7 @@ public class SQLUserDAO {
      * @throws Exception
      */
     private void createConnection() throws Exception {
-        this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+        this.connection = DriverManager.getConnection(dbUrl);
     }
 
     /**
