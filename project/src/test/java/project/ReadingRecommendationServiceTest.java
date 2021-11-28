@@ -4,6 +4,7 @@ import project.logic.ReadingRecommendationService;
 import project.DAO.ReadingRecommendationDAO;
 import project.domain.ReadingRecommendation;
 import project.domain.BlogRecommendation;
+import project.domain.BookRecommendation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,6 +50,7 @@ public class ReadingRecommendationServiceTest {
         service.setRecommendations(recommendations);
     }
 
+    // CreateRecommendations tests
     @Test
     public void createRecommendationWorksForBlogWithoutWriter() {
         service.createRecommendation(blogInfo);
@@ -68,6 +70,27 @@ public class ReadingRecommendationServiceTest {
     }
 
     @Test
+    public void createRecommendationWorksForBookWithoutIsbn() {
+        service.createRecommendation(bookInfo);
+        ReadingRecommendationDAO addedBook = recommendations.get(0);
+        BookRecommendation book = new BookRecommendation("Book headline", "book", "Kirjoittaja");
+
+        assertEquals(book.getPrint(), addedBook.getPrint());
+    }
+
+    @Test
+    public void createRecommendationWorksForBookWithIsbn() {
+        bookInfo.put("ISBN", "ISBN");
+        service.createRecommendation(bookInfo);
+        ReadingRecommendationDAO addedBook = recommendations.get(0);
+        BookRecommendation book = new BookRecommendation("Book headline", "book", "Kirjoittaja");
+        book.setISBN("ISBN");
+
+        assertEquals(book.getPrint(), addedBook.getPrint());
+    }
+
+    //FindIndex tests
+    @Test
     public void findIndexReturnsIndexIfRecommendationIsThere() {
         recommendations.add(new ReadingRecommendation("Bonus", "book"));
         recommendations.add(recommendation);
@@ -85,5 +108,68 @@ public class ReadingRecommendationServiceTest {
         assertEquals(-1, index);
     }
 
+    //RemoveRecommendations tests
+    @Test
+    public void removeRecommendationReducesSizeIfHeadlineIsFound() {
+        recommendations.add(new ReadingRecommendation("Bonus", "book"));
+        recommendations.add(recommendation);
+        service.removeRecommendation("Bonus");
+
+        assertEquals(1, recommendations.size());
+    }
+
+    @Test
+    public void removeRecommendationDoesNothingIfNotFound() {
+        recommendations.add(new ReadingRecommendation("Bonus", "book"));
+        recommendations.add(recommendation);
+        service.removeRecommendation("Not here");
+
+        assertEquals(2, recommendations.size());
+    }
+
+    @Test
+    public void removeRecommendationRemovesCorrectRecommendation() {
+        recommendations.add(new ReadingRecommendation("Bonus", "book"));
+        recommendations.add(recommendation);
+        service.removeRecommendation("Bonus");
+
+        String headline = recommendations.get(0).getHeadline();
+
+        assertEquals("Basic", headline);
+    }
+
+    //FindRecommendation tests
+    @Test
+    public void findRecommendationReturnsCorrectRecommendation() {
+        recommendations.add(recommendation);
+        ReadingRecommendationDAO recom = service.findRecommendation("Basic");
+
+        assertEquals("Basic", recom.getHeadline());
+    }
+
+    @Test
+    public void findRecommendationReturnsNullIfNotFound() {
+        recommendations.add(recommendation);
+        ReadingRecommendationDAO recom = service.findRecommendation("Not there");
+
+        assertNull(recom);
+    }
+
+    //ShowRecommendation tests
+    @Test
+    public void showRecommendationPrintsCorrect() {
+        recommendations.add(recommendation);
+        String recomPrint = service.showRecommendation(recommendation);
+
+        assertEquals(recommendation.getPrint(), recomPrint);
+    }
+
+    //ShowAllRecommendations tests
+    @Test
+    public void showAllRecommendationsReturnsCorrectIfNoRecommendations() {
+        String ans = service.showAllRecommendations();
+        
+        assertEquals("No recommendations", ans);
+    }
 
 }
