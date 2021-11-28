@@ -46,7 +46,7 @@ public class TableCreator {
         //TODO: check exists
         this.createConnection();
         //(id, headline, type, url, comment_id, course_id, tag_id)
-        String sql = "CREATE TABLE ReadingRecommendation (id INTEGER, headline STRING, type STRING,"
+        String sql = "CREATE TABLE ReadingRecommendations (id INTEGER, headline STRING, type STRING,"
                 + "url STRING, isbn STRING, writer STRING, comment_id INTEGER, course_id INTEGER,"
                 + " tag_id INTEGER);";
         this.statement.execute(sql);
