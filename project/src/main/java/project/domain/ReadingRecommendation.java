@@ -41,7 +41,7 @@ public class ReadingRecommendation implements ReadingRecommendationDAO {
     }
     
     @Override
-    public ArrayList getRelatedCourses() {
+    public ArrayList<String> getRelatedCourses() {
         return this.relatedCourses;
     }
     
@@ -56,7 +56,7 @@ public class ReadingRecommendation implements ReadingRecommendationDAO {
     }
     
     @Override
-    public ArrayList getTags() {
+    public ArrayList<String> getTags() {
         return this.tags;
     }
     
