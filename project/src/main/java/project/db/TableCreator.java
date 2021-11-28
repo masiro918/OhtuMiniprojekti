@@ -5,10 +5,7 @@
  */
 package project.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Tarkistaa, onko tarvittavia tietokantatauluja olemassa.
@@ -20,6 +17,20 @@ public class TableCreator {
     
     public TableCreator() {
         
+    }
+
+    /**
+     * Luo Users-taulu, jos sitä ei ole jo olemassa.
+     * @return
+     * @throws Exception
+     */
+    public boolean createUser() throws Exception {
+        // TODO: check exists
+        this.createConnection();
+        PreparedStatement pstmt = connection.prepareStatement("CREATE TABLE Users (id INTEGER, username STRING, password STRING");
+        pstmt.executeQuery();
+        this.closeConnection();
+        return true;
     }
 
     /**
