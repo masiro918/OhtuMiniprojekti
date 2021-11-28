@@ -47,7 +47,7 @@ public class SQLBlogDAO {
      * @throws Exception
      */
     public void remove(BlogRecommendation blogRecommendation) throws Exception {
-        boolean checking = blogRecommendationExists(blogRecommendation.getURL());
+        //boolean checking = blogRecommendationExists(blogRecommendation.getURL());
     }
 
     /**
