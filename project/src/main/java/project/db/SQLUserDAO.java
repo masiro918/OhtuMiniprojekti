@@ -1,6 +1,7 @@
 
 package project.db;
 
+import project.DAO.UserDAO;
 import project.domain.User;
 
 import java.sql.*;
@@ -22,7 +23,7 @@ public class SQLUserDAO {
      * @param user lisättävä olio
      *  @throws Exception
      */
-    public void add(User user) throws Exception {
+    public void add(UserDAO user) throws Exception {
         this.createConnection();
 
         PreparedStatement pstmt = connection.prepareStatement("INSERT INTO Users (username, password) VALUES (? ?)");
@@ -38,7 +39,7 @@ public class SQLUserDAO {
      * @param user poistettava olio
      * @throws Exception
      */
-    public void remove(User user) throws Exception {
+    public void remove(UserDAO user) throws Exception {
         this.createConnection();
 
         PreparedStatement pstmt = connection.prepareStatement("DELETE FROM Users WHERE username=?");
@@ -52,7 +53,7 @@ public class SQLUserDAO {
      * Hae käyttäjän tiedot tietokannasta.
      * @throws Exception
      */
-    public boolean login(User user) throws Exception {
+    public boolean login(UserDAO user) throws Exception {
         this.createConnection();
 
         PreparedStatement pstmt = connection.prepareStatement("SELECT username, password FROM Users WHERE username=? AND password=?");
@@ -65,16 +66,20 @@ public class SQLUserDAO {
         return rs.next();
     }
 
-    public boolean userExists(User user) throws Exception {
+    public ArrayList<UserDAO> fetchAllUsers() throws Exception {
         this.createConnection();
 
-        PreparedStatement pstmt = connection.prepareStatement("SELECT COUNT(username) FROM Users WHERE username=?");
-        pstmt.setString(1, user.getUsername());
+        PreparedStatement pstmt = connection.prepareStatement("SELECT username, password FROM Users");
 
         ResultSet rs = pstmt.executeQuery();
         this.closeConnection();
 
-        return rs.next();
+        ArrayList<UserDAO> users = new ArrayList<>();
+        while (rs.next()) {
+            users.add(new User(rs.getString(1), rs.getString(2)));
+        }
+
+        return users;
     }
 
     /**
