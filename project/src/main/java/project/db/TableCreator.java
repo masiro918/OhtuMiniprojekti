@@ -38,20 +38,49 @@ public class TableCreator {
     }
 
     /**
-     * Luo uuden ReadingRecommendation-taulun, jos sitä ei ole jo oleamassa.
-     * @return true jos taulua ei ole olemassa, false, jos taulu on jo olemassa
+     * Luo uuden ReadingRecommendations-taulun, jos sitä ei ole jo oleamassa.
      * @throws Exception
      */
-    public boolean createReadingRecommendation() throws Exception {
-        //TODO: check exists
+    public void createReadingRecommendations() throws Exception {
         this.createConnection();
-        //(id, headline, type, url, comment_id, course_id, tag_id)
-        String sql = "CREATE TABLE ReadingRecommendations (id INTEGER, headline STRING, type STRING,"
+        String sql = "CREATE TABLE IF NOT EXISTS ReadingRecommendations (id INTEGER, headline STRING, type STRING,"
                 + "url STRING, isbn STRING, writer STRING, comment_id INTEGER, course_id INTEGER,"
                 + " tag_id INTEGER);";
         this.statement.execute(sql);
         this.closeConnection();
-        return true;
+    }
+
+    /**
+     * Luo uuden ReadingRecommendation-taulun, jos sitä ei ole jo oleamassa.
+     * @throws Exception
+     */
+    public void createRelatedCourses() throws Exception {
+        this.createConnection();
+        String sql = "CREATE TABLE IF NOT EXISTS RelatedCourses (id INTEGER, course STRING, readingRecommendation_id INTEGER);";
+        this.statement.execute(sql);
+        this.closeConnection();
+    }
+
+    /**
+     * Luo uuden Tags-taulun, jos sitä ei ole jo olemassa.
+     * @throws Exception
+     */
+    public void createTags() throws Exception {
+        this.createConnection();
+        String sql = "CREATE TABLE IF NOT EXISTS Tags (id INTEGER, tag STRING, readingRecommendation_id INTEGER);";
+        this.statement.execute(sql);
+        this.closeConnection();
+    }
+
+    /**
+     * Luo uuden Comments-taulun, jos sitä ei ole jo olemassa.
+     * @throws Exception
+     */
+    public void createCommments() throws Exception {
+        this.createConnection();
+        String sql = "CREATE TABLE IF NOT EXISTS Comments (id INTEGER, comment STRING, readingRecommendation_id INTEGER);";
+        this.statement.execute(sql);
+        this.closeConnection();
     }
     
     private void createConnection() throws SQLException {

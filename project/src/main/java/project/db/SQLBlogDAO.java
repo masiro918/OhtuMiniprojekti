@@ -34,6 +34,7 @@ public class SQLBlogDAO {
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
         
+        
         // kesken!!
         String sql = "INSERT INTO ReadingRecommendations (id, headline, type, url, isbn, writer, comment_id, course_id, tag_id) values (9999, 'empty', 'empty', 'empty', 'empty', 'empty', 9999, 9999, 9999);";
 
