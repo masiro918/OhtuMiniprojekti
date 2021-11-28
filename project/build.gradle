@@ -16,6 +16,12 @@ application {
     mainClass = 'project.main.Main'
 }
 
+compileJava.options.encoding = "UTF-8"
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
 project.ext {
     junitVersion = '4.13'
     cucumberVersion = '6.8.1'
