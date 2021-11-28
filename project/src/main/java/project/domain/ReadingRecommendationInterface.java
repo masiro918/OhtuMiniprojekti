@@ -1,11 +1,11 @@
 
-package project.DAO;
+package project.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import project.domain.Comment;
 
-public interface ReadingRecommendationDAO {
+public interface ReadingRecommendationInterface {
     public void setComment(String comment);
     public Comment getComment();
     public String getHeadline();

@@ -2,38 +2,38 @@
 package project.logic;
 
 import java.util.ArrayList;
-import project.DAO.UserDAO;
+import project.domain.UserInterface;
 import project.db.SQLUserDAO;
 import project.domain.User;
 
 public class AuthenticationService {
-    private ArrayList<UserDAO> users;
+    private ArrayList<UserInterface> users;
     private SQLUserDAO userDb = new SQLUserDAO();
     
     public AuthenticationService() {
         this.users = loadUsers();
     }
     
-    public ArrayList<UserDAO> loadUsers() {
+    public ArrayList<UserInterface> loadUsers() {
         return userDb.fetchAllUsers();
     }
 
     //testeja varten, voi poistaa kunhan olemassa sopiva rajapinta tietokannalle
-    public void setUsers(ArrayList<UserDAO> users) {
+    public void setUsers(ArrayList<UserInterface> users) {
         this.users = users;
     }
 
     //testeja varten, voi poistaa kunhan tietokannan rajapinta kaytossa
-    public ArrayList<UserDAO> getUsers() {
+    public ArrayList<UserInterface> getUsers() {
         return this.users;
     }
     
-    public void saveUser(UserDAO u) {
+    public void saveUser(UserInterface u) {
         userDb.add(u);
     }
     
-    public UserDAO login(String username, String password) {
-        for (UserDAO u : this.users) {
+    public UserInterface login(String username, String password) {
+        for (UserInterface u : this.users) {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
                 return u;
             }
@@ -51,8 +51,8 @@ public class AuthenticationService {
         return false;
     }
     
-    public UserDAO findUser(String username) {
-        for (UserDAO u : this.users) {
+    public UserInterface findUser(String username) {
+        for (UserInterface u : this.users) {
             if (u.getUsername().equals(username)) {
                 return u;
             }

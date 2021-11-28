@@ -3,10 +3,9 @@ package project.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import project.DAO.ReadingRecommendationDAO;
 
 
-public class ReadingRecommendation implements ReadingRecommendationDAO {
+public class ReadingRecommendation implements ReadingRecommendationInterface {
     public String headline;
     public String type;
     public Comment comment; // pitaako kommentin olla erillinen olio, ei String?

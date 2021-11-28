@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import project.DAO.UserDAO;
+import project.domain.UserInterface;
 import project.domain.User;
 import project.logic.AuthenticationService;
 
@@ -15,7 +15,7 @@ public class AuthenticationServiceTest {
     @Before
     public void setUp() {
         service = new AuthenticationService();
-        service.setUsers(new ArrayList<UserDAO>());
+        service.setUsers(new ArrayList<UserInterface>());
     }
     
     @Test

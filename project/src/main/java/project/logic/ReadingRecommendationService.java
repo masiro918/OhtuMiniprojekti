@@ -3,23 +3,23 @@ package project.logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import project.DAO.ReadingRecommendationDAO;
-import project.DAO.UserDAO;
+import project.domain.UserInterface;
 import project.domain.BlogRecommendation;
 import project.domain.BookRecommendation;
+import project.domain.ReadingRecommendationInterface;
 
 public class ReadingRecommendationService {
 
-    private ArrayList<ReadingRecommendationDAO> recommendations;
-    private UserDAO user;
+    private ArrayList<ReadingRecommendationInterface> recommendations;
+    private UserInterface user;
     //oliomuuttujana SQLdatabaseDAO, josta haetaan lukuvinkit kayttajan mukaan
 
-    public ReadingRecommendationService(UserDAO user) {
+    public ReadingRecommendationService(UserInterface user) {
         this.user = user;
         this.recommendations = loadRecommendations();
     }
     
-    public ArrayList<ReadingRecommendationDAO> loadRecommendations() {
+    public ArrayList<ReadingRecommendationInterface> loadRecommendations() {
         //TODO: kommunikointi databasen kanssa
         //hae kayttajan kaikki lukuvinkit ja palauta listana
         return null;
@@ -31,11 +31,11 @@ public class ReadingRecommendationService {
     }
     
     //testeja varten, korjataan sitten kun database on maaritelty
-    public void setRecommendations(ArrayList<ReadingRecommendationDAO> recommendations) {
+    public void setRecommendations(ArrayList<ReadingRecommendationInterface> recommendations) {
         this.recommendations = recommendations;
     }
 
-    public void addRecommendation(ReadingRecommendationDAO recommendation) {
+    public void addRecommendation(ReadingRecommendationInterface recommendation) {
         this.recommendations.add(recommendation);
         saveRecommendations();
     }
@@ -69,7 +69,7 @@ public class ReadingRecommendationService {
         saveRecommendations();
     }
     
-    public String showRecommendation(ReadingRecommendationDAO recommendation) {
+    public String showRecommendation(ReadingRecommendationInterface recommendation) {
         return recommendation.getPrint();
     }
     
@@ -78,15 +78,15 @@ public class ReadingRecommendationService {
             return "No recommendations";
         }
         String all = "";
-        for (ReadingRecommendationDAO r : this.recommendations) {
+        for (ReadingRecommendationInterface r : this.recommendations) {
             all += r.getPrint() + "\n\n";
         }
         return all;
     }
 
     // korvattavissa alla olevalla metodilla findIndex?
-    public ReadingRecommendationDAO findRecommendation(String headline) {
-        for (ReadingRecommendationDAO r : this.recommendations) {
+    public ReadingRecommendationInterface findRecommendation(String headline) {
+        for (ReadingRecommendationInterface r : this.recommendations) {
             if (r.getHeadline().equals(headline)) {
                 return r;
             }
@@ -106,7 +106,7 @@ public class ReadingRecommendationService {
         return index;
     }
 
-    public ArrayList<ReadingRecommendationDAO> getAllRecommendations() {
+    public ArrayList<ReadingRecommendationInterface> getAllRecommendations() {
         return this.recommendations;
     }
 }

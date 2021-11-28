@@ -1,7 +1,6 @@
 package project;
 
 import project.logic.ReadingRecommendationService;
-import project.DAO.ReadingRecommendationDAO;
 import project.domain.ReadingRecommendation;
 import project.domain.BlogRecommendation;
 import project.domain.BookRecommendation;
@@ -13,12 +12,13 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import project.domain.User;
+import project.domain.ReadingRecommendationInterface;
 
 public class ReadingRecommendationServiceTest {
     
     ReadingRecommendationService service;
-    ReadingRecommendationDAO recommendation;
-    ArrayList<ReadingRecommendationDAO> recommendations;
+    ReadingRecommendationInterface recommendation;
+    ArrayList<ReadingRecommendationInterface> recommendations;
     HashMap<String, String> blogInfo;
     HashMap<String, String> bookInfo;
     User user;
@@ -54,7 +54,7 @@ public class ReadingRecommendationServiceTest {
     @Test
     public void createRecommendationWorksForBlogWithoutWriter() {
         service.createRecommendation(blogInfo);
-        ReadingRecommendationDAO addedBlog = recommendations.get(0);
+        ReadingRecommendationInterface addedBlog = recommendations.get(0);
         BlogRecommendation blog = new BlogRecommendation("Blog headline", "blog", "Blog's url");  
         assertEquals(blog.getPrint(), addedBlog.getPrint());
     }
@@ -63,7 +63,7 @@ public class ReadingRecommendationServiceTest {
     public void createRecommendationWorksForBlogWithWriter() {
         blogInfo.put("writer", "Kirjailija");
         service.createRecommendation(blogInfo);
-        ReadingRecommendationDAO addedBlog = recommendations.get(0);
+        ReadingRecommendationInterface addedBlog = recommendations.get(0);
         BlogRecommendation blog = new BlogRecommendation("Blog headline", "blog", "Blog's url");
         blog.setWriter("Kirjailija");  
         assertEquals(blog.getPrint(), addedBlog.getPrint());
@@ -72,7 +72,7 @@ public class ReadingRecommendationServiceTest {
     @Test
     public void createRecommendationWorksForBookWithoutIsbn() {
         service.createRecommendation(bookInfo);
-        ReadingRecommendationDAO addedBook = recommendations.get(0);
+        ReadingRecommendationInterface addedBook = recommendations.get(0);
         BookRecommendation book = new BookRecommendation("Book headline", "book", "Kirjoittaja");
 
         assertEquals(book.getPrint(), addedBook.getPrint());
@@ -82,7 +82,7 @@ public class ReadingRecommendationServiceTest {
     public void createRecommendationWorksForBookWithIsbn() {
         bookInfo.put("ISBN", "ISBN");
         service.createRecommendation(bookInfo);
-        ReadingRecommendationDAO addedBook = recommendations.get(0);
+        ReadingRecommendationInterface addedBook = recommendations.get(0);
         BookRecommendation book = new BookRecommendation("Book headline", "book", "Kirjoittaja");
         book.setISBN("ISBN");
 
@@ -142,7 +142,7 @@ public class ReadingRecommendationServiceTest {
     @Test
     public void findRecommendationReturnsCorrectRecommendation() {
         recommendations.add(recommendation);
-        ReadingRecommendationDAO recom = service.findRecommendation("Basic");
+        ReadingRecommendationInterface recom = service.findRecommendation("Basic");
 
         assertEquals("Basic", recom.getHeadline());
     }
@@ -150,7 +150,7 @@ public class ReadingRecommendationServiceTest {
     @Test
     public void findRecommendationReturnsNullIfNotFound() {
         recommendations.add(recommendation);
-        ReadingRecommendationDAO recom = service.findRecommendation("Not there");
+        ReadingRecommendationInterface recom = service.findRecommendation("Not there");
 
         assertNull(recom);
     }

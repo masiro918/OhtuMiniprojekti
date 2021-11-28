@@ -1,9 +1,7 @@
 
 package project.domain;
 
-import project.DAO.UserDAO;
-
-public class User implements UserDAO {
+public class User implements UserInterface{
     private String username;
     private String password;
     
@@ -12,10 +10,12 @@ public class User implements UserDAO {
         this.password = p;
     }
     
+    @Override
     public String getUsername() {
         return this.username;
     }
     
+    @Override
     public String getPassword() {
         return this.password;
     }
