@@ -25,7 +25,11 @@ public class TableCreator {
      * @throws Exception
      */
     public boolean createUser() throws Exception {
-        // TODO: check exists
+        SQLUserDAO userDb = new SQLUserDAO();
+        if (userDb.tableExists()) {
+            return true;
+        }
+
         this.createConnection();
         PreparedStatement pstmt = connection.prepareStatement("CREATE TABLE Users (id INTEGER, username STRING, password STRING");
         pstmt.executeQuery();
