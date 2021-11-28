@@ -65,6 +65,18 @@ public class SQLUserDAO {
         return rs.next();
     }
 
+    private boolean userExists(User user) throws Exception {
+        this.createConnection();
+
+        PreparedStatement pstmt = connection.prepareStatement("SELECT COUNT(username) FROM Users WHERE username=?");
+        pstmt.setString(1, user.getUsername());
+
+        ResultSet rs = pstmt.executeQuery();
+        this.closeConnection();
+
+        return rs.next();
+    }
+
     /**
      * Luo uuden tietokanta-yhetyden.
      * @throws Exception
