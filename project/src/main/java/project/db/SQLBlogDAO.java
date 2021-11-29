@@ -103,6 +103,7 @@ public class SQLBlogDAO {
         ps.close();
         this.closeConnection();
 
+        // TODO: palauta luodun kommenitin id
         return -1;
     }
 }
