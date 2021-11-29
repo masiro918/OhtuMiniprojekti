@@ -3,7 +3,12 @@ import java.util.HashMap;
 import project.db.SQLUserDAO;
 import static spark.Spark.*;
 
+import project.logic.ReadingRecommendationService;
 import project.logic.AuthenticationService;
+
+import project.db.SQLReadingDAO;
+import project.domain.User;
+
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import spark.ModelAndView;
 
@@ -12,11 +17,14 @@ public class Main {
         AuthenticationService auth = new AuthenticationService(new SQLUserDAO());
 
         port(5000);
-        get("/", (req,res) -> {
+        get("/", (req,res) -> new ModelAndView(new HashMap<>(), "index"), new ThymeleafTemplateEngine());
+        get("/list", (req,res) -> {
+            ReadingRecommendationService recommend = new ReadingRecommendationService(new User("change", "this"),
+                                                     new SQLReadingDAO()); //TEMP!
             HashMap map = new HashMap<>();
-            return new ModelAndView(map, "index");
+            map.put("recommendations", recommend.getAllRecommendations());
+            return new ModelAndView(map, "list");
         }, new ThymeleafTemplateEngine());
-        get("/list", (req,res) -> "Recommendation list");
 
         get("/login", (req,res) -> new ModelAndView(new HashMap<>(), "login"), new ThymeleafTemplateEngine());
         post("/login", (req, res) -> {
