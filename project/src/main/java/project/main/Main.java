@@ -12,8 +12,12 @@ public class Main {
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
         get("/list", (req,res) -> "Recommendation list");
-        get("/login", (req,res) -> "Login page");
-        get("/signup", (req,res) -> "Signup page");
+        get("/login", (req,res) -> {
+            return new ModelAndView(new HashMap<>(), "login");
+        }, new ThymeleafTemplateEngine());
+        get("/signup", (req,res) -> {
+            return new ModelAndView(new HashMap<>(), "signup");
+        }, new ThymeleafTemplateEngine());
         get("/post", (req,res) -> "Post a new recommendation");
     }
 }

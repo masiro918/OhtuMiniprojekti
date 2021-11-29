@@ -118,14 +118,4 @@ public class SQLUserDAO implements UserDAO {
         this.connection.close();
         this.connection = null;
     }
-
-    /**
-     * Tarkistaa, onko ReadingRecommendation-taulu olemassa.
-     * @return true, jos on olemassa, muulloin false
-     * @throws Exception
-     */
-    @Override
-    public boolean tableExists() throws Exception {
-        return false;
-    }
 }

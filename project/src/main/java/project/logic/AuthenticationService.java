@@ -1,8 +1,6 @@
 package project.logic;
 
-import java.util.ArrayList;
 import project.domain.UserInterface;
-//import project.db.SQLUserDAO;
 import project.db.UserDAO;
 import project.domain.User;
 
