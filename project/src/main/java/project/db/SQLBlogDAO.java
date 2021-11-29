@@ -1,6 +1,7 @@
 package project.db;
 
 import project.domain.BlogRecommendation;
+import project.domain.Comment;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -34,9 +35,10 @@ public class SQLBlogDAO {
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
         
+        Comment comment = blogRecommendation.get
         
         // kesken!!
-        String sql = "INSERT INTO ReadingRecommendations (id, headline, type, url, isbn, writer, comment_id, course_id, tag_id) values (9999, 'empty', 'empty', 'empty', 'empty', 'empty', 9999, 9999, 9999);";
+        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) values ('empty', 'empty', 'empty', 'empty', 'empty', 9999, 9999, 9999);";
 
 
         statement.executeUpdate(sql);
@@ -82,11 +84,25 @@ public class SQLBlogDAO {
     }
 
     /**
-     * Tarkistaa, onko ReadingRecommendation-taulu olemassa.
-     * @return true, jos on olemassa, muulloin false
+     * Lisää kommentin Comments-tauluun, ja palauttaa lisätyn kommentin id-tunnisteen.
+     * @param blogRecommendation
+     * @param commentStr
      * @throws Exception
+     * @return luodun kommentin id
      */
-    private boolean tableExists() throws Exception {
-        return false;
+    public int addComment(BlogRecommendation blogRecommendation, String commentStr) throws Exception {
+        Comment comment = new Comment(commentStr);
+
+        String content = comment.getContent();
+        
+        this.createConnection();
+        String sql = "INSERT INTO Comments (comment) values (?);";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, content);
+        ps.executeUpdate();
+        ps.close();
+        this.closeConnection();
+
+        return -1;
     }
 }
