@@ -26,6 +26,7 @@ public class SQLReadingDAO {
      *  @throws Exception
      */
     public void add(BlogRecommendation blogRecommendation, Comment comment) throws Exception {
+        addComment(comment.getCone)
         this.createConnection();
 
         String headline = blogRecommendation.getHeadline();
@@ -35,7 +36,7 @@ public class SQLReadingDAO {
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
         
-        //TODO: lisätään Comment-tauluun kommentti
+        
         
         // kesken!!
         String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) values ('empty', 'empty', 'empty', 'empty', 'empty', 9999, 9999, 9999);";
@@ -75,22 +76,15 @@ public class SQLReadingDAO {
         this.statement = null;
     }
 
-    /**
-     * Tarkistaa, että blogimerkintä löytyy tietokannasta.
-     * @param url blogin-url osoite (tämä riittää, koska url-osoitteet ovat uniikkeja)
-     */
-    private void blogRecommendationExists(String url) {
-
-    }
+    
 
     /**
      * Lisää kommentin Comments-tauluun, ja palauttaa lisätyn kommentin id-tunnisteen.
-     * @param blogRecommendation
      * @param commentStr
      * @throws Exception
      * @return luodun kommentin id
      */
-    public int addComment(BlogRecommendation blogRecommendation, String commentStr) throws Exception {
+    public int addComment(String commentStr) throws Exception {
         Comment comment = new Comment(commentStr);
 
         String content = comment.getContent();
@@ -103,7 +97,20 @@ public class SQLReadingDAO {
         ps.close();
         this.closeConnection();
 
-        // TODO: palauta luodun kommenitin id
-        return -1;
+        // haetaan juuri lisätyn kommentin id
+
+        this.createConnection();
+        String sql = "SELECT * FROM ReadingRecommendations;";
+        ResultSet rs = this.statement.executeQuery(sql);
+
+        int id = -1;
+
+        while (rs.next()) {
+            id = rs.getInt("id");
+        }
+
+        this.closeConnection();
+
+        return id;
     }
 }
