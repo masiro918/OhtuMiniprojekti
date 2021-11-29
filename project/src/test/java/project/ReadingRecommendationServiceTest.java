@@ -45,8 +45,9 @@ public class ReadingRecommendationServiceTest {
         bookInfo.put("type", "book");
         bookInfo.put("writer", "Kirjoittaja");
 
-
-        service = new ReadingRecommendationService(user);
+        FakeReadingRecommendationDAO fakeDb = new FakeReadingRecommendationDAO();
+        
+        service = new ReadingRecommendationService(user, fakeDb);
         service.setRecommendations(recommendations);
     }
 

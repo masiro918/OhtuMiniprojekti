@@ -31,10 +31,5 @@ public class FakeUserDAO implements UserDAO{
     public void remove(UserInterface user) throws Exception {
         this.fakeUsers.remove(user);
     }
-
-    @Override
-    public boolean tableExists() throws Exception {
-        return true;
-    }
     
 }
