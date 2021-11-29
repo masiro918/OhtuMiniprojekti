@@ -25,7 +25,7 @@ public class SQLBlogDAO {
      * @param blogRecommendation lisättävä olio
      *  @throws Exception
      */
-    public void add(BlogRecommendation blogRecommendation) throws Exception {
+    public void add(BlogRecommendation blogRecommendation, Comment comment) throws Exception {
         this.createConnection();
 
         String headline = blogRecommendation.getHeadline();
@@ -35,7 +35,7 @@ public class SQLBlogDAO {
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
         
-        Comment comment = blogRecommendation.get
+        //TODO: lisätään Comment-tauluun kommentti
         
         // kesken!!
         String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) values ('empty', 'empty', 'empty', 'empty', 'empty', 9999, 9999, 9999);";
