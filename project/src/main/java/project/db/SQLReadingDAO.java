@@ -26,7 +26,7 @@ public class SQLReadingDAO {
      *  @throws Exception
      */
     public void add(BlogRecommendation blogRecommendation, Comment comment) throws Exception {
-        int commentId = addComment(comment.getComment());
+        int commentId = addComment(comment.getContent());
         this.createConnection();
 
         String headline = blogRecommendation.getHeadline();
