@@ -26,7 +26,7 @@ public class SQLReadingDAO {
      *  @throws Exception
      */
     public void add(BlogRecommendation blogRecommendation, Comment comment) throws Exception {
-        addComment(comment.getCone)
+        int commentId = addComment(comment.getCone);
         this.createConnection();
 
         String headline = blogRecommendation.getHeadline();
@@ -39,7 +39,8 @@ public class SQLReadingDAO {
         
         
         // kesken!!
-        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) values ('empty', 'empty', 'empty', 'empty', 'empty', 9999, 9999, 9999);";
+        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) " +
+        "values ('empty', 'empty', 'empty', 'empty', 'empty', 9999, 9999, 9999);";
 
 
         statement.executeUpdate(sql);
@@ -100,8 +101,8 @@ public class SQLReadingDAO {
         // haetaan juuri lisätyn kommentin id
 
         this.createConnection();
-        String sql = "SELECT * FROM ReadingRecommendations;";
-        ResultSet rs = this.statement.executeQuery(sql);
+        String sqlComment = "SELECT * FROM ReadingRecommendations;";
+        ResultSet rs = this.statement.executeQuery(sqlComment);
 
         int id = -1;
 
