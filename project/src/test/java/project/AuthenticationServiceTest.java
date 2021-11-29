@@ -1,21 +1,20 @@
 
 package project;
 
-import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import project.domain.UserInterface;
 import project.domain.User;
 import project.logic.AuthenticationService;
 
 public class AuthenticationServiceTest {
     AuthenticationService service;
+    FakeUserDAO fakeUsers;
     
     @Before
     public void setUp() {
-        service = new AuthenticationService();
-        service.setUsers(new ArrayList<UserInterface>());
+        fakeUsers = new FakeUserDAO();
+        service = new AuthenticationService(fakeUsers);
     }
     
     @Test
@@ -71,19 +70,19 @@ public class AuthenticationServiceTest {
     @Test
     public void createUserAddsUserWithProperUsernameAndProperPasswordToUsers() {
         service.createUser("Maija", "s4lasana");
-        assertEquals("Maija", service.getUsers().get(0).getUsername());
+        assertEquals("Maija", service.findUser("Maija").getUsername());
     }
     
     @Test
     public void createUserDoesNotAddUserWithBadUsername() {
         service.createUser("M4ija", "s4lasana");
-        assertTrue(service.getUsers().isEmpty());
+        assertTrue(fakeUsers.fetchAllUsers().isEmpty());
     }
     
     @Test
     public void createUserDoesNotAddUserWithBadPassword() {
         service.createUser("Maija", "salasana");
-        assertTrue(service.getUsers().isEmpty());
+        assertTrue(fakeUsers.fetchAllUsers().isEmpty());
     }
     
     @Test
@@ -103,42 +102,42 @@ public class AuthenticationServiceTest {
     
     @Test
     public void creationStatusReturnsFalseIfUsernameIsTaken() {
-        service.getUsers().add(new User("Maija", "s4lasana"));
+        service.createUser("Maija", "s4lasana");
         assertFalse(service.creationStatus("Maija", "s4alasana"));
     }
     
     @Test
     public void findUserFindsAndReturnsCorrectUser() {
         User user = new User("Maija", "s4lasana");
-        service.getUsers().add(user);
+        fakeUsers.fetchAllUsers().add(user);
         assertTrue(user == service.findUser("Maija"));
     }
     
     @Test
     public void findUserReturnsNullIfUserIsNotFound() {
         User user = new User("Maija", "s4lasana");
-        service.getUsers().add(user);
+        fakeUsers.fetchAllUsers().add(user);
         assertTrue(null == service.findUser("Pekka"));
     }
     
     @Test
     public void loginReturnsUserThatSuccesfullyLogsIn() {
         User user = new User("Maija", "s4lasana");
-        service.getUsers().add(user);
+        fakeUsers.fetchAllUsers().add(user);
         assertTrue(user == service.login("Maija", "s4lasana"));
     }
     
     @Test
     public void loginReturnsNullForUserThatDoesNotExist() {
         User user = new User("Maija", "s4lasana");
-        service.getUsers().add(user);
+        fakeUsers.fetchAllUsers().add(user);
         assertTrue(null == service.login("Pekka", "s4lasana"));
     }
     
     @Test
     public void loginReturnsNullForWrongPassword() {
         User user = new User("Maija", "s4lasana");
-        service.getUsers().add(user);
+        fakeUsers.fetchAllUsers().add(user);
         assertTrue(null == service.login("Maija", "wrong"));
     }
 }

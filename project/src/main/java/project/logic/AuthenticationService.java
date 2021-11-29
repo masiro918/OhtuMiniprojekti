@@ -2,37 +2,19 @@ package project.logic;
 
 import java.util.ArrayList;
 import project.domain.UserInterface;
-import project.db.SQLUserDAO;
+//import project.db.SQLUserDAO;
+import project.db.UserDAO;
 import project.domain.User;
 
 /**
  * A class responsible for handling useraccount functions (create a user, log user in, save users).
  */
 public class AuthenticationService {
-    private ArrayList<UserInterface> users;
-    private SQLUserDAO userDb = new SQLUserDAO();
+    private UserDAO userDb;
     
-    public AuthenticationService() {
-        this.users = loadUsers();
-    }
-    
-    /**
-     * Loads the users from the database.
-     * 
-     * @return all users in an ArrayList
-     */
-    public ArrayList<UserInterface> loadUsers() {
-        return userDb.fetchAllUsers();
-    }
-
-    //testeja varten, voi poistaa kunhan olemassa sopiva rajapinta tietokannalle
-    public void setUsers(ArrayList<UserInterface> users) {
-        this.users = users;
-    }
-
-    //testeja varten, voi poistaa kunhan tietokannan rajapinta kaytossa
-    public ArrayList<UserInterface> getUsers() {
-        return this.users;
+    public AuthenticationService(UserDAO userdao) {
+//        this.users = loadUsers();
+        this.userDb = userdao;
     }
     
     /**
@@ -52,7 +34,7 @@ public class AuthenticationService {
      * @return user if login successful, null if not
      */
     public UserInterface login(String username, String password) {
-        for (UserInterface u : this.users) {
+        for (UserInterface u : this.userDb.fetchAllUsers()) {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
                 return u;
             }
@@ -71,7 +53,6 @@ public class AuthenticationService {
         if (creationStatus(username, password)) {
             User user = new User(username, password);
             saveUser(user);
-            this.users.add(user);
             return true;
         }
         return false;
@@ -84,7 +65,7 @@ public class AuthenticationService {
      * @return user if was found, null if not
      */
     public UserInterface findUser(String username) {
-        for (UserInterface u : this.users) {
+        for (UserInterface u : this.userDb.fetchAllUsers()) {
             if (u.getUsername().equals(username)) {
                 return u;
             }

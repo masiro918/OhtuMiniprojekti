@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Luokka käsittelee User-olioden tallennuksen
  * ja poiston tietokannassa.
  */
-public class SQLUserDAO {
+public class SQLUserDAO implements UserDAO {
     private String dbUrl = "jdbc:sqlite:database.db";
     private Connection connection = null;
 
@@ -32,6 +32,7 @@ public class SQLUserDAO {
      * @param user lisättävä olio
      *  @throws Exception
      */
+    @Override
     public void add(UserInterface user) {
         try {
             this.createConnection();
@@ -52,6 +53,7 @@ public class SQLUserDAO {
      * @param user poistettava olio
      * @throws Exception
      */
+    @Override
     public void remove(UserInterface user) throws Exception {
         this.createConnection();
 
@@ -66,6 +68,7 @@ public class SQLUserDAO {
      * Hae käyttäjän tiedot tietokannasta.
      * @throws Exception
      */
+    @Override
     public boolean login(UserInterface user) throws Exception {
         this.createConnection();
 
@@ -79,6 +82,7 @@ public class SQLUserDAO {
         return rs.next();
     }
 
+    @Override
     public ArrayList<UserInterface> fetchAllUsers() {
         ArrayList<UserInterface> users = new ArrayList<>();
         try {
@@ -120,6 +124,7 @@ public class SQLUserDAO {
      * @return true, jos on olemassa, muulloin false
      * @throws Exception
      */
+    @Override
     public boolean tableExists() throws Exception {
         return false;
     }
