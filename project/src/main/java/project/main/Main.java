@@ -1,5 +1,6 @@
 package project.main;
 import java.util.HashMap;
+import project.db.SQLUserDAO;
 import static spark.Spark.*;
 
 import project.logic.AuthenticationService;
@@ -8,7 +9,7 @@ import spark.ModelAndView;
 
 public class Main {
     public static void main(String args[]){
-        AuthenticationService auth = new AuthenticationService();
+        AuthenticationService auth = new AuthenticationService(new SQLUserDAO());
 
         port(5000);
         get("/", (req,res) -> {

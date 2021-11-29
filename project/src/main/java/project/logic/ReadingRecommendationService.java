@@ -2,6 +2,7 @@ package project.logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import project.db.ReadingRecommendationDAO;
 import project.domain.UserInterface;
 import project.domain.BlogRecommendation;
 import project.domain.BookRecommendation;
@@ -15,10 +16,11 @@ public class ReadingRecommendationService {
 
     private ArrayList<ReadingRecommendationInterface> recommendations;
     private UserInterface user;
-    //oliomuuttujana SQLdatabaseDAO, josta haetaan lukuvinkit kayttajan mukaan
+    private ReadingRecommendationDAO recommendationDb;
 
-    public ReadingRecommendationService(UserInterface user) {
+    public ReadingRecommendationService(UserInterface user, ReadingRecommendationDAO recommendationDb) {
         this.user = user;
+        this.recommendationDb = recommendationDb;
         this.recommendations = loadRecommendations();
     }
 

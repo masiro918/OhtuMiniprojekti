@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Luokka käsittelee BlogRecommendation-olioden tallennuksen
  * ja poiston tietokannassa.
  */
-public class SQLReadingDAO {
+public class SQLReadingDAO implements NewInterface {
     private Connection connection = null;
     private Statement statement = null;
 
@@ -25,6 +25,7 @@ public class SQLReadingDAO {
      * @param blogRecommendation lisättävä olio
      *  @throws Exception
      */
+    @Override
     public void add(BlogRecommendation blogRecommendation, Comment comment) throws Exception {
         int commentId = addComment(comment.getContent());
         this.createConnection();
@@ -65,6 +66,7 @@ public class SQLReadingDAO {
      * @param blogRecommendation poistettava olio
      * @throws Exception
      */
+    @Override
     public void remove(BlogRecommendation blogRecommendation) throws Exception {
         //boolean checking = blogRecommendationExists(blogRecommendation.getURL());
     }
@@ -98,6 +100,7 @@ public class SQLReadingDAO {
      * @throws Exception
      * @return luodun kommentin id
      */
+    @Override
     public int addComment(String commentStr) throws Exception {
         Comment comment = new Comment(commentStr);
 
