@@ -32,6 +32,8 @@ public class SQLReadingDAO {
         String headline = blogRecommendation.getHeadline();
         String type = blogRecommendation.getType();
         String url = blogRecommendation.getURL();
+        String isbn = "empty";
+        String writer = "empty";
 
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
@@ -40,10 +42,21 @@ public class SQLReadingDAO {
         
         // kesken!!
         String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) " +
-        "values ('empty', 'empty', 'empty', 'empty', 'empty', 9999, 9999, 9999);";
+        "values (?, ?, ?, ?, ?, 9999, 9999, 9999);";
 
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, headline);
+        ps.setString(2, type);
+        ps.setString(3, url);
+        ps.setString(4, isbn);
+        ps.setString(5, writer);
+        ps.setString(6, commentId);
+        //TODO allaolevat
+        ps.setString(7, -1);
+        ps.setString(8, -1);
 
-        statement.executeUpdate(sql);
+        ps.executeUpdate();
+
         this.closeConnection();
     }
 
