@@ -1,4 +1,3 @@
-
 package project.logic;
 
 import java.util.ArrayList;
@@ -6,6 +5,9 @@ import project.domain.UserInterface;
 import project.db.SQLUserDAO;
 import project.domain.User;
 
+/**
+ * A class responsible for handling useraccount functions (create a user, log user in, save users).
+ */
 public class AuthenticationService {
     private ArrayList<UserInterface> users;
     private SQLUserDAO userDb = new SQLUserDAO();

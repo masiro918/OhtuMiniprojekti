@@ -36,7 +36,7 @@ public class BlogTest {
     public void getPrintReturnsCorrectIfBlogHasTags() {
         blog.addTags("Tägi1");
         blog.addTags("Tägi2");
-        String correct = "Otsikko: Test headline\nUrl: Url\nTyyppi: Blog\nTagit: [Tägi1, Tägi2]";
+        String correct = "Otsikko: Test headline\nUrl: Url\nTyyppi: Blog\nTagit: Tägi1, Tägi2";
 
         assertEquals(correct, blog.getPrint());
     }
@@ -46,7 +46,7 @@ public class BlogTest {
         blog.addCourse("Ohte");
         blog.addCourse("Ohtu");
         blog.addCourse("FullStack");
-        String correct = "Otsikko: Test headline\nUrl: Url\nTyyppi: Blog\nRelated courses: [Ohte, Ohtu, FullStack]";
+        String correct = "Otsikko: Test headline\nUrl: Url\nTyyppi: Blog\nRelated courses: Ohte, Ohtu, FullStack";
 
         assertEquals(correct, blog.getPrint());
     }
@@ -67,7 +67,7 @@ public class BlogTest {
         blog.addCourse("Ohtu");
         blog.setComment("comment");
 
-        String correct = "Otsikko: Test headline\nKirjoittaja: writer\nUrl: Url\nTyyppi: Blog\nTagit: [Tägi]\nRelated courses: [Ohte, Ohtu]\nKommentti: comment";
+        String correct = "Otsikko: Test headline\nKirjoittaja: writer\nUrl: Url\nTyyppi: Blog\nTagit: Tägi\nRelated courses: Ohte, Ohtu\nKommentti: comment";
 
         assertEquals(correct, blog.getPrint());
     }

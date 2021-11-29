@@ -1,24 +1,31 @@
-
 package project.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * A general class for defining a reading recommendation.
+ */
 public class ReadingRecommendation implements ReadingRecommendationInterface {
-    public String headline;
-    public String type;
-    public Comment comment; // pitaako kommentin olla erillinen olio, ei String?
-    public ArrayList<String> relatedCourses;
-    public ArrayList<String> tags;
+    private String headline;
+    private String type;
+    private Comment comment; // pitaako kommentin olla erillinen olio, ei String?
+    private ArrayList<String> relatedCourses;
+    private ArrayList<String> tags;
     
     public ReadingRecommendation(String o, String t) {
         this.headline = o;
         this.type = t;
+        this.comment = null;
         this.relatedCourses = new ArrayList<>();
         this.tags = new ArrayList<>();
     }
     
+    /**
+     * Add a comment for the reading recommendation.
+     * 
+     * @param comment comment that is to be added as string
+     */
     @Override
     public void setComment(String comment) {
         this.comment = new Comment(comment);
@@ -34,6 +41,11 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
         return this.headline;
     }
     
+    /**
+     * Add a course that is related to the reading recommendation.
+     * 
+     * @param course added course as string
+     */
     @Override
     public void addCourse(String course) {
         this.relatedCourses.add(course);
@@ -44,11 +56,27 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
         return this.relatedCourses;
     }
     
+    /**
+     * Returns a string representation of related courses.
+     * 
+     * @return printable string
+     */
+    @Override
+    public String printRelatedCourses() {
+        String print = "" + getRelatedCourses();
+        return print.substring(1, print.length() - 1);
+    }
+    
     @Override
     public String getType() {
         return this.type;
     }
     
+    /**
+     * Adds a tag for the reading recommendation.
+     * 
+     * @param tag tag that is to be added as string
+     */
     @Override
     public void addTags(String tag) {
         this.tags.add(tag);
@@ -59,29 +87,51 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
         return this.tags;
     }
     
+    /**
+     * Returns a string representation of tags.
+     * 
+     * @return printable string
+     */
+    @Override
+    public String printTags() {
+        String print = "" + getTags();
+        return print.substring(1, print.length() - 1);
+    }
+    
+    /**
+     * Returns the information of the reading recommendation (headline, type and possibly comment) as a HashMap.
+     * Initially calls the super class method and adds own relevant info to that.
+     * 
+     * @return a HashMap containing all information stored in the object
+     */
     @Override
     public HashMap<String, String> getInfo() {
         HashMap<String, String> info = new HashMap<>();
         info.put("headline",this.headline);
         info.put("type", this.type);
         if (this.comment != null) {
-            info.put("comment", this.comment.getComment());
+            info.put("comment", this.comment.getContent());
         }
         return info;
     }
     
+    /**
+     * Returns the information of the reading recommendation as a string representation.
+     * 
+     * @return printable string
+     */
     @Override
     public String getPrint() {
         String print = "Otsikko: " + this.headline +
                 "\nTyyppi: " + this.type;
         if (!this.tags.isEmpty()) {
-            print += "\nTagit: " + this.tags;
+            print += "\nTagit: " + printTags();
         }
         if (!this.relatedCourses.isEmpty()) {
-            print += "\nRelated courses: " + this.relatedCourses;
+            print += "\nRelated courses: " + printRelatedCourses();
         }
         if (this.comment != null) {
-            print += "\nKommentti: " + this.comment.getComment();
+            print += "\nKommentti: " + this.comment.getContent();
         }
         return print;
     }
