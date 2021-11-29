@@ -114,13 +114,4 @@ public class SQLUserDAO {
         this.connection.close();
         this.connection = null;
     }
-
-    /**
-     * Tarkistaa, onko ReadingRecommendation-taulu olemassa.
-     * @return true, jos on olemassa, muulloin false
-     * @throws Exception
-     */
-    public boolean tableExists() throws Exception {
-        return false;
-    }
 }
