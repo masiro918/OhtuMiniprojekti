@@ -26,8 +26,8 @@ public class TableCreator {
      */
     public boolean createUser() throws Exception {
         this.createConnection();
-        PreparedStatement pstmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Users (id INTEGER, username STRING, password STRING");
-        pstmt.executeQuery();
+        PreparedStatement pstmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Users (id INTEGER, username STRING, password STRING)");
+        pstmt.execute();
         this.closeConnection();
         return true;
     }
