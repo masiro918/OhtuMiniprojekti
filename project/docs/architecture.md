@@ -2,7 +2,7 @@
 
 ## Preliminary Class Diagram
 
-![UusiLukuvinkki](https://user-images.githubusercontent.com/73843204/143844887-6b83688f-ac92-4cd9-9ef8-920e31f635ba.png)
+![UusiLukuvinkki](https://user-images.githubusercontent.com/73843204/143850550-972e2433-dd8f-4dda-b151-fbae392fc75e.png)
 
 ## Database Structure
 
