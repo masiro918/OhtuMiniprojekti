@@ -40,7 +40,10 @@ public class SQLUserDAO {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
 
+            System.out.println(user.getUsername());
+
             pstmt.executeUpdate();
+            connection.commit();
             this.closeConnection();
         } catch (Exception e) {
 
