@@ -12,7 +12,9 @@ public class Main {
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
         get("/list", (req,res) -> "Recommendation list");
-        get("/login", (req,res) -> "Login page");
+        get("/login", (req,res) -> {
+            return new ModelAndView(new HashMap<>(), "login");
+        }, new ThymeleafTemplateEngine());
         get("/signup", (req,res) -> {
             return new ModelAndView(new HashMap<>(), "signup");
         }, new ThymeleafTemplateEngine());
