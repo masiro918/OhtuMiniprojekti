@@ -26,7 +26,7 @@ public class SQLReadingDAO {
      *  @throws Exception
      */
     public void add(BlogRecommendation blogRecommendation, Comment comment) throws Exception {
-        int commentId = addComment(comment.getCone);
+        int commentId = addComment(comment.getComment());
         this.createConnection();
 
         String headline = blogRecommendation.getHeadline();
@@ -50,10 +50,10 @@ public class SQLReadingDAO {
         ps.setString(3, url);
         ps.setString(4, isbn);
         ps.setString(5, writer);
-        ps.setString(6, commentId);
+        ps.setInt(6, commentId);
         //TODO allaolevat
-        ps.setString(7, -1);
-        ps.setString(8, -1);
+        ps.setInt(7, -1);
+        ps.setInt(8, -1);
 
         ps.executeUpdate();
 
