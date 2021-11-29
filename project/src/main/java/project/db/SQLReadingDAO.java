@@ -9,14 +9,14 @@ import java.util.ArrayList;
  * Luokka käsittelee BlogRecommendation-olioden tallennuksen
  * ja poiston tietokannassa.
  */
-public class SQLBlogDAO {
+public class SQLReadingDAO {
     private Connection connection = null;
     private Statement statement = null;
 
     /**
      * Konstruktori.
      */
-    public SQLBlogDAO() {
+    public SQLReadingDAO() {
 
     }
 
