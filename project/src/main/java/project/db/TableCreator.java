@@ -25,13 +25,8 @@ public class TableCreator {
      * @throws Exception
      */
     public boolean createUser() throws Exception {
-        SQLUserDAO userDb = new SQLUserDAO();
-        if (userDb.tableExists()) {
-            return true;
-        }
-
         this.createConnection();
-        PreparedStatement pstmt = connection.prepareStatement("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT,, username STRING, password STRING");
+        PreparedStatement pstmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT,, username STRING, password STRING");
         pstmt.executeQuery();
         this.closeConnection();
         return true;
