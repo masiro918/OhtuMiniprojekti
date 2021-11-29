@@ -35,12 +35,5 @@ public interface UserDAO {
      * @throws Exception
      */
     void remove(UserInterface user) throws Exception;
-
-    /**
-     * Tarkistaa, onko ReadingRecommendation-taulu olemassa.
-     * @return true, jos on olemassa, muulloin false
-     * @throws Exception
-     */
-    boolean tableExists() throws Exception;
     
 }
