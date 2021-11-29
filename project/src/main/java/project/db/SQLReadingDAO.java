@@ -26,22 +26,37 @@ public class SQLReadingDAO {
      *  @throws Exception
      */
     public void add(BlogRecommendation blogRecommendation, Comment comment) throws Exception {
+        int commentId = addComment(comment.getContent());
         this.createConnection();
 
         String headline = blogRecommendation.getHeadline();
         String type = blogRecommendation.getType();
         String url = blogRecommendation.getURL();
+        String isbn = "empty";
+        String writer = "empty";
 
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
         
-        //TODO: lisätään Comment-tauluun kommentti
+        
         
         // kesken!!
-        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) values ('empty', 'empty', 'empty', 'empty', 'empty', 9999, 9999, 9999);";
+        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) " +
+        "values (?, ?, ?, ?, ?, ?, ?, ?);";
 
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, headline);
+        ps.setString(2, type);
+        ps.setString(3, url);
+        ps.setString(4, isbn);
+        ps.setString(5, writer);
+        ps.setInt(6, commentId);
+        //TODO allaolevat
+        ps.setInt(7, -1);
+        ps.setInt(8, -1);
 
-        statement.executeUpdate(sql);
+        ps.executeUpdate();
+
         this.closeConnection();
     }
 
@@ -75,22 +90,15 @@ public class SQLReadingDAO {
         this.statement = null;
     }
 
-    /**
-     * Tarkistaa, että blogimerkintä löytyy tietokannasta.
-     * @param url blogin-url osoite (tämä riittää, koska url-osoitteet ovat uniikkeja)
-     */
-    private void blogRecommendationExists(String url) {
-
-    }
+    
 
     /**
      * Lisää kommentin Comments-tauluun, ja palauttaa lisätyn kommentin id-tunnisteen.
-     * @param blogRecommendation
      * @param commentStr
      * @throws Exception
      * @return luodun kommentin id
      */
-    public int addComment(BlogRecommendation blogRecommendation, String commentStr) throws Exception {
+    public int addComment(String commentStr) throws Exception {
         Comment comment = new Comment(commentStr);
 
         String content = comment.getContent();
@@ -103,7 +111,20 @@ public class SQLReadingDAO {
         ps.close();
         this.closeConnection();
 
-        // TODO: palauta luodun kommenitin id
-        return -1;
+        // haetaan juuri lisätyn kommentin id
+
+        this.createConnection();
+        String sqlComment = "SELECT * FROM ReadingRecommendations;";
+        ResultSet rs = this.statement.executeQuery(sqlComment);
+
+        int id = -1;
+
+        while (rs.next()) {
+            id = rs.getInt("id");
+        }
+
+        this.closeConnection();
+
+        return id;
     }
 }
