@@ -42,7 +42,7 @@ public class SQLReadingDAO {
         
         // kesken!!
         String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) " +
-        "values (?, ?, ?, ?, ?, 9999, 9999, 9999);";
+        "values (?, ?, ?, ?, ?, ?, ?, ?);";
 
         PreparedStatement ps = this.connection.prepareStatement(sql);
         ps.setString(1, headline);
