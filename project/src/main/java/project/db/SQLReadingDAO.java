@@ -23,9 +23,10 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     /**
      * Tallentaa blogi-vinkin tietokantaan.
      * @param blogRecommendation lisättävä olio
-     *  @throws Exception
+     * @throws Exception
      */
-    public void add(BlogRecommendation blogRecommendation, Comment comment) throws Exception {
+    public void add(BlogRecommendation blogRecommendation) throws Exception {
+        Comment comment = blogRecommendation.getComment();
         int commentId = addComment(comment.getContent());
         this.createConnection();
 
@@ -33,7 +34,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         String type = blogRecommendation.getType();
         String url = blogRecommendation.getURL();
         String isbn = "empty";
-        String writer = "empty";
+        String writer = blogRecommendation.getWriter();
 
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
