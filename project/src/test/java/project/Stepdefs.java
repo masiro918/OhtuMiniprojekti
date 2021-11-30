@@ -6,7 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.After;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+//import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -72,6 +72,32 @@ public class Stepdefs {
     @Given("signup is selected")
     public void signupSelected() {
         clickLink("Signup");
+        assertTrue(driver.getPageSource().contains("Username:"));
+        assertTrue(driver.getPageSource().contains("Password:"));
+        assertTrue(driver.getPageSource().contains("Register"));
+    }
+
+    @When("given valid username {string} and valid password {string}")
+    public void validUsernameAndPassword(String username, String password) {
+        findElementAndSendData("username", username);
+        findElementAndSendData("password", password);
+    }
+
+    @When("given valid username {string} and invalid password {string}")
+    public void validUsernameAndInvalidPassword(String username, String password) {
+        findElementAndSendData("username", username);
+        findElementAndSendData("password", password);
+    }
+
+    @When("given invalid username {string}")
+    public void invalidUsername(String username) {
+        findElementAndSendData("username", username);
+        findElementAndSendData("password", "something");
+    }
+
+    @Then("signup fails")
+    public void signupFails() {
+        assertTrue(driver.getPageSource().contains("Failure"));
     }
 
     @After
