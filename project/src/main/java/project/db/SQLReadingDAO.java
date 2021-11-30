@@ -65,7 +65,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         }
 
         for (String course : courses) {
-
+            addCourse(course, reading_id);
         }
     }
 
@@ -173,6 +173,15 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      * @throws Exception
      */
     public void addCourse(String course, int reading_id) throws Exception {
+        this.createConnection();
 
+        String sql = "INSERT INTO RelatedCourses (course, readingRecommendation_id) values (?, ?);";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, course);
+        ps.setInt(reading_id);
+        ps.executeUpdate();
+        ps.close();
+
+        this.closeConnection();
     }
 }
