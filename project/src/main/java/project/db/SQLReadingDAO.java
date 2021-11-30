@@ -131,7 +131,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      * @return uusimman lukuvinkin id
      * @throws Exception
      */
-    public int getLastIdReading() throws Exception {
+    public Integer getLastIdReading() throws Exception {
         this.createConnection();
         String sqlComment = "SELECT * FROM ReadingRecommendations;";
         ResultSet rs = this.statement.executeQuery(sqlComment);
