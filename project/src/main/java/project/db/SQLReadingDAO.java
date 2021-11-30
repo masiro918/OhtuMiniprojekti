@@ -4,6 +4,7 @@ import project.domain.BlogRecommendation;
 import project.domain.Comment;
 import java.sql.*;
 import java.util.ArrayList;
+import project.domain.ReadingRecommendation;
 import project.domain.ReadingRecommendationInterface;
 
 /**
@@ -198,7 +199,19 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     }
 
     @Override
-    public ArrayList<ReadingRecommendationInterface> loadAll() {
-        return null;
+    public ArrayList<ReadingRecommendationInterface> loadAll() throws Exception {
+        ArrayList<ReadingRecommendationInterface> recommendations = new ArrayList<>();
+        this.createConnection();
+        
+        String sqlComment = "SELECT * FROM ReadingRecommendations;";
+        ResultSet rs = this.statement.executeQuery(sqlComment);
+        while (rs.next()) {
+            ReadingRecommendation recommendation = new ReadingRecommendation(rs.getString("headline"),
+                                                                             rs.getString("type"));
+            recommendations.add(recommendation);
+        }
+        rs.close();
+        this.closeConnection();
+        return recommendations;
     }
 }

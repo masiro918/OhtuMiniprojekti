@@ -9,6 +9,8 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import spark.ModelAndView;
 
 // /list-sivun proof of concept. Poistetaan, kun blogien hakeminen tietokannasta onnistuu.
+import project.db.SQLReadingDAO;
+import project.domain.ReadingRecommendationInterface;
 import project.domain.BlogRecommendation;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import java.util.HashMap;
 public class Main {
     public static void main(String args[]){
         AuthenticationService auth = new AuthenticationService(new SQLUserDAO());
+        SQLReadingDAO reader = new SQLReadingDAO();
 
         port(5000);
         get("/", (req,res) -> new ModelAndView(new HashMap<>(), "index"), new ThymeleafTemplateEngine());
@@ -23,12 +26,10 @@ public class Main {
             // Proof of concept. Poistetaan, kun blogien hakeminen tietokannasta onnistuu.
             BlogRecommendation testBlog1 = new BlogRecommendation("Blog 1", "Blog", "https://test.blog.com");
             BlogRecommendation testBlog2 = new BlogRecommendation("Blog 2", "Blog", "https://test.blog2.org");
-            List tempBlogList = new ArrayList<>();
-            tempBlogList.add(testBlog1);
-            tempBlogList.add(testBlog2);
+            ArrayList<ReadingRecommendationInterface> readingList = reader.loadAll();
             
             HashMap map = new HashMap<>();
-            map.put("recommendations", tempBlogList);
+            map.put("recommendations", readingList);
             return new ModelAndView(map, "list");
         }, new ThymeleafTemplateEngine());
 

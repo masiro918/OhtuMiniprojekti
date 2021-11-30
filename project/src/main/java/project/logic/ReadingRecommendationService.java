@@ -18,7 +18,7 @@ public class ReadingRecommendationService {
     private UserInterface user;
     private ReadingRecommendationDAO recommendationDb;
 
-    public ReadingRecommendationService(UserInterface user, ReadingRecommendationDAO recommendationDb) {
+    public ReadingRecommendationService(UserInterface user, ReadingRecommendationDAO recommendationDb) throws Exception {
         this.user = user;
         this.recommendationDb = recommendationDb;
         this.recommendations = loadRecommendations();
@@ -27,7 +27,7 @@ public class ReadingRecommendationService {
     /**
      * Loads the user's reading recommendations from the database.
      */
-    public ArrayList<ReadingRecommendationInterface> loadRecommendations() {
+    public ArrayList<ReadingRecommendationInterface> loadRecommendations() throws Exception {
         return recommendationDb.loadAll();
     }
     
