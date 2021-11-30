@@ -57,7 +57,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.closeConnection();
 
         // haetaan juuri lisätyn lukuvinkin id
-        int readingId = getLastIdReading();
+        Integer readingId = getLastIdReading();
 
         // lisätään tagit ja kurssit
         for (String tag : tags) {
@@ -144,7 +144,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
         this.closeConnection();
 
-        return id;
+        return Integer.parseInt(id);
     }
 
     /**
