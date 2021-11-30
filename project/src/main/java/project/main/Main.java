@@ -31,12 +31,15 @@ public class Main {
             // Proof of concept. Poistetaan, kun blogien hakeminen tietokannasta onnistuu.
             try {
                 tc.createReadingRecommendations();
+                tc.createCommments();
             } catch (Exception ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+            System.out.println("Create db");
             
             BlogRecommendation testBlog1 = new BlogRecommendation("Blog 1", "Blog", "https://test.blog.com");
             BlogRecommendation testBlog2 = new BlogRecommendation("Blog 2", "Blog", "https://test.blog2.org");
+            System.out.println("Create blogs");
             
             try {
                 reader.addBlog(testBlog1);
@@ -48,6 +51,7 @@ public class Main {
             } catch (Exception ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+            System.out.println("Add blogs to DB");
             
             ArrayList<ReadingRecommendationInterface> readingList = new ArrayList<ReadingRecommendationInterface>();
             try {
@@ -55,6 +59,7 @@ public class Main {
             } catch (Exception ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+            System.out.println("Get blogs " + readingList);
             
             HashMap map = new HashMap<>();
             map.put("recommendations", readingList);

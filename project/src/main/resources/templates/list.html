@@ -11,7 +11,7 @@
                 <th>Type</th>
             </tr>
             <tr th:each="recommendation : ${recommendations}">
-                <td><a th:href="${recommendation.url}"><span th:text="${recommendation.headline}">$headline</span></a></td>
+                <td><span th:text="${recommendation.headline}">$headline</span></td>
                 <td th:text="${recommendation.type}">$type</td>
             </tr>
         </table>
