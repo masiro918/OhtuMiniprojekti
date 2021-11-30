@@ -144,7 +144,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
         this.closeConnection();
 
-        return Integer.parseInt(id);
+        return id;
     }
 
     /**
@@ -159,7 +159,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         String sql = "INSERT INTO Tags (comment, readingRecommendation_id) values (?, ?);";
         PreparedStatement ps = this.connection.prepareStatement(sql);
         ps.setString(1, tag);
-        ps.setInt((Integer)reading_id);
+        ps.setInt(2, reading_id);
         ps.executeUpdate();
         ps.close();
 
@@ -178,7 +178,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         String sql = "INSERT INTO RelatedCourses (course, readingRecommendation_id) values (?, ?);";
         PreparedStatement ps = this.connection.prepareStatement(sql);
         ps.setString(1, course);
-        ps.setInt((Integer)reading_id);
+        ps.setInt(2, reading_id);
         ps.executeUpdate();
         ps.close();
 
