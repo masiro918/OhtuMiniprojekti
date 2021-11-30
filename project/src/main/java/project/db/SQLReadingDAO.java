@@ -60,7 +60,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         int readingId = getLastIdReading();
 
         // lisätään tagit ja kurssit
-        for (String tag : tags {
+        for (String tag : tags) {
             addTag(tag, reading_id);
         }
 
