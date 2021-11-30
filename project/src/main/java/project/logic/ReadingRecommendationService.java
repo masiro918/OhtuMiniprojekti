@@ -28,22 +28,7 @@ public class ReadingRecommendationService {
      * Loads the user's reading recommendations from the database.
      */
     public ArrayList<ReadingRecommendationInterface> loadRecommendations() {
-        //TODO: kommunikointi databasen kanssa
-        //hae kayttajan kaikki lukuvinkit ja palauta listana
-        return null;
-    }
-    
-    /**
-     * Saves the users reading recommendations to the database.
-     */
-    public void saveRecommendations() {
-        //TODO: kommunikointi databasen kanssa
-        //tallenna lukuvinkit kayttajan osoittamaan tauluun
-    }
-
-    //testeja varten, korjataan sitten kun database on maaritelty
-    public void setRecommendations(ArrayList<ReadingRecommendationInterface> recommendations) {
-        this.recommendations = recommendations;
+        return recommendationDb.loadAll();
     }
     
     /**
@@ -53,7 +38,12 @@ public class ReadingRecommendationService {
      */
     public void addRecommendation(ReadingRecommendationInterface recommendation) {
         this.recommendations.add(recommendation);
-        saveRecommendations();
+    }
+    
+    //korjataan sitten kun tietokanta tallentaa muitakin kuin blogiolioita
+    public void addBlogRecommendation(BlogRecommendation blog) throws Exception {
+        this.recommendations.add(blog);
+        recommendationDb.add(blog);
     }
     
     /**
@@ -89,10 +79,17 @@ public class ReadingRecommendationService {
      */
     public void removeRecommendation(String headline) {
         int index = findIndex(headline);
+        ReadingRecommendationInterface r = null;
         if (index >= 0) {
+            r = this.recommendations.get(index);
             this.recommendations.remove(index);
+            //this.recommendationDb.remove(r);
         }
-        saveRecommendations();
+    }
+    
+    //valiaikainen, voi poistaa sitten kun tallennetaan muita kuin blogiolioita
+    public void removeBlogRecommendation(BlogRecommendation blog) throws Exception {
+        this.recommendationDb.remove(blog);
     }
     
     /**

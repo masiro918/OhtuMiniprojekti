@@ -4,6 +4,7 @@ import project.domain.BlogRecommendation;
 import project.domain.Comment;
 import java.sql.*;
 import java.util.ArrayList;
+import project.domain.ReadingRecommendationInterface;
 
 /**
  * Luokka käsittelee BlogRecommendation-olioden tallennuksen
@@ -20,12 +21,18 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     }
 
+    
+    @Override
+    public void add(ReadingRecommendationInterface r) throws Exception {
+        
+    }
+    
     /**
      * Tallentaa blogi-vinkin tietokantaan.
      * @param blogRecommendation lisättävä olio
      * @throws Exception
      */
-    public void add(BlogRecommendation blogRecommendation) throws Exception {
+    public void addBlog(BlogRecommendation blogRecommendation) throws Exception {
         Comment comment = blogRecommendation.getComment();
         int commentId = addComment(comment.getContent());
         this.createConnection();
@@ -74,10 +81,15 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      * @param blogRecommendation poistettava olio
      * @throws Exception
      */
-    public void remove(BlogRecommendation blogRecommendation) throws Exception {
+    public void removeBlog(BlogRecommendation blogRecommendation) throws Exception {
         //boolean checking = blogRecommendationExists(blogRecommendation.getURL());
     }
-
+    
+    @Override
+    public void remove(ReadingRecommendationInterface r) {
+        
+    }
+    
     /**
      * Luo uuden tietokanta-yhetyden.
      * @throws Exception
@@ -183,5 +195,10 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.close();
 
         this.closeConnection();
+    }
+
+    @Override
+    public ArrayList<ReadingRecommendationInterface> loadAll() {
+        return null;
     }
 }

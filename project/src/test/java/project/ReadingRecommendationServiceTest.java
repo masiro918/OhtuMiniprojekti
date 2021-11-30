@@ -29,7 +29,6 @@ public class ReadingRecommendationServiceTest {
         String type = "blog";
 
         recommendation = new ReadingRecommendation(headline, type);
-        recommendations = new ArrayList<>();
         
         user = new User("pekka", "salasana1");
 
@@ -46,9 +45,9 @@ public class ReadingRecommendationServiceTest {
         bookInfo.put("writer", "Kirjoittaja");
 
         FakeReadingRecommendationDAO fakeDb = new FakeReadingRecommendationDAO();
+        recommendations = fakeDb.loadAll();
         
         service = new ReadingRecommendationService(user, fakeDb);
-        service.setRecommendations(recommendations);
     }
 
     // CreateRecommendations tests
