@@ -25,6 +25,7 @@ tasks.withType(JavaCompile) {
 project.ext {
     junitVersion = '4.13'
     cucumberVersion = '6.8.1'
+    seleniumVersion = '3.14.0'
 }
 
 dependencies {
