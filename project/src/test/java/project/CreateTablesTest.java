@@ -1,11 +1,12 @@
 package project;
 
 import project.db.*;
+import java.sql.*;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class SQLCreateTablesTest {
+public class CreateTablesTest {
 
     private Connection connection = null;
     private Statement statement = null;
