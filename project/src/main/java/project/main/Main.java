@@ -14,19 +14,46 @@ import project.domain.ReadingRecommendationInterface;
 import project.domain.BlogRecommendation;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import project.db.TableCreator;
 
 public class Main {
-    public static void main(String args[]){
+    public static void main(String args[]) throws Exception{
         AuthenticationService auth = new AuthenticationService(new SQLUserDAO());
         SQLReadingDAO reader = new SQLReadingDAO();
+        TableCreator tc = new TableCreator();
+        
 
         port(5000);
         get("/", (req,res) -> new ModelAndView(new HashMap<>(), "index"), new ThymeleafTemplateEngine());
         get("/list", (req,res) -> {
             // Proof of concept. Poistetaan, kun blogien hakeminen tietokannasta onnistuu.
+            try {
+                tc.createReadingRecommendations();
+            } catch (Exception ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
             BlogRecommendation testBlog1 = new BlogRecommendation("Blog 1", "Blog", "https://test.blog.com");
             BlogRecommendation testBlog2 = new BlogRecommendation("Blog 2", "Blog", "https://test.blog2.org");
-            ArrayList<ReadingRecommendationInterface> readingList = reader.loadAll();
+            try {
+                reader.addBlog(testBlog1);
+            } catch (Exception ex) {
+                System.out.println("Ei onnistu!");
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                reader.addBlog(testBlog2);
+            } catch (Exception ex) {
+                System.out.println("Ei onnistu!");
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ArrayList<ReadingRecommendationInterface> readingList = new ArrayList<ReadingRecommendationInterface>();
+            try {
+                readingList = reader.loadAll();
+            } catch (Exception ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             HashMap map = new HashMap<>();
             map.put("recommendations", readingList);
