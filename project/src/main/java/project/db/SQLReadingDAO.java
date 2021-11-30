@@ -61,11 +61,11 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
         // lisätään tagit ja kurssit
         for (String tag : tags) {
-            addTag(tag, reading_id);
+            addTag(tag, readingId);
         }
 
         for (String course : courses) {
-            addCourse(course, reading_id);
+            addCourse(course, readingId);
         }
     }
 
