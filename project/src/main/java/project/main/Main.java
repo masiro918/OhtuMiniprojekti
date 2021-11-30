@@ -5,12 +5,11 @@ import static spark.Spark.*;
 
 import project.logic.AuthenticationService;
 
-import project.domain.BlogRecommendation;
-
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import spark.ModelAndView;
 
 // /list-sivun proof of concept. Poistetaan, kun blogien hakeminen tietokannasta onnistuu.
+import project.domain.BlogRecommendation;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,12 +34,15 @@ public class Main {
 
         get("/login", (req,res) -> new ModelAndView(new HashMap<>(), "login"), new ThymeleafTemplateEngine());
         post("/login", (req, res) -> {
+            String user = req.queryParamOrDefault("username", null);
+            String pass = req.queryParamOrDefault("password", null);
             if (auth.login(
-                req.queryParamOrDefault("username", null),
-                req.queryParamOrDefault("password", null)
+                user,
+                pass
             ) == null) {
                 return "{\"message\":\"Wrong username or password\"}";
             }
+            res.redirect(String.format("/%s/home", user));
             return "{\"message\":\"Success\"}";
             }
         );
@@ -57,5 +59,14 @@ public class Main {
         });
 
         get("/post", (req,res) -> "Post a new recommendation");
+        
+        get("/:user/home", (req, res) -> {
+            // Tähän check, että käyttäjä on oikeasti olemassa
+            HashMap map = new HashMap<>();
+            String user = req.params(":user");
+            map.put("username", user);
+            
+            return new ModelAndView(map, "home");
+        }, new ThymeleafTemplateEngine());
     }
 }
