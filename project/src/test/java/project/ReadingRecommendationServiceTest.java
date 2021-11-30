@@ -24,7 +24,7 @@ public class ReadingRecommendationServiceTest {
     User user;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         String headline = "Basic";
         String type = "blog";
 

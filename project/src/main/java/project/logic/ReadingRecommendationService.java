@@ -3,6 +3,7 @@ package project.logic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import project.db.ReadingRecommendationDAO;
+import project.db.TableCreator;
 import project.domain.UserInterface;
 import project.domain.BlogRecommendation;
 import project.domain.BookRecommendation;
@@ -21,6 +22,8 @@ public class ReadingRecommendationService {
     public ReadingRecommendationService(UserInterface user, ReadingRecommendationDAO recommendationDb) throws Exception {
         this.user = user;
         this.recommendationDb = recommendationDb;
+        TableCreator tables = new TableCreator();
+        tables.createReadingRecommendations();
         this.recommendations = loadRecommendations();
     }
 
