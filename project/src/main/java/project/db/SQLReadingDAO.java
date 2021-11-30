@@ -39,10 +39,8 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
         
-        
-        
         // kesken!!
-        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, course_id, tag_id) " +
+        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id) " +
         "values (?, ?, ?, ?, ?, ?, ?, ?);";
 
         PreparedStatement ps = this.connection.prepareStatement(sql);
@@ -52,13 +50,23 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.setString(4, isbn);
         ps.setString(5, writer);
         ps.setInt(6, commentId);
-        //TODO allaolevat
-        ps.setInt(7, -1);
-        ps.setInt(8, -1);
+        
 
         ps.executeUpdate();
 
         this.closeConnection();
+
+        // haetaan juuri lisätyn lukuvinkin id
+        int readingId = getLastIdReading();
+
+        // lisätään tagit ja kurssit
+        for (String tag : tags {
+            addTag(tag, reading_id);
+        }
+
+        for (String course : courses) {
+
+        }
     }
 
     /**
@@ -113,7 +121,17 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.closeConnection();
 
         // haetaan juuri lisätyn kommentin id
+        int id = getLastIdReading();
 
+        return id;
+    }
+
+    /**
+     * Hakee viimeisimmäksi lisätyn lukuvinkin id:n.
+     * @return uusimman lukuvinkin id
+     * @throws Exception
+     */
+    public int getLastIdReading() throws Exception {
         this.createConnection();
         String sqlComment = "SELECT * FROM ReadingRecommendations;";
         ResultSet rs = this.statement.executeQuery(sqlComment);
@@ -127,5 +145,34 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.closeConnection();
 
         return id;
+    }
+
+    /**
+     * Lisää uuden tagin.
+     * @param tag lisättävä tagi
+     * @param reading_id viite lukuvinkkiin
+     * @throws Exception
+     */
+    public void addTag(String tag, int reading_id) throws Exception {
+        this.createConnection();
+
+        String sql = "INSERT INTO Tags (comment, readingRecommendation_id) values (?, ?);";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, tag);
+        ps.setInt(reading_id);
+        ps.executeUpdate();
+        ps.close();
+
+        this.closeConnection();
+    }
+
+    /**
+     * 
+     * @param course
+     * @param reading_id
+     * @throws Exception
+     */
+    public void addCourse(String course, int reading_id) throws Exception {
+
     }
 }
