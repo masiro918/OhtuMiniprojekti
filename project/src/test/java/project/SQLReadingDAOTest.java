@@ -8,6 +8,6 @@ public class SQLReadingDAOTest {
 
     @Before
     public void setUp() {
-        
+        // luodaan tietokanta testejä varten
     }
 }
