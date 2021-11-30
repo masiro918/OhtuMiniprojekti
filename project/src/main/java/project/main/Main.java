@@ -34,20 +34,21 @@ public class Main {
             } catch (Exception ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
             BlogRecommendation testBlog1 = new BlogRecommendation("Blog 1", "Blog", "https://test.blog.com");
             BlogRecommendation testBlog2 = new BlogRecommendation("Blog 2", "Blog", "https://test.blog2.org");
+            
             try {
                 reader.addBlog(testBlog1);
             } catch (Exception ex) {
-                System.out.println("Ei onnistu!");
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 reader.addBlog(testBlog2);
             } catch (Exception ex) {
-                System.out.println("Ei onnistu!");
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
             ArrayList<ReadingRecommendationInterface> readingList = new ArrayList<ReadingRecommendationInterface>();
             try {
                 readingList = reader.loadAll();
