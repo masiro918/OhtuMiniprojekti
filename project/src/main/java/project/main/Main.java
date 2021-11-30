@@ -42,6 +42,7 @@ public class Main {
             ) == null) {
                 return "{\"message\":\"Wrong username or password\"}";
             }
+            res.cookie("login", user);
             res.redirect(String.format("/%s/home", user));
             return "{\"message\":\"Success\"}";
             }
@@ -61,12 +62,14 @@ public class Main {
         get("/post", (req,res) -> "Post a new recommendation");
         
         get("/:user/home", (req, res) -> {
-            // Tähän check, että käyttäjä on oikeasti olemassa
             HashMap map = new HashMap<>();
             String user = req.params(":user");
-            map.put("username", user);
-            
-            return new ModelAndView(map, "home");
+            String cookie = req.cookie("login");
+            if (cookie.equals(user)) {
+                map.put("username", user);
+                return new ModelAndView(map, "home");
+            }
+            return null;
         }, new ThymeleafTemplateEngine());
     }
 }
