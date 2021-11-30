@@ -38,9 +38,8 @@ public class TableCreator {
      */
     public void createReadingRecommendations() throws Exception {
         this.createConnection();
-        String sql = "CREATE TABLE IF NOT EXISTS ReadingRecommendations (id INTEGER PRIMARY KEY AUTOINCREMENT,, headline STRING, type STRING,"
-                + "url STRING, isbn STRING, writer STRING, comment_id INTEGER, course_id INTEGER,"
-                + " tag_id INTEGER);";
+        String sql = "CREATE TABLE IF NOT EXISTS ReadingRecommendations (id INTEGER PRIMARY KEY AUTOINCREMENT, headline STRING, type STRING,"
+                + "url STRING, isbn STRING, writer STRING, comment_id INTEGER);";
         this.statement.execute(sql);
         this.closeConnection();
     }
@@ -51,7 +50,7 @@ public class TableCreator {
      */
     public void createRelatedCourses() throws Exception {
         this.createConnection();
-        String sql = "CREATE TABLE IF NOT EXISTS RelatedCourses (id INTEGER PRIMARY KEY AUTOINCREMENT,, course STRING, readingRecommendation_id INTEGER);";
+        String sql = "CREATE TABLE IF NOT EXISTS RelatedCourses (id INTEGER PRIMARY KEY AUTOINCREMENT, course STRING, readingRecommendation_id INTEGER);";
         this.statement.execute(sql);
         this.closeConnection();
     }
@@ -62,7 +61,7 @@ public class TableCreator {
      */
     public void createTags() throws Exception {
         this.createConnection();
-        String sql = "CREATE TABLE IF NOT EXISTS Tags (id INTEGER PRIMARY KEY AUTOINCREMENT,, tag STRING, readingRecommendation_id INTEGER);";
+        String sql = "CREATE TABLE IF NOT EXISTS Tags (id INTEGER PRIMARY KEY AUTOINCREMENT, tag STRING, readingRecommendation_id INTEGER);";
         this.statement.execute(sql);
         this.closeConnection();
     }
@@ -73,7 +72,7 @@ public class TableCreator {
      */
     public void createCommments() throws Exception {
         this.createConnection();
-        String sql = "CREATE TABLE IF NOT EXISTS Comments (id INTEGER PRIMARY KEY AUTOINCREMENT,, comment STRING, readingRecommendation_id INTEGER);";
+        String sql = "CREATE TABLE IF NOT EXISTS Comments (id INTEGER PRIMARY KEY AUTOINCREMENT, comment STRING, readingRecommendation_id INTEGER);";
         this.statement.execute(sql);
         this.closeConnection();
     }
