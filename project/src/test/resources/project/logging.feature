@@ -11,7 +11,7 @@ Feature: As a user I can login with the right credentials
         #When given correct username "tester" and incorrect password "incorrect"
         #Then login fails
     
-    #Scenario: login fail with non existing username
-        #Given login is selected
-        #When given non existing username "Noup"
-        #Then login fails
+    Scenario: login fail with non existing username
+        Given login is selected
+        When given non existing username "Noup"
+        Then login fails
