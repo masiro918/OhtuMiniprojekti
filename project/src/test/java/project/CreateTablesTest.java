@@ -18,14 +18,28 @@ public class CreateTablesTest {
 
     @Test
     public void createUserTableTest() throws Exception {
-        /*
         tc.createUser();
-
         createConnection();
-        */
+
+        boolean success = false;
+
+        try {
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM User;" );
+            
+            while (rs.next()) {
+
+            }
+
+            rs.close();
+            success = true;
+        } catch (Exception e) {
+            success = false;
+        }
+        closeConnection();
+        assertTrue(success);
     }
 
-    /*
+    
     private void createConnection() throws SQLException {
         this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
         this.statement = connection.createStatement();
@@ -38,5 +52,5 @@ public class CreateTablesTest {
         this.connection = null;
         this.statement = null;
     }
-    */
+    
 }
