@@ -24,7 +24,7 @@ public class CreateTablesTest {
         boolean success = false;
 
         try {
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM User;" );
+            ResultSet rs = this.statement.executeQuery( "SELECT * FROM Users;" );
             
             while (rs.next()) {
 
