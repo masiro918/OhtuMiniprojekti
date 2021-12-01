@@ -10,10 +10,11 @@ public class CreateTablesTest {
 
     private Connection connection = null;
     private Statement statement = null;
+    private TableCreator tc = null;
 
     @Before
     public void setUp() {
-        TableCreator tc = new TableCreator();
+        tc = new TableCreator();
     }
 
     @Test
