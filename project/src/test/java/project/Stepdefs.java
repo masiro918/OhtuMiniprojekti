@@ -95,18 +95,26 @@ public class Stepdefs {
     public void validUsernameAndPassword(String username, String password) {
         findElementAndSendData("username", username);
         findElementAndSendData("password", password);
+        findElementAndSubmit("register");
     }
 
     @When("given valid username {string} and invalid password {string}")
     public void validUsernameAndInvalidPassword(String username, String password) {
         findElementAndSendData("username", username);
         findElementAndSendData("password", password);
+        findElementAndSubmit("register");
     }
 
-    @When("given invalid username {string}")
-    public void invalidUsername(String username) {
+    @When("given invalid username {string} and valid password {string}")
+    public void invalidUsernameAndValidPasswors(String username, String password) {
         findElementAndSendData("username", username);
-        findElementAndSendData("password", "something");
+        findElementAndSendData("password", password);
+        findElementAndSubmit("register");
+    }
+
+    @Then("signup is successful")
+    public void signupIsSuccessful() {
+        assertTrue(driver.getPageSource().contains("Success"));
     }
 
     @Then("signup fails")

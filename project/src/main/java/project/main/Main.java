@@ -18,9 +18,33 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import project.db.TableCreator;
 
+import project.db.UserDAO;
+import project.db.ReadingRecommendationDAO;
+
 public class Main {
+
+    private static UserDAO userDao;
+    private static ReadingRecommendationDAO recommendationsDao;
+    private static AuthenticationService auth;
+
+    public static void setUserDao(UserDAO u) {
+        userDao = u;
+    }
+
+    public static void setRecommendationDao(ReadingRecommendationDAO r) {
+        recommendationsDao = r;
+    }
+
+
     public static void main(String args[]) throws Exception{
-        AuthenticationService auth = new AuthenticationService(new SQLUserDAO());
+
+        if(userDao == null) {
+            auth = new AuthenticationService(new SQLUserDAO());
+        } else {
+            //Tämä tulee käyttöön user story testeissä
+            auth = new AuthenticationService(userDao);
+        }
+
         SQLReadingDAO reader = new SQLReadingDAO();
         TableCreator tc = new TableCreator();
         

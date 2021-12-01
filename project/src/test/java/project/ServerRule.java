@@ -42,7 +42,7 @@ public class ServerRule extends ExternalResource {
 
         //Need to add testing daos to the main
         // TODO
-        //Main.setUserDao(users);
+        Main.setUserDao(users);
         
         
         Main.main(null);
