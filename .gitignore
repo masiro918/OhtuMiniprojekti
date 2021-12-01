@@ -6,3 +6,4 @@ project/bin
 .classpath
 .project
 /project/.nb-gradle/
+/project/src/test/database.db
