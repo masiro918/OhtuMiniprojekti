@@ -10,22 +10,36 @@ public class CreateTablesTest {
 
     private Connection connection = null;
     private Statement statement = null;
+    private TableCreator tc = null;
 
     @Before
     public void setUp() {
-        TableCreator tc = new TableCreator();
+        this.tc = new TableCreator();
     }
 
     @Test
     public void createUserTableTest() throws Exception {
-        /*
-        tc.createUser();
+        boolean success = false;
 
-        createConnection();
-        */
+        try {
+            this.tc.createUser();
+            createConnection();
+            ResultSet rs = this.statement.executeQuery( "SELECT * FROM Users;" );
+            
+            while (rs.next()) {
+
+            }
+
+            rs.close();
+            closeConnection();
+            success = true;
+        } catch (Exception e) {
+            success = false;
+        }
+        assertTrue(success);
     }
 
-    /*
+    
     private void createConnection() throws SQLException {
         this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
         this.statement = connection.createStatement();
@@ -38,5 +52,5 @@ public class CreateTablesTest {
         this.connection = null;
         this.statement = null;
     }
-    */
+    
 }
