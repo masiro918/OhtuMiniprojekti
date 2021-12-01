@@ -4,14 +4,16 @@ import project.domain.BlogRecommendation;
 import project.domain.Comment;
 import java.sql.*;
 import java.util.ArrayList;
+import project.domain.BookRecommendation;
 import project.domain.ReadingRecommendation;
 import project.domain.ReadingRecommendationInterface;
 
 /**
- * Luokka käsittelee BlogRecommendation-olioden tallennuksen
- * ja poiston tietokannassa.
+ * Luokka käsittelee BlogRecommendation-olioden tallennuksen ja poiston
+ * tietokannassa.
  */
 public class SQLReadingDAO implements ReadingRecommendationDAO {
+
     private Connection connection = null;
     private Statement statement = null;
 
@@ -22,14 +24,20 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     }
 
-    
     @Override
     public void add(ReadingRecommendationInterface r) throws Exception {
-        
+        if (r.getType().equals("blog")) {
+            BlogRecommendation blog = (BlogRecommendation) r;
+            addBlog(blog);
+        } else if (r.getType().equals("book")) {
+            BookRecommendation book = (BookRecommendation) r;
+            addBook(book);
+        }
     }
-    
+
     /**
      * Tallentaa blogi-vinkin tietokantaan.
+     *
      * @param blogRecommendation lisättävä olio
      * @throws Exception
      */
@@ -46,10 +54,10 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
-        
+
         // kesken!!
-        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id) " +
-        "values (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id) "
+                + "values (?, ?, ?, ?, ?, ?);";
 
         PreparedStatement ps = this.connection.prepareStatement(sql);
         ps.setString(1, headline);
@@ -58,7 +66,6 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.setString(4, isbn);
         ps.setString(5, writer);
         ps.setInt(6, commentId);
-        
 
         ps.executeUpdate();
 
@@ -77,22 +84,67 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         }
     }
 
+    public void addBook(BookRecommendation book) {
+        try {
+            this.createConnection();
+
+            String headline = book.getHeadline();
+            String type = book.getType();
+            String url = "empty";
+            String isbn = book.getISBN();
+            String writer = book.getWriter();
+
+            ArrayList<String> courses = book.getRelatedCourses();
+            ArrayList<String> tags = book.getTags();
+
+            String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id) "
+                    + "values (?, ?, ?, ?, ?, ?);";
+
+            PreparedStatement ps = this.connection.prepareStatement(sql);
+            ps.setString(1, headline);
+            ps.setString(2, type);
+            ps.setString(3, url);
+            ps.setString(4, isbn);
+            ps.setString(5, writer);
+            ps.setInt(6, 0); // kommentti, korjataan my�hemmin
+
+            ps.executeUpdate();
+
+            this.closeConnection();
+
+            Integer readingId = getLastIdReading();
+
+            for (String tag : tags) {
+                addTag(tag, readingId);
+            }
+
+            for (String course : courses) {
+                addCourse(course, readingId);
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
+
     /**
      * Poistaa blogi-vinkit tietokannasta.
+     *
      * @param blogRecommendation poistettava olio
      * @throws Exception
      */
     public void removeBlog(BlogRecommendation blogRecommendation) throws Exception {
         //boolean checking = blogRecommendationExists(blogRecommendation.getURL());
     }
-    
+
     @Override
     public void remove(ReadingRecommendationInterface r) {
-        
+
     }
-    
+
     /**
      * Luo uuden tietokanta-yhetyden.
+     *
      * @throws Exception
      */
     private void createConnection() throws Exception {
@@ -102,20 +154,21 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     /**
      * Suolkee tietokanta-yhteyden.
+     *
      * @throws Exception
      */
     private void closeConnection() throws Exception {
         this.statement.close();
         this.connection.close();
-        
+
         this.connection = null;
         this.statement = null;
     }
 
-    
-
     /**
-     * Lisää kommentin Comments-tauluun, ja palauttaa lisätyn kommentin id-tunnisteen.
+     * Lisää kommentin Comments-tauluun, ja palauttaa lisätyn kommentin
+     * id-tunnisteen.
+     *
      * @param commentStr
      * @throws Exception
      * @return luodun kommentin id
@@ -124,7 +177,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         Comment comment = new Comment(commentStr);
 
         String content = comment.getContent();
-        
+
         this.createConnection();
         String sql = "INSERT INTO Comments (comment) values (?);";
         PreparedStatement ps = this.connection.prepareStatement(sql);
@@ -141,6 +194,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     /**
      * Hakee viimeisimmäksi lisätyn lukuvinkin id:n.
+     *
      * @return uusimman lukuvinkin id
      * @throws Exception
      */
@@ -162,6 +216,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     /**
      * Lisää uuden tagin.
+     *
      * @param tag lisättävä tagi
      * @param reading_id viite lukuvinkkiin
      * @throws Exception
@@ -180,7 +235,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     }
 
     /**
-     * 
+     *
      * @param course
      * @param reading_id
      * @throws Exception
@@ -202,12 +257,12 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     public ArrayList<ReadingRecommendationInterface> loadAll() throws Exception {
         ArrayList<ReadingRecommendationInterface> recommendations = new ArrayList<>();
         this.createConnection();
-        
+
         String sqlComment = "SELECT * FROM ReadingRecommendations;";
         ResultSet rs = this.statement.executeQuery(sqlComment);
         while (rs.next()) {
             ReadingRecommendation recommendation = new ReadingRecommendation(rs.getString("headline"),
-                                                                             rs.getString("type"));
+                    rs.getString("type"));
             recommendations.add(recommendation);
         }
         rs.close();
