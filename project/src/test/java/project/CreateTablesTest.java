@@ -14,17 +14,16 @@ public class CreateTablesTest {
 
     @Before
     public void setUp() {
-        tc = new TableCreator();
+        this.tc = new TableCreator();
     }
 
     @Test
     public void createUserTableTest() throws Exception {
-        tc.createUser();
-        createConnection();
-
         boolean success = false;
 
         try {
+            this.tc.createUser();
+            createConnection();
             ResultSet rs = this.statement.executeQuery( "SELECT * FROM Users;" );
             
             while (rs.next()) {
@@ -32,11 +31,11 @@ public class CreateTablesTest {
             }
 
             rs.close();
+            closeConnection();
             success = true;
         } catch (Exception e) {
             success = false;
         }
-        closeConnection();
         assertTrue(success);
     }
 
