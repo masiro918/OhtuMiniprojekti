@@ -126,6 +126,22 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     }
 
+    public BlogRecommendation getBlog(int id) throws Exception {
+        this.createConnection();
+        String sqlComment = "SELECT * FROM ReadingRecommendations WHERE id=? AND type=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sqlComment);
+        ps.setInt(1,id);
+        ps.setString(2,"Blog");
+        ResultSet rs = ps.executeQuery();
+        BlogRecommendation blog = new BlogRecommendation(rs.getString("headline"),
+                                                         rs.getString("type"),
+                                                         rs.getString("url"));
+        blog.setWriter(rs.getString("writer"));
+        rs.close();
+        this.closeConnection();
+        return blog;
+    }
+
     /**
      * Poistaa blogi-vinkit tietokannasta.
      *
@@ -260,6 +276,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         while (rs.next()) {
             ReadingRecommendation recommendation = new ReadingRecommendation(rs.getString("headline"),
                     rs.getString("type"));
+            recommendation.setId(rs.getInt("id"));
             recommendations.add(recommendation);
         }
         rs.close();

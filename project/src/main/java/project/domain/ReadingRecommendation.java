@@ -7,6 +7,7 @@ import java.util.HashMap;
  * A general class for defining a reading recommendation.
  */
 public class ReadingRecommendation implements ReadingRecommendationInterface {
+    private int id;
     private String headline;
     private String type;
     private String comment;
@@ -14,6 +15,7 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
     private ArrayList<String> tags;
     
     public ReadingRecommendation(String o, String t) {
+        this.id = 0;
         this.headline = o;
         this.type = t;
         this.comment = null;
@@ -39,6 +41,16 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
     @Override
     public String getHeadline() {
         return this.headline;
+    }
+    
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    @Override
+    public int getId() {
+        return this.id;
     }
     
     /**

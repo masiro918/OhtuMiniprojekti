@@ -64,6 +64,8 @@ public class Main {
             
             BlogRecommendation testBlog1 = new BlogRecommendation("Blog 1", "Blog", "https://test.blog.com");
             BlogRecommendation testBlog2 = new BlogRecommendation("Blog 2", "Blog", "https://test.blog2.org");
+            testBlog1.setWriter("Bob the Blogger");
+            testBlog2.setWriter("Ann the Author");
             
             try {
                 reader.addBlog(testBlog1);
@@ -76,7 +78,7 @@ public class Main {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            ArrayList<ReadingRecommendationInterface> readingList = new ArrayList<ReadingRecommendationInterface>();
+            ArrayList<ReadingRecommendationInterface> readingList = new ArrayList<>();
             try {
                 readingList = reader.loadAll();
             } catch (Exception ex) {
@@ -126,6 +128,15 @@ public class Main {
                 return new ModelAndView(map, "home");
             }
             return null;
+        }, new ThymeleafTemplateEngine());
+
+        get("/list/Blog/:id", (req,res) -> {
+            int id = Integer.parseInt(req.params(":id"));
+            // Metodia toistaiseksi ei olemassa
+            BlogRecommendation blog = reader.getBlog(id);
+            HashMap map = new HashMap<>();
+            map.put("blog", blog);
+            return new ModelAndView(map, "blog");
         }, new ThymeleafTemplateEngine());
     }
 

@@ -10,6 +10,8 @@ public interface ReadingRecommendationInterface {
     public void setComment(String comment);
     public String getComment();
     public String getHeadline();
+    public void setId(int id);
+    public int getId();
     public void addCourse(String course);
     public ArrayList<String> getRelatedCourses();
     public String printRelatedCourses();

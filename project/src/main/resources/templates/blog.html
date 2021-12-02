@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title th:text="${blog.headline}">$blogheadline</title>
+    </head>
+    <body>
+        <h1>Blog: <span th:text="${blog.headline}">$blogheadline</span></h1>
+        <table>
+            <tr>
+                <th>Headline</th>
+                <th>Author</th>
+                <th>URL</th>
+                <th>Tags</th>
+                <th>Related courses</th>
+            </tr>
+            <tr>
+                <td th:text="${blog.headline}">$blogheadline</td>
+                <td th:text="${blog.writer}">$blogauthor</td>
+                <td><a th:href="${blog.url}">URL</a></td>
+                <td>$tags</td>
+                <td>$courses</td>
+            </tr>
+        </table>
+        <h2>Comments</h2>
+        <p th:text="${blog.comment}">$comments</p>
+    </body>
+</html>
