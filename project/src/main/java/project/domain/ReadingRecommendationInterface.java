@@ -2,14 +2,13 @@ package project.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import project.domain.Comment;
 
 /**
  * Interface defining the general methods of a reading recommendation.
  */
 public interface ReadingRecommendationInterface {
     public void setComment(String comment);
-    public Comment getComment();
+    public String getComment();
     public String getHeadline();
     public void addCourse(String course);
     public ArrayList<String> getRelatedCourses();

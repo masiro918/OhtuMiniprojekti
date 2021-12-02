@@ -1,7 +1,6 @@
 package project.db;
 
 import project.domain.BlogRecommendation;
-import project.domain.Comment;
 import java.sql.*;
 import java.util.ArrayList;
 import project.domain.BookRecommendation;
@@ -42,8 +41,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      * @throws Exception
      */
     public void addBlog(BlogRecommendation blogRecommendation) throws Exception {
-        Comment comment = blogRecommendation.getComment();
-        int commentId = addComment(comment.getContent());
+        int commentId = addComment(blogRecommendation.getComment());
         this.createConnection();
 
         String headline = blogRecommendation.getHeadline();
@@ -93,6 +91,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
             String url = "empty";
             String isbn = book.getISBN();
             String writer = book.getWriter();
+            String comment = book.getComment();
 
             ArrayList<String> courses = book.getRelatedCourses();
             ArrayList<String> tags = book.getTags();
@@ -106,7 +105,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
             ps.setString(3, url);
             ps.setString(4, isbn);
             ps.setString(5, writer);
-            ps.setInt(6, 0); // kommentti, korjataan myöhemmin
+            ps.setInt(6, 0); // kommentti, korjataan myohemmin
 
             ps.executeUpdate();
 
@@ -174,9 +173,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      * @return luodun kommentin id
      */
     public int addComment(String commentStr) throws Exception {
-        Comment comment = new Comment(commentStr);
-
-        String content = comment.getContent();
+        String content = commentStr;
 
         this.createConnection();
         String sql = "INSERT INTO Comments (comment) values (?);";

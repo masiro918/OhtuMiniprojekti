@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class ReadingRecommendation implements ReadingRecommendationInterface {
     private String headline;
     private String type;
-    private Comment comment; // pitaako kommentin olla erillinen olio, ei String?
+    private String comment;
     private ArrayList<String> relatedCourses;
     private ArrayList<String> tags;
     
@@ -28,11 +28,11 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
      */
     @Override
     public void setComment(String comment) {
-        this.comment = new Comment(comment);
+        this.comment = comment;
     }
     
     @Override
-    public Comment getComment() {
+    public String getComment() {
         return this.comment;
     }
     
@@ -100,7 +100,6 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
     
     /**
      * Returns the information of the reading recommendation (headline, type and possibly comment) as a HashMap.
-     * Initially calls the super class method and adds own relevant info to that.
      * 
      * @return a HashMap containing all information stored in the object
      */
@@ -110,7 +109,7 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
         info.put("headline",this.headline);
         info.put("type", this.type);
         if (this.comment != null) {
-            info.put("comment", this.comment.getContent());
+            info.put("comment", this.comment);
         }
         return info;
     }
@@ -131,7 +130,7 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
             print += "\nRelated courses: " + printRelatedCourses();
         }
         if (this.comment != null) {
-            print += "\nKommentti: " + this.comment.getContent();
+            print += "\nKommentti: " + this.comment;
         }
         return print;
     }

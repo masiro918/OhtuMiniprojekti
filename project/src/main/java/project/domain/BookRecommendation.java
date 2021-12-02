@@ -67,7 +67,7 @@ public class BookRecommendation extends ReadingRecommendation {
             print += "\nRelated courses: " + printRelatedCourses();
         }
         if (getComment() != null) {
-            print += "\nKommentti: " + getComment().getContent();
+            print += "\nKommentti: " + getComment();
         }
         return print;
     }
