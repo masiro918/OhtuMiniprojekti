@@ -54,3 +54,6 @@ checkstyle {
     checkstyleMain.source = "src"
     // checkstyleMain.exclude('some/path/*.java')
 }
+
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
