@@ -15,7 +15,7 @@ import project.domain.ReadingRecommendationInterface;
  */
 public class ReadingRecommendationService {
 
-    private ArrayList<ReadingRecommendationInterface> recommendations;
+    //private ArrayList<ReadingRecommendationInterface> recommendations;
     private UserInterface user;
     private ReadingRecommendationDAO recommendationDb;
 
@@ -24,138 +24,153 @@ public class ReadingRecommendationService {
         this.recommendationDb = recommendationDb;
         TableCreator tables = new TableCreator();
         tables.createReadingRecommendations();
-        this.recommendations = loadRecommendations();
     }
 
     /**
      * Loads the user's reading recommendations from the database.
+     * Returns empty list if database throws exception.
+     * @return ArrayList of all recommendations
      */
-    public ArrayList<ReadingRecommendationInterface> loadRecommendations() throws Exception {
-        return recommendationDb.loadAll();
+    public ArrayList<ReadingRecommendationInterface> loadRecommendations() {
+        try {
+            return recommendationDb.loadAll();
+        } catch (Exception e) {
+            return new ArrayList<ReadingRecommendationInterface>();
+        }
     }
-    
-    /**
-     * Adds a reading recommendation for the user.
-     * 
-     * @param recommendation reading recommendation that is to be added.
-     */
-    public void addRecommendation(ReadingRecommendationInterface recommendation) {
-        this.recommendations.add(recommendation);
-    }
-    
-    //korjataan sitten kun tietokanta tallentaa muitakin kuin blogiolioita
-    public void addBlogRecommendation(BlogRecommendation blog) throws Exception {
-        this.recommendations.add(blog);
-        recommendationDb.add(blog);
-    }
-    
+
     /**
      * Creates a new reading recommendation for the user.
-     * 
-     * @param info a HashMap that contains all provided information of the reading recommendation
+     *
+     * @param info a HashMap that contains all provided information of the
+     * reading recommendation
      */
-    public void createRecommendation(HashMap<String, String> info) { // TODO: jaa osiin lukuvinkin tyypin mukaan
-        String headline = info.get("headline");
+    public boolean createRecommendation(HashMap<String, String> info) {
         String type = info.get("type");
         if (type.equals("blog")) {
-            BlogRecommendation r = new BlogRecommendation(headline, type, info.get("url"));
+            return addBlog(info);
+        } else if (type.equals("book")) {
+            return addBook(info);
+        }
+        return false;
+    }
+
+    public boolean addBlog(HashMap<String, String> info) {
+        try {
+            String headline = info.get("headline");
+            BlogRecommendation r = new BlogRecommendation(headline, "blog", info.get("url"));
             if (info.containsKey("writer")) {
                 r.setWriter(info.get("writer"));
             }
-            this.recommendations.add(r);
+            this.recommendationDb.add(r);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-        } else if (type.equals("book")) {
-            BookRecommendation r = new BookRecommendation(headline, type, info.get("writer"));
+    public boolean addBook(HashMap<String, String> info) {
+        try {
+            String headline = info.get("headline");
+            BookRecommendation r = new BookRecommendation(headline, "book", info.get("writer"));
             if (info.containsKey("ISBN")) {
                 r.setISBN(info.get("ISBN"));
             }
-            this.recommendations.add(r);
-
+            this.recommendationDb.add(r);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-
     }
-    
+
     /**
      * Removes a reading recommendation from the user.
-     * 
+     *
      * @param headline the headline of the recommendation that is to be removed
      */
-    public void removeRecommendation(String headline) {
-        int index = findIndex(headline);
-        ReadingRecommendationInterface r = null;
-        if (index >= 0) {
-            r = this.recommendations.get(index);
-            this.recommendations.remove(index);
-            //this.recommendationDb.remove(r);
+    public boolean removeRecommendation(String headline) {
+        ReadingRecommendationInterface r = findRecommendation(headline);
+        try {
+            this.recommendationDb.remove(r);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
-    
+
     //valiaikainen, voi poistaa sitten kun tallennetaan muita kuin blogiolioita
     public void removeBlogRecommendation(BlogRecommendation blog) throws Exception {
         this.recommendationDb.remove(blog);
     }
-    
+
     /**
      * Returns a reading recommendation as a printable string.
-     * 
+     *
      * @param recommendation the recommendation that is wanted
      */
     public String showRecommendation(ReadingRecommendationInterface recommendation) {
         return recommendation.getPrint();
     }
-    
+
     /**
      * Returns all the user's reading recommendations as a printable string.
      */
     public String showAllRecommendations() {
-        if (this.recommendations.isEmpty()) {
-            return "No recommendations";
+        try {
+            if (loadRecommendations().isEmpty()) {
+                return "No recommendations";
+            }
+            String all = "";
+            for (ReadingRecommendationInterface r : loadRecommendations()) {
+                all += r.getPrint() + "\n\n";
+            }
+            return all;
+        } catch (Exception e) {
+            return "Something went wrong";
         }
-        String all = "";
-        for (ReadingRecommendationInterface r : this.recommendations) {
-            all += r.getPrint() + "\n\n";
-        }
-        return all;
     }
 
     /**
      * Finds and returns a reading recommendation based on headline.
-     * 
+     *
      * @param headline the headline of a reading recommendation that is wanted.
      * @return reading recommendation if found, null if not found
      */
     public ReadingRecommendationInterface findRecommendation(String headline) {
-        for (ReadingRecommendationInterface r : this.recommendations) {
-            if (r.getHeadline().equals(headline)) {
-                return r;
+        try {
+            for (ReadingRecommendationInterface r : loadRecommendations()) {
+                if (r.getHeadline().equals(headline)) {
+                    return r;
+                }
             }
+            return null;
+        } catch (Exception e) {
+            return null;
         }
-        return null;
     }
 
     /**
-     * Returns the index of the wanted reading recommendation in the recommendations list.
-     * 
-     * @param headline headline of the reading recommendation that is searched for.
-     * @return index of the reading recommendation as int, negative if not found.
+     * Returns the index of the wanted reading recommendation in the
+     * recommendations list.
+     *
+     * @param headline headline of the reading recommendation that is searched
+     * for.
+     * @return index of the reading recommendation as int, negative if not
+     * found.
      */
     public int findIndex(String headline) {
-        int index = -1;
-        for (int i = 0; i < this.recommendations.size(); i++) {
-            if (this.recommendations.get(i).getHeadline().equals(headline)) {
-                index = i;
-                break;
+        try {
+            int index = -1;
+            ArrayList<ReadingRecommendationInterface> recommendations = loadRecommendations();
+            for (int i = 0; i < recommendations.size(); i++) {
+                if (recommendations.get(i).getHeadline().equals(headline)) {
+                    index = i;
+                    break;
+                }
             }
+            return index;
+        } catch (Exception e) {
+            return -1;
         }
-        return index;
-    }
-    
-    /**
-     * Returns all the user's reading recommendations as an ArrayList.
-     * 
-     * @return list of all the reading recommendations.
-     */
-    public ArrayList<ReadingRecommendationInterface> getAllRecommendations() {
-        return this.recommendations;
     }
 }
