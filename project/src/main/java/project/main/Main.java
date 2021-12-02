@@ -35,6 +35,8 @@ public class Main {
         recommendationsDao = r;
     }
 
+    // localhost:5000
+    private static int defaultPort = 5000;
 
     public static void main(String args[]) throws Exception{
 
@@ -48,8 +50,8 @@ public class Main {
         SQLReadingDAO reader = new SQLReadingDAO();
         TableCreator tc = new TableCreator();
         
+        port(getHerokuAssignedPort());
 
-        port(5000);
         get("/", (req,res) -> new ModelAndView(new HashMap<>(), "index"), new ThymeleafTemplateEngine());
         get("/list", (req,res) -> {
             // Proof of concept. Poistetaan, kun blogien hakeminen tietokannasta onnistuu.
@@ -125,5 +127,13 @@ public class Main {
             }
             return null;
         }, new ThymeleafTemplateEngine());
+    }
+
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return defaultPort;
     }
 }
