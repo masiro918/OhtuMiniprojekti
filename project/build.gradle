@@ -41,6 +41,7 @@ dependencies {
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-api', version:seleniumVersion
     implementation group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.33.0'
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version:seleniumVersion
+    implementation 'org.slf4j:slf4j-simple:1.6.1'
 }
 
 test {
