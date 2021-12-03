@@ -19,11 +19,9 @@ public class ReadingRecommendationService {
     private UserInterface user;
     private ReadingRecommendationDAO recommendationDb;
 
-    public ReadingRecommendationService(UserInterface user, ReadingRecommendationDAO recommendationDb) throws Exception {
+    public ReadingRecommendationService(UserInterface user, ReadingRecommendationDAO recommendationDb) {
         this.user = user;
         this.recommendationDb = recommendationDb;
-        TableCreator tables = new TableCreator();
-        tables.createReadingRecommendations();
     }
     
     /**

@@ -48,8 +48,7 @@ public class Main {
             //Tämä tulee käyttöön user story testeissä
             auth = new AuthenticationService(userDao);
         }
-        SQLReadingDAO reader = new SQLReadingDAO();
-        recService = new ReadingRecommendationService(null, reader);
+        recService = new ReadingRecommendationService(null, new SQLReadingDAO());
         TableCreator tc = new TableCreator();
         tc.createUser();
         
@@ -139,10 +138,10 @@ public class Main {
             return null;
         }, new ThymeleafTemplateEngine());
 
-        get("/list/Blog/:id", (req,res) -> {
+        get("/list/blog/:id", (req,res) -> {
             int id = Integer.parseInt(req.params(":id"));
             // Metodia toistaiseksi ei olemassa
-            BlogRecommendation blog = reader.getBlog(id);
+            BlogRecommendation blog = recService.findBlogId(id);
             HashMap map = new HashMap<>();
             map.put("blog", blog);
             return new ModelAndView(map, "blog");

@@ -131,7 +131,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         String sqlComment = "SELECT * FROM ReadingRecommendations WHERE id=? AND type=?;";
         PreparedStatement ps = this.connection.prepareStatement(sqlComment);
         ps.setInt(1,id);
-        ps.setString(2,"Blog");
+        ps.setString(2,"blog");
         ResultSet rs = ps.executeQuery();
         BlogRecommendation blog = new BlogRecommendation(rs.getString("headline"),
                                                          rs.getString("type"),
