@@ -94,16 +94,17 @@ public class SQLUserDAO implements UserDAO {
             PreparedStatement pstmt = connection.prepareStatement("SELECT id, username, password FROM Users");
 
             ResultSet rs = pstmt.executeQuery();
-            this.closeConnection();
-
+            
             while (rs.next()) {
                 int userId = rs.getInt(1);
                 User user = new User(rs.getString(2), rs.getString(3));
                 user.setId(userId);
                 users.add(user);
             }
-        } catch (Exception e) {
             
+            this.closeConnection();
+        } catch (Exception e) {
+            System.out.println("Kayttajien haku ei onnistunut.");
         }
         return users;
     }
