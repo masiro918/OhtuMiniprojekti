@@ -118,7 +118,22 @@ public class Main {
         });
 
         get("/post", (req,res) -> "Post a new recommendation");
-        
+
+        get("/post/blog", (req,res) -> {
+            // TODO: Cookie check
+            return new ModelAndView(new HashMap<>(), "postblog");
+        }, new ThymeleafTemplateEngine());
+
+        post("/post", (req,res) -> {
+            // TODO: Cookie check
+            String type = req.queryParamOrDefault("type", null);
+            if (type == null) {
+                return "{\"message\":\"Failure\"}";
+            }
+            // TODO: Call ReadingRecommendationService add method
+            return "{\"message\":\"Success\"}";
+        });
+
         get("/:user/home", (req, res) -> {
             HashMap map = new HashMap<>();
             String user = req.params(":user");
