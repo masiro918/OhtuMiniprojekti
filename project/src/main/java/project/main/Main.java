@@ -20,12 +20,14 @@ import project.db.TableCreator;
 
 import project.db.UserDAO;
 import project.db.ReadingRecommendationDAO;
+import project.logic.ReadingRecommendationService;
 
 public class Main {
 
     private static UserDAO userDao;
     private static ReadingRecommendationDAO recommendationsDao;
     private static AuthenticationService auth;
+    private static ReadingRecommendationService recService;
 
     public static void setUserDao(UserDAO u) {
         userDao = u;
@@ -46,9 +48,10 @@ public class Main {
             //Tämä tulee käyttöön user story testeissä
             auth = new AuthenticationService(userDao);
         }
-
         SQLReadingDAO reader = new SQLReadingDAO();
+        recService = new ReadingRecommendationService(null, reader);
         TableCreator tc = new TableCreator();
+        tc.createUser();
         
         port(getHerokuAssignedPort());
 
@@ -62,31 +65,22 @@ public class Main {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            BlogRecommendation testBlog1 = new BlogRecommendation("Blog 1", "Blog", "https://test.blog.com");
-            BlogRecommendation testBlog2 = new BlogRecommendation("Blog 2", "Blog", "https://test.blog2.org");
-            testBlog1.setWriter("Bob the Blogger");
-            testBlog2.setWriter("Ann the Author");
+            HashMap<String,String> testBlog1 = new HashMap<>();
+            testBlog1.put("headline", "Blog 1");
+            testBlog1.put("type", "blog");
+            testBlog1.put("url", "https://test.blog.com");
+            testBlog1.put("writer", "Bob the Blogger");
+            recService.createRecommendation(testBlog1);
             
-            try {
-                reader.addBlog(testBlog1);
-            } catch (Exception ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                reader.addBlog(testBlog2);
-            } catch (Exception ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            ArrayList<ReadingRecommendationInterface> readingList = new ArrayList<>();
-            try {
-                readingList = reader.loadAll();
-            } catch (Exception ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            HashMap<String,String> testBlog2 = new HashMap<>();
+            testBlog2.put("headline", "Blog 2");
+            testBlog2.put("type", "blog");
+            testBlog2.put("url", "https://test.blog2.org");
+            testBlog2.put("writer", "Ann the Author");
+            recService.createRecommendation(testBlog2);
             
             HashMap map = new HashMap<>();
-            map.put("recommendations", readingList);
+            map.put("recommendations", recService.loadRecommendations());
             return new ModelAndView(map, "list");
         }, new ThymeleafTemplateEngine());
 

@@ -25,6 +25,15 @@ public class ReadingRecommendationService {
         TableCreator tables = new TableCreator();
         tables.createReadingRecommendations();
     }
+    
+    /**
+     * Sets the user that is currently logged in.
+     * Service fetches recommendations from database on the basis of userId.
+     * @param user user that is currently logged in to app
+     */
+    public void setUser(UserInterface user) {
+        this.user = user;
+    }
 
     /**
      * Loads the user's reading recommendations from the database.
@@ -171,6 +180,14 @@ public class ReadingRecommendationService {
             return index;
         } catch (Exception e) {
             return -1;
+        }
+    }
+    
+    public BlogRecommendation findBlogId(int id) {
+        try {
+            return this.recommendationDb.getBlog(id);
+        } catch (Exception e) {
+            return null;
         }
     }
 }

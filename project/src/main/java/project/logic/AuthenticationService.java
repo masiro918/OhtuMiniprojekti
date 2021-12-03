@@ -1,5 +1,6 @@
 package project.logic;
 
+import java.util.ArrayList;
 import project.domain.UserInterface;
 import project.db.UserDAO;
 import project.domain.User;
@@ -11,7 +12,6 @@ public class AuthenticationService {
     private UserDAO userDb;
     
     public AuthenticationService(UserDAO userdao) {
-//        this.users = loadUsers();
         this.userDb = userdao;
     }
     
@@ -129,5 +129,10 @@ public class AuthenticationService {
             return true;
         }
         return false;
+    }
+    
+    // debuggausta varten
+    public ArrayList<UserInterface> getAll() {
+        return this.userDb.fetchAllUsers();
     }
 }

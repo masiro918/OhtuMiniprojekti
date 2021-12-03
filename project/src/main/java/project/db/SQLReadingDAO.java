@@ -137,6 +137,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
                                                          rs.getString("type"),
                                                          rs.getString("url"));
         blog.setWriter(rs.getString("writer"));
+        blog.setId(id);
         rs.close();
         this.closeConnection();
         return blog;
@@ -274,10 +275,25 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         String sqlComment = "SELECT * FROM ReadingRecommendations;";
         ResultSet rs = this.statement.executeQuery(sqlComment);
         while (rs.next()) {
-            ReadingRecommendation recommendation = new ReadingRecommendation(rs.getString("headline"),
-                    rs.getString("type"));
-            recommendation.setId(rs.getInt("id"));
-            recommendations.add(recommendation);
+            String headline = rs.getString("headline");
+            String type = rs.getString("type");
+            
+            if (type.equals("blog")) {
+                BlogRecommendation blog = new BlogRecommendation(headline, type, rs.getString("url"));
+                blog.setWriter(rs.getString("writer"));
+                blog.setId(rs.getInt("id"));
+                recommendations.add(blog);
+                
+            } else if (type.equals("book")) {
+                BookRecommendation book = new BookRecommendation(headline, type, rs.getString("isbn"));
+                book.setWriter(rs.getString("writer"));
+                book.setId(rs.getInt("id"));
+                recommendations.add(book);
+            }
+//            ReadingRecommendation recommendation = new ReadingRecommendation(rs.getString("headline"),
+//                    rs.getString("type"));
+//            recommendation.setId(rs.getInt("id"));
+//            recommendations.add(recommendation);
         }
         rs.close();
         this.closeConnection();

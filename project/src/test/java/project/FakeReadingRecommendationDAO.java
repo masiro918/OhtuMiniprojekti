@@ -3,6 +3,7 @@ package project;
 
 import java.util.ArrayList;
 import project.db.ReadingRecommendationDAO;
+import project.domain.BlogRecommendation;
 import project.domain.ReadingRecommendationInterface;
 
 public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
@@ -34,6 +35,11 @@ public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
     @Override
     public ArrayList<ReadingRecommendationInterface> loadAll() {
         return this.fakeRecommendations;
+    }
+
+    public BlogRecommendation getBlog(int i) throws Exception {
+        // turha, poistetaan myohemmin
+        return null;
     }
     
 }

@@ -7,6 +7,8 @@ import project.domain.User;
  * A interface for a user of the software.
  */
 public interface UserInterface {
-    public String getUsername();
-    public String getPassword();
+    void setId(int id);
+    int getId();
+    String getUsername();
+    String getPassword();
 }

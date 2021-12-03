@@ -37,7 +37,7 @@ public class SQLUserDAO implements UserDAO {
         try {
             this.createConnection();
 
-            PreparedStatement pstmt = connection.prepareStatement("INSERT INTO Users (username, password) VALUES (? ?)");
+            PreparedStatement pstmt = connection.prepareStatement("INSERT INTO Users (username, password) VALUES (?, ?);");
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
 
@@ -47,7 +47,7 @@ public class SQLUserDAO implements UserDAO {
             connection.commit();
             this.closeConnection();
         } catch (Exception e) {
-
+            System.out.println("Kayttajan tallennus epaonnistui.");
         }
     }
 
@@ -91,16 +91,19 @@ public class SQLUserDAO implements UserDAO {
         try {
             this.createConnection();
 
-            PreparedStatement pstmt = connection.prepareStatement("SELECT username, password FROM Users");
+            PreparedStatement pstmt = connection.prepareStatement("SELECT id, username, password FROM Users");
 
             ResultSet rs = pstmt.executeQuery();
             this.closeConnection();
 
             while (rs.next()) {
-                users.add(new User(rs.getString(1), rs.getString(2)));
+                int userId = rs.getInt(1);
+                User user = new User(rs.getString(2), rs.getString(3));
+                user.setId(userId);
+                users.add(user);
             }
         } catch (Exception e) {
-
+            
         }
         return users;
     }
