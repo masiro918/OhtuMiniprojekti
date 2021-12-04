@@ -149,13 +149,36 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      * @param blogRecommendation poistettava olio
      * @throws Exception
      */
-    public void removeBlog(BlogRecommendation blogRecommendation) throws Exception {
-        //boolean checking = blogRecommendationExists(blogRecommendation.getURL());
+    private void removeBlog(BlogRecommendation blogRecommendation) throws Exception {
+        this.createConnection();
+        String sql = "DELETE FROM ReadingRecommendations WHERE url=? writer=? headline=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, blogRecommendation.getURL());
+        ps.setString(2, blogRecommendation.getWriter());
+        ps.setString(3, blogRecommendation.getHeadline());
+        ps.executeUpdate();
+        this.closeConnection();
+    }
+
+    private void removeBook(BookRecommendation bookRecommendation) throws Exception {
+        this.createConnection();
+        String sql = "DELETE FROM ReadingRecommendations WHERE ISBN=? writer=? headline=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, bookRecommendation.getISBN());
+        ps.setString(2, bookRecommendation.getWriter());
+        ps.setString(3, bookRecommendation.getHeadline());
+        ps.executeUpdate();
+        this.closeConnection();
     }
 
     @Override
-    public void remove(ReadingRecommendationInterface r) {
-
+    public void remove(ReadingRecommendationInterface r) throws Exception{
+        String type = r.getType();
+        if (type == "blog") {
+            removeBlog((BlogRecommendation) r);
+        } else if (type == "book") {
+            removeBook((BookRecommendation) r);
+        }
     }
 
     /**
