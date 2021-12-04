@@ -10,5 +10,6 @@ public interface ReadingRecommendationDAO {
     void remove(ReadingRecommendationInterface r) throws Exception;
     ArrayList<ReadingRecommendationInterface> loadAll() throws Exception;
     BlogRecommendation getBlog(int id) throws Exception;
+    void setUserId(int id);
     
 }

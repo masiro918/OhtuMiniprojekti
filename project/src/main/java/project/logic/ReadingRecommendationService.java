@@ -3,7 +3,6 @@ package project.logic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import project.db.ReadingRecommendationDAO;
-import project.db.TableCreator;
 import project.domain.UserInterface;
 import project.domain.BlogRecommendation;
 import project.domain.BookRecommendation;
@@ -11,7 +10,7 @@ import project.domain.ReadingRecommendationInterface;
 
 /**
  * A class defining all the functions for handling the reading recommendations
- * (create, save,load, remove etc.).
+ * (create, save, load, remove etc.).
  */
 public class ReadingRecommendationService {
 
@@ -31,6 +30,7 @@ public class ReadingRecommendationService {
      */
     public void setUser(UserInterface user) {
         this.user = user;
+        this.recommendationDb.setUserId(user.getId());
     }
 
     /**
@@ -103,11 +103,6 @@ public class ReadingRecommendationService {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    //valiaikainen, voi poistaa sitten kun tallennetaan muita kuin blogiolioita
-    public void removeBlogRecommendation(BlogRecommendation blog) throws Exception {
-        this.recommendationDb.remove(blog);
     }
 
     /**

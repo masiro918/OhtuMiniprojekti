@@ -20,6 +20,7 @@ import project.db.TableCreator;
 
 import project.db.UserDAO;
 import project.db.ReadingRecommendationDAO;
+import project.domain.User;
 import project.logic.ReadingRecommendationService;
 
 public class Main {
@@ -51,18 +52,14 @@ public class Main {
         recService = new ReadingRecommendationService(null, new SQLReadingDAO());
         TableCreator tc = new TableCreator();
         tc.createUser();
+        tc.createReadingRecommendations();
+        tc.createCommments();
         
         port(getHerokuAssignedPort());
 
         get("/", (req,res) -> new ModelAndView(new HashMap<>(), "index"), new ThymeleafTemplateEngine());
         get("/list", (req,res) -> {
             // Proof of concept. Poistetaan, kun blogien hakeminen tietokannasta onnistuu.
-            try {
-                tc.createReadingRecommendations();
-                tc.createCommments();
-            } catch (Exception ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
             
             HashMap<String,String> testBlog1 = new HashMap<>();
             testBlog1.put("headline", "Blog 1");
@@ -87,12 +84,11 @@ public class Main {
         post("/login", (req, res) -> {
             String user = req.queryParamOrDefault("username", null);
             String pass = req.queryParamOrDefault("password", null);
-            if (auth.login(
-                user,
-                pass
-            ) == null) {
+            User loggedIn = (User) auth.login(user, pass);
+            if (loggedIn == null) {
                 return "{\"message\":\"Wrong username or password\"}";
             }
+            recService.setUser(loggedIn);
             res.cookie("login", user);
             res.redirect(String.format("/%s/home", user));
             return "{\"message\":\"Success\"}";

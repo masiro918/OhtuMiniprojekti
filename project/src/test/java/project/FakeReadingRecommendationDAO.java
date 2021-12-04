@@ -8,9 +8,11 @@ import project.domain.ReadingRecommendationInterface;
 
 public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
     private ArrayList<ReadingRecommendationInterface> fakeRecommendations;
+    private int userId;
     
     public FakeReadingRecommendationDAO() {
         this.fakeRecommendations = new ArrayList<ReadingRecommendationInterface>();
+        this.userId = 0;
     }
     
     @Override
@@ -37,9 +39,15 @@ public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
         return this.fakeRecommendations;
     }
 
+    @Override
     public BlogRecommendation getBlog(int i) throws Exception {
         // turha, poistetaan myohemmin
         return null;
+    }
+
+    @Override
+    public void setUserId(int id) {
+        this.userId = id;
     }
     
 }
