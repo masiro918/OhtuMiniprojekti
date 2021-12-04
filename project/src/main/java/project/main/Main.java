@@ -110,15 +110,27 @@ public class Main {
             return "{\"message\":\"Failure\"}";
         });
 
-        get("/post", (req,res) -> "Post a new recommendation");
+        get("/post", (req, res) -> {
+            String cookie = req.cookie("login");
+            if (cookie != null) {
+                return new ModelAndView(new HashMap<>(), "post");
+            }
+            return new ModelAndView(new HashMap<>(), "index");
+        }, new ThymeleafTemplateEngine());
 
         get("/post/blog", (req,res) -> {
-            // TODO: Cookie check
-            return new ModelAndView(new HashMap<>(), "postblog");
+            String cookie = req.cookie("login");
+            if (cookie != null) {
+                return new ModelAndView(new HashMap<>(), "postblog");
+            }
+            return new ModelAndView(new HashMap<>(), "index");
         }, new ThymeleafTemplateEngine());
 
         post("/post", (req,res) -> {
-            // TODO: Cookie check
+            String cookie = req.cookie("login");
+            if (cookie == null) {
+                return new ModelAndView(new HashMap<>(), "index");
+            }
             String type = req.queryParamOrDefault("type", null);
             if (type == null) {
                 return "{\"message\":\"Failure\"}";
