@@ -123,7 +123,16 @@ public class Main {
             if (type == null) {
                 return "{\"message\":\"Failure\"}";
             }
-            // TODO: Call ReadingRecommendationService add method
+            HashMap<String, String> info = new HashMap<>();
+            info.put("type", req.queryParamOrDefault("type", null));
+            info.put("headline", req.queryParamOrDefault("headline", null));
+            info.put("writer", req.queryParamOrDefault("writer", null));
+            if (type == "blog") {
+                info.put("url", req.queryParamOrDefault("url", null));
+            } else if (type == "book") {
+                info.put("ISBN", req.queryParamOrDefault("ISBN", null));
+            }
+            recService.createRecommendation(info);
             return "{\"message\":\"Success\"}";
         });
 
