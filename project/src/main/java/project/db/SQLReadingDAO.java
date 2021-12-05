@@ -1,11 +1,11 @@
 package project.db;
 
-import project.domain.BlogRecommendation;
+import project.domain.*;
+
 import java.sql.*;
 import java.util.ArrayList;
-import project.domain.BookRecommendation;
-import project.domain.PodcastRecommendation;
-import project.domain.ReadingRecommendationInterface;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Luokka käsittelee BlogRecommendation-olioden tallennuksen ja poiston

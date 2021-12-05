@@ -11,5 +11,4 @@ public interface ReadingRecommendationDAO {
     ArrayList<ReadingRecommendationInterface> loadAll() throws Exception;
     BlogRecommendation getBlog(int id) throws Exception;
     void setUserId(int id);
-    
 }

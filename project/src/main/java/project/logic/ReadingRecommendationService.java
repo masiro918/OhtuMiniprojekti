@@ -1,13 +1,11 @@
 package project.logic;
 
+import java.awt.print.Book;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import project.db.ReadingRecommendationDAO;
-import project.domain.UserInterface;
-import project.domain.BlogRecommendation;
-import project.domain.BookRecommendation;
-import project.domain.PodcastRecommendation;
-import project.domain.ReadingRecommendationInterface;
+import project.domain.*;
 
 /**
  * A class defining all the functions for handling the reading recommendations
@@ -244,6 +242,55 @@ public class ReadingRecommendationService {
             return index;
         } catch (Exception e) {
             return -1;
+        }
+    }
+
+    /**
+     * Contains some serious spaghetti.
+     * @param writer
+     * @return
+     */
+    public ArrayList<Integer> findIndexesByWriter(String writer) {
+        try {
+            ArrayList<Integer> indexes = new ArrayList<>();
+            ArrayList<ReadingRecommendationInterface> recommendations = loadRecommendations();
+            for (int i = 0; i < recommendations.size(); i++) {
+                String type = recommendations.get(i).getType();
+                if (type.equals("blog")) {
+                    BlogRecommendation blog = (BlogRecommendation) recommendations.get(i);
+                    if (blog.getWriter().equals(writer)) {
+                        indexes.add(i);
+                    }
+                } else if (type.equals("book")) {
+                    BookRecommendation book = (BookRecommendation) recommendations.get(i);
+                    if (book.getWriter().equals(writer)) {
+                        indexes.add(i);
+                    }
+                } else if (type.equals("podcast")) {
+                    PodcastRecommendation podcast = (PodcastRecommendation) recommendations.get(i);
+                    if (podcast.getWriter().equals(writer)) {
+                        indexes.add(i);
+                    }
+                }
+
+            }
+            return indexes;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public ArrayList<ReadingRecommendationInterface> findRecommendationsByIDs(ArrayList<Integer> indexes) {
+        try {
+            // TODO: Change to support all types
+            ArrayList<ReadingRecommendationInterface> recs = new ArrayList<>();
+            for(int index : indexes) {
+                recs.add(this.findBlogId(index));
+            }
+            return recs;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
         }
     }
     

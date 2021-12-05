@@ -163,6 +163,31 @@ public class Main {
             map.put("blog", blog);
             return new ModelAndView(map, "blog");
         }, new ThymeleafTemplateEngine());
+
+        get("/search", (req,res) -> {
+            String cookie = req.cookie("login");
+            if (cookie != null) {
+                return new ModelAndView(new HashMap<>(), "search");
+            }
+            return new ModelAndView(new HashMap<>(), "index");
+        }, new ThymeleafTemplateEngine());
+        post("/search", (req,res) -> {
+            String cookie = req.cookie("login");
+            if (cookie == null) {
+                return new ModelAndView(new HashMap<>(), "index");
+            }
+            String writer = req.queryParamOrDefault("writer", null);
+            if (writer == null) {
+                return null;//"{\"message\":\"Failure\"}";
+            }
+            ArrayList<Integer> indexes = recService.findIndexesByWriter(writer);
+            if (indexes.isEmpty()) {
+                return null;//"{\"message\":\"Found nothing\"}";
+            }
+            HashMap map = new HashMap<>();
+            map.put("recommendations", recService.findRecommendationsByIDs(indexes));
+            return new ModelAndView(map, "list");
+        }, new ThymeleafTemplateEngine());
     }
 
     static int getHerokuAssignedPort() {
