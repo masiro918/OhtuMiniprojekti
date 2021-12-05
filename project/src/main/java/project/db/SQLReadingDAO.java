@@ -59,14 +59,16 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         String url = blogRecommendation.getURL();
         String isbn = "empty";
         String writer = blogRecommendation.getWriter();
+        String podcastName = "empty";
+        String description = "empty";
         String comment = blogRecommendation.getComment();
 
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
 
         // kesken!!
-        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment, user_id) "
-                + "values (?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, podcastName, description, comment, user_id) "
+                + "values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         PreparedStatement ps = this.connection.prepareStatement(sql);
         ps.setString(1, headline);
@@ -74,8 +76,10 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.setString(3, url);
         ps.setString(4, isbn);
         ps.setString(5, writer);
-        ps.setString(6, comment);
-        ps.setInt(7, this.userId);
+        ps.setString(6, podcastName);
+        ps.setString(7, description);
+        ps.setString(8, comment);
+        ps.setInt(9, this.userId);
 
         ps.executeUpdate();
 
