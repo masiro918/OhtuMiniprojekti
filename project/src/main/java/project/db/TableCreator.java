@@ -41,7 +41,7 @@ public class TableCreator {
     public void createReadingRecommendations() throws Exception {
         this.createConnection();
         String sql = "CREATE TABLE IF NOT EXISTS ReadingRecommendations (id INTEGER PRIMARY KEY AUTOINCREMENT, headline STRING, type STRING,"
-                + "url STRING, isbn STRING, writer STRING, comment_id INTEGER, user_id INTEGER);";
+                + "url STRING, isbn STRING, writer STRING, podcastName STRING, description STRING, comment STRING, user_id INTEGER);";
         this.statement.execute(sql);
         this.closeConnection();
     }
