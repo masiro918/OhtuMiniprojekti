@@ -89,6 +89,10 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         }
     }
 
+    /**
+     * Lisää uuden kirjavinkin.
+     * @param book lisättävä kirjavikko
+     */
     public void addBook(BookRecommendation book) {
         try {
             this.createConnection();
@@ -134,6 +138,12 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     }
 
+    /**
+     * Hakee blogivinkin id:n perusteella.
+     * @param id haettavan blogivinkin id
+     * @return haettu blogivinkki
+     * @throws Exception
+     */
     public BlogRecommendation getBlog(int id) throws Exception {
         this.createConnection();
         String sqlComment = "SELECT * FROM ReadingRecommendations WHERE id=? AND type=?;";
@@ -168,6 +178,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.executeUpdate();
         this.closeConnection();
     }
+
 
     private void removeBook(BookRecommendation bookRecommendation) throws Exception {
         this.createConnection();
