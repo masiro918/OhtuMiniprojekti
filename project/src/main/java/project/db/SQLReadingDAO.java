@@ -51,7 +51,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      * @throws Exception
      */
     public void addBlog(BlogRecommendation blogRecommendation) throws Exception {
-        int commentId = addComment(blogRecommendation.getComment());
+        //int commentId = addComment(blogRecommendation.getComment());
         this.createConnection();
 
         String headline = blogRecommendation.getHeadline();
@@ -59,12 +59,13 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         String url = blogRecommendation.getURL();
         String isbn = "empty";
         String writer = blogRecommendation.getWriter();
+        String comment = blogRecommendation.getComment();
 
         ArrayList<String> courses = blogRecommendation.getRelatedCourses();
         ArrayList<String> tags = blogRecommendation.getTags();
 
         // kesken!!
-        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, user_id) "
+        String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment, user_id) "
                 + "values (?, ?, ?, ?, ?, ?, ?);";
 
         PreparedStatement ps = this.connection.prepareStatement(sql);
@@ -73,7 +74,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.setString(3, url);
         ps.setString(4, isbn);
         ps.setString(5, writer);
-        ps.setInt(6, commentId);
+        ps.setString(6, comment);
         ps.setInt(7, this.userId);
 
         ps.executeUpdate();
@@ -103,7 +104,6 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
             String headline = book.getHeadline();
             String type = book.getType();
-            String url = "empty";
             String isbn = book.getISBN();
             String writer = book.getWriter();
             String comment = book.getComment();
@@ -111,17 +111,16 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
             ArrayList<String> courses = book.getRelatedCourses();
             ArrayList<String> tags = book.getTags();
 
-            String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, user_id) "
-                    + "values (?, ?, ?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO ReadingRecommendations (headline, type, isbn, writer, comment, user_id) "
+                    + "values (?, ?, ?, ?, ?, ?);";
 
             PreparedStatement ps = this.connection.prepareStatement(sql);
             ps.setString(1, headline);
             ps.setString(2, type);
-            ps.setString(3, url);
-            ps.setString(4, isbn);
-            ps.setString(5, writer);
-            ps.setInt(6, 0); // kommentti, korjataan myohemmin
-            ps.setInt(7, this.userId);
+            ps.setString(3, isbn);
+            ps.setString(4, writer);
+            ps.setString(5, comment);
+            ps.setInt(6, this.userId);
 
             ps.executeUpdate();
 
@@ -152,25 +151,24 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
             String headline = podcast.getHeadline();
             String type = podcast.getType();
-            String url = "empty";
-            String isbn = "empty";
-            String podcastName = podcast.getPodcastName(); // TODO: muokkaa tallennustauluun uusi sarake!
             String writer = podcast.getWriter();
+            String podcastName = podcast.getPodcastName();
+            String description = podcast.getDescription();
             String comment = podcast.getComment();
 
             ArrayList<String> courses = podcast.getRelatedCourses();
             ArrayList<String> tags = podcast.getTags();
 
-            String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, user_id) "
+            String sql = "INSERT INTO ReadingRecommendations (headline, type, writer, podcastName, description, comment, user_id) "
                     + "values (?, ?, ?, ?, ?, ?, ?);";
 
             PreparedStatement ps = this.connection.prepareStatement(sql);
             ps.setString(1, headline);
             ps.setString(2, type);
-            ps.setString(3, url);
-            ps.setString(4, isbn);
-            ps.setString(5, writer);
-            ps.setInt(6, 0); // kommentti, korjataan myohemmin
+            ps.setString(3, writer);
+            ps.setString(4, podcastName);
+            ps.setString(5, description);
+            ps.setString(6, comment);
             ps.setInt(7, this.userId);
 
             ps.executeUpdate();
@@ -248,12 +246,12 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     
     private void removePodcast(PodcastRecommendation podcastRecommendation) throws Exception {
         this.createConnection();
-        String sql = "DELETE FROM ReadingRecommendations WHERE type=? headline=? user_id=?;";
+        String sql = "DELETE FROM ReadingRecommendations WHERE type=? headline=? podcastName=? user_id=?;";
         PreparedStatement ps = this.connection.prepareStatement(sql);
-        //TODO: tunnistus podcastin nimen mukaan! (tayty lisata uusi sarake tauluun)
         ps.setString(1, podcastRecommendation.getType());
         ps.setString(2, podcastRecommendation.getHeadline());
-        ps.setInt(3, this.userId);
+        ps.setString(3, podcastRecommendation.getPodcastName());
+        ps.setInt(4, this.userId);
         ps.executeUpdate();
         this.closeConnection();
     }
