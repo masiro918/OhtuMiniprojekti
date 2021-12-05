@@ -69,6 +69,18 @@ public class ReadingRecommendationService {
             if (info.containsKey("writer")) {
                 r.setWriter(info.get("writer"));
             }
+            if (info.containsKey("tags")) {
+                String[] tags = info.get("tags").split(";");
+                for (String tag : tags) {
+                    r.addTags(tag);
+                }
+            }
+            if (info.containsKey("courses")) {
+                String[] courses = info.get("courses").split(";");
+                for (String course : courses) {
+                    r.addCourse(course);
+                }
+            }
             this.recommendationDb.add(r);
             return true;
         } catch (Exception e) {
@@ -82,6 +94,18 @@ public class ReadingRecommendationService {
             BookRecommendation r = new BookRecommendation(headline, "book", info.get("writer"));
             if (info.containsKey("ISBN")) {
                 r.setISBN(info.get("ISBN"));
+            }
+            if (info.containsKey("tags")) {
+                String[] tags = info.get("tags").split(";");
+                for (String tag : tags) {
+                    r.addTags(tag);
+                }
+            }
+            if (info.containsKey("courses")) {
+                String[] courses = info.get("courses").split(";");
+                for (String course : courses) {
+                    r.addCourse(course);
+                }
             }
             this.recommendationDb.add(r);
             return true;
