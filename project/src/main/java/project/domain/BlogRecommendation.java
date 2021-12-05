@@ -48,7 +48,7 @@ public class BlogRecommendation extends ReadingRecommendation {
     }
     
     /**
-     * Returns the information of the blog recommendation as a string representation.
+     * Returns the information of the blog recommendation as a string.
      * 
      * @return printable string
      */

@@ -48,7 +48,7 @@ public class BookRecommendation extends ReadingRecommendation {
     }
     
     /**
-     * Returns the information of the book recommendation as a string representation.
+     * Returns the information of the book recommendation as a string.
      * 
      * @return printable string
      */

@@ -123,11 +123,25 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
         if (this.comment != null) {
             info.put("comment", this.comment);
         }
+        if (!this.tags.isEmpty()) {
+            String savedTags = "";
+            for (String tag : this.tags) {
+                savedTags += tag + ";";
+            }
+            info.put("tags", savedTags);
+        }
+        if (!this.relatedCourses.isEmpty()) {
+            String savedCourses = "";
+            for (String course : this.relatedCourses) {
+                savedCourses += course + ";";
+            }
+            info.put("tags", savedCourses);
+        }
         return info;
     }
     
     /**
-     * Returns the information of the reading recommendation as a string representation.
+     * Returns the information of the reading recommendation as a string.
      * 
      * @return printable string
      */

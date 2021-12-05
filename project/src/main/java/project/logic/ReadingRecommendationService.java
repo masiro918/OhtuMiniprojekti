@@ -6,6 +6,7 @@ import project.db.ReadingRecommendationDAO;
 import project.domain.UserInterface;
 import project.domain.BlogRecommendation;
 import project.domain.BookRecommendation;
+import project.domain.PodcastRecommendation;
 import project.domain.ReadingRecommendationInterface;
 
 /**
@@ -61,7 +62,13 @@ public class ReadingRecommendationService {
         }
         return false;
     }
-
+    
+    /**
+     * Creates and adds a new blog recommendation for the user.
+     *
+     * @param info a HashMap that contains all provided information of the
+     * blog
+     */
     public boolean addBlog(HashMap<String, String> info) {
         try {
             String headline = info.get("headline");
@@ -88,12 +95,52 @@ public class ReadingRecommendationService {
         }
     }
 
+    /**
+     * Creates and adds a new book recommendation for the user.
+     *
+     * @param info a HashMap that contains all provided information of the
+     * book
+     */
     public boolean addBook(HashMap<String, String> info) {
         try {
             String headline = info.get("headline");
             BookRecommendation r = new BookRecommendation(headline, "book", info.get("writer"));
             if (info.containsKey("ISBN")) {
                 r.setISBN(info.get("ISBN"));
+            }
+            if (info.containsKey("tags")) {
+                String[] tags = info.get("tags").split(";");
+                for (String tag : tags) {
+                    r.addTags(tag);
+                }
+            }
+            if (info.containsKey("courses")) {
+                String[] courses = info.get("courses").split(";");
+                for (String course : courses) {
+                    r.addCourse(course);
+                }
+            }
+            this.recommendationDb.add(r);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Creates and adds a new podcast recommendation for the user.
+     *
+     * @param info a HashMap that contains all provided information of the
+     * podcast
+     */
+    public boolean addPodcast(HashMap<String, String> info) {
+        try {
+            String headline = info.get("headline");
+            String podcastName = info.get("podcastName");
+            String description = info.get("description");
+            PodcastRecommendation r = new PodcastRecommendation(headline, "podcast", podcastName, description);
+            if (info.containsKey("writer")) {
+                r.setWriter(info.get("writer"));
             }
             if (info.containsKey("tags")) {
                 String[] tags = info.get("tags").split(";");

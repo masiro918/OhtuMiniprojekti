@@ -4,6 +4,7 @@ import project.domain.BlogRecommendation;
 import java.sql.*;
 import java.util.ArrayList;
 import project.domain.BookRecommendation;
+import project.domain.PodcastRecommendation;
 import project.domain.ReadingRecommendationInterface;
 
 /**
@@ -37,6 +38,9 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         } else if (r.getType().equals("book")) {
             BookRecommendation book = (BookRecommendation) r;
             addBook(book);
+        } else if (r.getType().equals("podcast")) {
+            PodcastRecommendation podcast = (PodcastRecommendation) r;
+            addPodcast(podcast);
         }
     }
 
@@ -137,6 +141,56 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         }
 
     }
+    
+    /**
+     * Adds a new podcast recommendation.
+     * @param podcast added podcast
+     */
+    public void addPodcast(PodcastRecommendation podcast) {
+        try {
+            this.createConnection();
+
+            String headline = podcast.getHeadline();
+            String type = podcast.getType();
+            String url = "empty";
+            String isbn = "empty";
+            String podcastName = podcast.getPodcastName(); // TODO: muokkaa tallennustauluun uusi sarake!
+            String writer = podcast.getWriter();
+            String comment = podcast.getComment();
+
+            ArrayList<String> courses = podcast.getRelatedCourses();
+            ArrayList<String> tags = podcast.getTags();
+
+            String sql = "INSERT INTO ReadingRecommendations (headline, type, url, isbn, writer, comment_id, user_id) "
+                    + "values (?, ?, ?, ?, ?, ?, ?);";
+
+            PreparedStatement ps = this.connection.prepareStatement(sql);
+            ps.setString(1, headline);
+            ps.setString(2, type);
+            ps.setString(3, url);
+            ps.setString(4, isbn);
+            ps.setString(5, writer);
+            ps.setInt(6, 0); // kommentti, korjataan myohemmin
+            ps.setInt(7, this.userId);
+
+            ps.executeUpdate();
+
+            this.closeConnection();
+
+            Integer readingId = getLastIdReading();
+
+            for (String tag : tags) {
+                addTag(tag, readingId);
+            }
+
+            for (String course : courses) {
+                addCourse(course, readingId);
+            }
+            
+        } catch (Exception e) {
+
+        }
+    }
 
     /**
      * Hakee blogivinkin id:n perusteella.
@@ -191,6 +245,18 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.executeUpdate();
         this.closeConnection();
     }
+    
+    private void removePodcast(PodcastRecommendation podcastRecommendation) throws Exception {
+        this.createConnection();
+        String sql = "DELETE FROM ReadingRecommendations WHERE type=? headline=? user_id=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        //TODO: tunnistus podcastin nimen mukaan! (tayty lisata uusi sarake tauluun)
+        ps.setString(1, podcastRecommendation.getType());
+        ps.setString(2, podcastRecommendation.getHeadline());
+        ps.setInt(3, this.userId);
+        ps.executeUpdate();
+        this.closeConnection();
+    }
 
     @Override
     public void remove(ReadingRecommendationInterface r) throws Exception{
@@ -199,6 +265,8 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
             removeBlog((BlogRecommendation) r);
         } else if (type == "book") {
             removeBook((BookRecommendation) r);
+        } if (type == "podcast") {
+            removePodcast((PodcastRecommendation) r);
         }
     }
 
