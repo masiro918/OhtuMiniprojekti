@@ -28,6 +28,22 @@ public class Stepdefs {
         assertTrue(driver.getPageSource().contains("Login"));
     }
 
+    @Given("user with username {string} and password {string} is created")
+    public void userCreated(String username, String password) {
+        clickLink("Signup");
+        findElementAndSendData("username", username);
+        findElementAndSendData("password", password);
+        findElementAndSubmit("register");
+    }
+
+    @Given("user is logged in")
+    public void userLoggedIn() {
+        clickLink("Login");
+        findElementAndSendData("username", "tester");
+        findElementAndSendData("password", "salasana123");
+        findElementAndSubmit("login");
+    }
+
     @When("given correct credentials username {string} and password {string}")
     public void correctUsernameAndPassword(String username, String password) {
         findElementAndSendData("username", username);
@@ -123,14 +139,35 @@ public class Stepdefs {
     }
 
     //Recommendation adding steps
-    @Given("new is selected")
+    @Given("post is selected")
     public void newIsSelected() {
-
+        clickLink("Post");
     }
 
-    @When("given valid blog headline {string}, type {string} and url {string}")
-    public void validBlogData(String headline, String type, String url) {
+    @Given("blogpost is selected")
+    public void blogPostIsSelected() {
+        clickPostType("blogi");
+    }
 
+    @Given("bookpost is selected")
+    public void bookPostIsSelected() {
+        clickPostType("kirja");
+    }
+ 
+    @When("given valid blog headline {string}, writer {string} and url {string}")
+    public void validBlogData(String headline, String writer, String url) {
+        findElementAndSendData("url", url);
+        findElementAndSendData("headline", headline);
+        findElementAndSendData("writer", writer);
+        findElementAndSubmit("add");
+    }
+
+    @When("given invalid blog, missing the headline")
+    public void invalidBlogMissingHeadline() {
+        findElementAndSendData("url", "Some url");
+        findElementAndSendData("writer", "tester");
+        findElementAndSubmit("add");
+        System.out.println(driver.getPageSource());
     }
 
     @When("given valid book headline {string}, type {string} and writer {string}")
@@ -140,7 +177,7 @@ public class Stepdefs {
 
     @Then("new blog recommendation is added")
     public void blogIsAdded() {
-
+        assertTrue(driver.getPageSource().contains("Success"));
     }
 
     @Then("new book recommendation is added")
@@ -166,6 +203,11 @@ public class Stepdefs {
     private void clickLink(String link) {
         driver.get(url);
         WebElement elem = driver.findElement(By.linkText(link));
+        elem.click();
+    }
+
+    private void clickPostType(String type) {
+        WebElement elem = driver.findElement(By.name(type));
         elem.click();
     }
 
