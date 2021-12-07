@@ -75,13 +75,15 @@ public class ReadingRecommendationService {
                 r.setWriter(info.get("writer"));
             }
             if (info.containsKey("tags")) {
-                String[] tags = info.get("tags").split(";");
+                String tagsNoSpaces = info.get("tags").replaceAll("\\s+",""); // Oletuksena, etta tagit tallennettu muodossa 'tag1, tag2, tag3'
+                String[] tags = tagsNoSpaces.split(",");
                 for (String tag : tags) {
                     r.addTags(tag);
                 }
             }
             if (info.containsKey("courses")) {
-                String[] courses = info.get("courses").split(";");
+                String coursesNoSpaces = info.get("courses").replaceAll("\\s+","");
+                String[] courses = coursesNoSpaces.split(",");
                 for (String course : courses) {
                     r.addCourse(course);
                 }
@@ -107,13 +109,15 @@ public class ReadingRecommendationService {
                 r.setISBN(info.get("ISBN"));
             }
             if (info.containsKey("tags")) {
-                String[] tags = info.get("tags").split(";");
+                String tagsNoSpaces = info.get("tags").replaceAll("\\s+","");
+                String[] tags = tagsNoSpaces.split(",");
                 for (String tag : tags) {
                     r.addTags(tag);
                 }
             }
             if (info.containsKey("courses")) {
-                String[] courses = info.get("courses").split(";");
+                String coursesNoSpaces = info.get("courses").replaceAll("\\s+","");
+                String[] courses = coursesNoSpaces.split(",");
                 for (String course : courses) {
                     r.addCourse(course);
                 }
@@ -141,13 +145,15 @@ public class ReadingRecommendationService {
                 r.setWriter(info.get("writer"));
             }
             if (info.containsKey("tags")) {
-                String[] tags = info.get("tags").split(";");
+                String tagsNoSpaces = info.get("tags").replaceAll("\\s+","");
+                String[] tags = tagsNoSpaces.split(",");
                 for (String tag : tags) {
                     r.addTags(tag);
                 }
             }
             if (info.containsKey("courses")) {
-                String[] courses = info.get("courses").split(";");
+                String coursesNoSpaces = info.get("courses").replaceAll("\\s+","");
+                String[] courses = coursesNoSpaces.split(",");
                 for (String course : courses) {
                     r.addCourse(course);
                 }
