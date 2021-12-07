@@ -7,8 +7,13 @@ Feature: As a user I can add blog as a reading recommendation
         When given valid blog headline "Test", writer "tester" and url "something"
         Then new blog recommendation is added
 
-    #Scenario: logged user cannnot add blog missing headline
-        #Given user is logged in
-        #And post is selected
-        #And blogpost is selected
-        #When given invalid blog, missing the headline
+    Scenario: cannot see post page if not logged in
+        Given post is selected
+        Then user is returned to the mainpage
+
+    Scenario: logged user cannnot add blog missing headline
+        Given user is logged in
+        And post is selected
+        And blogpost is selected
+        When given invalid blog, missing the headline
+        #Then adding reading recommendation fails

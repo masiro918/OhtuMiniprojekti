@@ -89,13 +89,10 @@ public class Stepdefs {
 
     @Then("all recommendations are shown")
     public void allRecommendationsAreShown() {
-        assertTrue(driver.getPageSource().contains("Blog 1"));
-        assertTrue(driver.getPageSource().contains("blog"));
-        assertTrue(driver.getPageSource().contains("urli"));
+        WebElement elem = driver.findElement(By.name("recommendations"));
 
-        assertTrue(driver.getPageSource().contains("Book 1"));
-        assertTrue(driver.getPageSource().contains("book"));
-        assertTrue(driver.getPageSource().contains("Writer"));
+        assertTrue(elem.getText().contains("Blog 1"));
+        assertTrue(elem.getText().contains("Book 1"));
     }
 
     //Signup steps
@@ -170,9 +167,12 @@ public class Stepdefs {
         System.out.println(driver.getPageSource());
     }
 
-    @When("given valid book headline {string}, type {string} and writer {string}")
-    public void validBookData(String headline, String type, String url) {
-
+    @When("given valid book with headline {string}, writer {string} and ISBN {string}")
+    public void validBookData(String headline, String writer, String isbn) {
+        findElementAndSendData("headline", headline);
+        findElementAndSendData("writer", writer);
+        findElementAndSendData("ISBN", isbn);
+        findElementAndSubmit("add");
     }
 
     @Then("new blog recommendation is added")
@@ -182,12 +182,26 @@ public class Stepdefs {
 
     @Then("new book recommendation is added")
     public void bookIsAdded() {
-        
+        assertTrue(driver.getPageSource().contains("Success"));
+    }
+
+    @Then("adding reading recommendation fails")
+    public void recommendationAddingFails() {
+        assertTrue(driver.getPageSource().contains("Failure"));
+    }
+
+    @Then("user is returned to the mainpage")
+    public void returnedToMain() {
+        assertTrue(driver.getPageSource().contains("Front page"));
     }
 
     @After
     public void tearDown() {
         driver.quit();
+    }
+
+    private void pageContains(String content) {
+        assertTrue(driver.getPageSource().contains(content));
     }
 
     private void findElementAndSendData(String name, String value) {
