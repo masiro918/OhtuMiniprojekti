@@ -50,6 +50,26 @@ public class SQLReadingDAOTest {
 
         assertEquals(br2.getURL(), "http://url.url/");
     }
+
+    @Test
+    public void getBlogTest() throws Exception {
+        boolean success = false;
+        BlogRecommendation br = new BlogRecommendation("headline-test", "blog", "http://url-test.url/");
+
+        try {
+            this.sqlReadingDAO.addBlog(br);
+            //int id = this.sqlReadingDAO.getLastIdReading();
+            BlogRecommendation br2 = this.sqlReadingDAO.getBlog(1);
+
+            System.out.println(br2.getHeadline());
+            if (br2.getHeadline().equals("headline-test")) {
+                success = true;
+            }
+        } catch (Exception e) {
+            System.err.println("virhe: " + e.getMessage());
+        }
+        assertTrue(success);
+    }
     
     @Test
     public void addCourseTest() throws Exception {
@@ -60,7 +80,7 @@ public class SQLReadingDAOTest {
             this.sqlReadingDAO.addCourse(course, 9999);
             String getCourse = this.sqlReadingDAO.getCourse(9999);
 
-            if (getCourse != null) {
+            if (getCourse.equals("testi-kurssi")) {
                 success = true;
             }
         } catch (Exception e) {
