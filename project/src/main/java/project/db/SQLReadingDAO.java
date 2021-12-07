@@ -414,7 +414,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         for (Object readingRecommendation : readingRecommendations) {
             ReadingRecommendation rr = (ReadingRecommendation)readingRecommendation;
 
-            if (rr.getHeadline().equals(headline)) {
+            if (rr.getHeadline().contains(headline)) {
                 findedRecommendations.add(rr);
             }
         }
