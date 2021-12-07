@@ -5,6 +5,9 @@ import project.domain.*;
 import project.logic.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.rmi.server.RMIClassLoader;
+import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 import javax.sound.sampled.SourceDataLine;
@@ -16,6 +19,12 @@ public class SQLReadingDAOTest {
 
     @Before
     public void setUp() throws Exception {
+        try {
+            tb.destroyDatabase();
+        } catch (Exception e) {
+
+        }
+
         this.sqlReadingDAO = new SQLReadingDAO();
 
         tb.createUser();
@@ -39,5 +48,24 @@ public class SQLReadingDAOTest {
         }
 
         assertEquals(br2.getURL(), "http://url.url/");
+    }
+
+    @Test
+    public void loadAllTest() throws Exception {
+        BlogRecommendation br3 = null, br4 = null;
+        ArrayList recommendations = null;
+        try {
+            BlogRecommendation br1 = new BlogRecommendation("headline", "blog", "http://url.url/");
+            BlogRecommendation br2 = new BlogRecommendation("headline2", "blog2", "http://url2.url/");
+
+            this.sqlReadingDAO.addBlog(br1);
+            this.sqlReadingDAO.addBlog(br2);
+            
+            recommendations = this.sqlReadingDAO.loadAll();
+            assertTrue(true);
+        }
+        catch (Exception e) {
+            assertTrue(false);
+        }
     }
 }

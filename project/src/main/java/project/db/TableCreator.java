@@ -6,6 +6,7 @@
 package project.db;
 
 import java.sql.*;
+import java.io.*;
 
 /**
  * Tarkistaa, onko tarvittavia tietokantatauluja olemassa.
@@ -90,5 +91,19 @@ public class TableCreator {
         
         this.connection = null;
         this.statement = null;
+    }
+
+    /**
+     * Tuhoaa tietokannan. Ole huolellinen tämä metodin kanssa. Tällä ei ole tuskin muuta käyttöä
+     * kuin testien yhteydessä
+     * @throws Exception
+     */
+    public void destroyDatabase() throws Exception {
+        File dbFile = new File("database.db");
+        if (dbFile.delete()) {
+            return;
+        } else {
+            throw new Exception("tietokannan poisto ei onnistunut:");
+        }
     }
 }
