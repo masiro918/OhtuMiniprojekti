@@ -13,7 +13,6 @@ import project.domain.*;
  */
 public class ReadingRecommendationService {
 
-    //private ArrayList<ReadingRecommendationInterface> recommendations;
     private UserInterface user;
     private ReadingRecommendationDAO recommendationDb;
 
@@ -21,10 +20,11 @@ public class ReadingRecommendationService {
         this.user = user;
         this.recommendationDb = recommendationDb;
     }
-    
+
     /**
-     * Sets the user that is currently logged in.
-     * Service fetches recommendations from database on the basis of userId.
+     * Sets the user that is currently logged in. Service fetches
+     * recommendations from database on the basis of userId.
+     *
      * @param user user that is currently logged in to app
      */
     public void setUser(UserInterface user) {
@@ -33,8 +33,9 @@ public class ReadingRecommendationService {
     }
 
     /**
-     * Loads the user's reading recommendations from the database.
-     * Returns empty list if database throws exception.
+     * Loads the user's reading recommendations from the database. Returns empty
+     * list if database throws exception.
+     *
      * @return ArrayList of all recommendations
      */
     public ArrayList<ReadingRecommendationInterface> loadRecommendations() {
@@ -60,20 +61,19 @@ public class ReadingRecommendationService {
         }
         return false;
     }
-    
+
     /**
      * Creates and adds a new blog recommendation for the user.
      *
-     * @param info a HashMap that contains all provided information of the
-     * blog
+     * @param info a HashMap that contains all provided information of the blog
      */
     public boolean addBlog(HashMap<String, String> info) {
         String url = info.get("url");
-        if (url == null || url.equals("")) {
-            return false;
-        }
+//        if (url == null) {
+//            return false;
+//        }
         String headline = info.get("headline");
-        if (headline == null || headline.equals("")) {
+        if (headline == null) {
             return false;
         }
         try {
@@ -82,14 +82,55 @@ public class ReadingRecommendationService {
                 r.setWriter(info.get("writer"));
             }
             if (info.containsKey("tags")) {
-                String tagsNoSpaces = info.get("tags").replaceAll("\\s+",""); // Oletuksena, etta tagit tallennettu muodossa 'tag1, tag2, tag3'
+                String tagsNoSpaces = info.get("tags").replaceAll("\\s+", ""); // Oletuksena, etta tagit tallennettu muodossa 'tag1, tag2, tag3'
                 String[] tags = tagsNoSpaces.split(",");
                 for (String tag : tags) {
                     r.addTags(tag);
                 }
             }
             if (info.containsKey("courses")) {
-                String coursesNoSpaces = info.get("courses").replaceAll("\\s+","");
+                String coursesNoSpaces = info.get("courses").replaceAll("\\s+", "");
+                String[] courses = coursesNoSpaces.split(",");
+                for (String course : courses) {
+                    r.addCourse(course);
+                }
+            }
+            showRecommendation(r);
+            this.recommendationDb.add(r);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Creates and adds a new book recommendation for the user.
+     *
+     * @param info a HashMap that contains all provided information of the book
+     */
+    public boolean addBook(HashMap<String, String> info) {
+        String headline = info.get("headline");
+        if (headline == null) {
+            return false;
+        }
+        String writer = info.get("writer");
+        if (writer == null) {
+            return false;
+        }
+        try {
+            BookRecommendation r = new BookRecommendation(headline, "book", writer);
+            if (info.containsKey("ISBN")) {
+                r.setISBN(info.get("ISBN"));
+            }
+            if (info.containsKey("tags")) {
+                String tagsNoSpaces = info.get("tags").replaceAll("\\s+", "");
+                String[] tags = tagsNoSpaces.split(",");
+                for (String tag : tags) {
+                    r.addTags(tag);
+                }
+            }
+            if (info.containsKey("courses")) {
+                String coursesNoSpaces = info.get("courses").replaceAll("\\s+", "");
                 String[] courses = coursesNoSpaces.split(",");
                 for (String course : courses) {
                     r.addCourse(course);
@@ -103,47 +144,6 @@ public class ReadingRecommendationService {
     }
 
     /**
-     * Creates and adds a new book recommendation for the user.
-     *
-     * @param info a HashMap that contains all provided information of the
-     * book
-     */
-    public boolean addBook(HashMap<String, String> info) {
-        String headline = info.get("headline");
-        if (headline == null || headline.equals("")) {
-            return false;
-        }
-        String writer = info.get("writer");
-        if (writer == null || writer.equals("")) {
-            return false;
-        }
-        try {
-            BookRecommendation r = new BookRecommendation(headline, "book", writer);
-            if (info.containsKey("ISBN")) {
-                r.setISBN(info.get("ISBN"));
-            }
-            if (info.containsKey("tags")) {
-                String tagsNoSpaces = info.get("tags").replaceAll("\\s+","");
-                String[] tags = tagsNoSpaces.split(",");
-                for (String tag : tags) {
-                    r.addTags(tag);
-                }
-            }
-            if (info.containsKey("courses")) {
-                String coursesNoSpaces = info.get("courses").replaceAll("\\s+","");
-                String[] courses = coursesNoSpaces.split(",");
-                for (String course : courses) {
-                    r.addCourse(course);
-                }
-            }
-            this.recommendationDb.add(r);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
-    /**
      * Creates and adds a new podcast recommendation for the user.
      *
      * @param info a HashMap that contains all provided information of the
@@ -151,15 +151,15 @@ public class ReadingRecommendationService {
      */
     public boolean addPodcast(HashMap<String, String> info) {
         String headline = info.get("headline");
-        if (headline == null || headline.equals("")) {
+        if (headline == null) {
             return false;
         }
         String podcastName = info.get("podcastName");
-        if (podcastName == null || headline.equals("")) {
+        if (podcastName == null) {
             return false;
         }
         String description = info.get("description");
-        if (description == null || headline.equals("")) {
+        if (description == null) {
             return false;
         }
         try {
@@ -168,14 +168,14 @@ public class ReadingRecommendationService {
                 r.setWriter(info.get("writer"));
             }
             if (info.containsKey("tags")) {
-                String tagsNoSpaces = info.get("tags").replaceAll("\\s+","");
+                String tagsNoSpaces = info.get("tags").replaceAll("\\s+", "");
                 String[] tags = tagsNoSpaces.split(",");
                 for (String tag : tags) {
                     r.addTags(tag);
                 }
             }
             if (info.containsKey("courses")) {
-                String coursesNoSpaces = info.get("courses").replaceAll("\\s+","");
+                String coursesNoSpaces = info.get("courses").replaceAll("\\s+", "");
                 String[] courses = coursesNoSpaces.split(",");
                 for (String course : courses) {
                     r.addCourse(course);
@@ -276,6 +276,7 @@ public class ReadingRecommendationService {
 
     /**
      * Contains some serious spaghetti.
+     *
      * @param writer
      * @return
      */
@@ -313,7 +314,7 @@ public class ReadingRecommendationService {
         try {
             // TODO: Change to support all types
             ArrayList<ReadingRecommendationInterface> recs = new ArrayList<>();
-            for(int index : indexes) {
+            for (int index : indexes) {
                 recs.add(this.findBlogId(index));
             }
             return recs;
@@ -322,7 +323,7 @@ public class ReadingRecommendationService {
             return null;
         }
     }
-    
+
     public BlogRecommendation findBlogId(int id) {
         try {
             return this.recommendationDb.getBlog(id);
