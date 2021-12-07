@@ -4,6 +4,7 @@ package project;
 import java.util.ArrayList;
 import project.db.ReadingRecommendationDAO;
 import project.domain.BlogRecommendation;
+import project.domain.BookRecommendation;
 import project.domain.ReadingRecommendationInterface;
 
 public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
@@ -48,6 +49,12 @@ public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
     @Override
     public void setUserId(int id) {
         this.userId = id;
+    }
+
+    @Override
+    public BookRecommendation getBook(int id) throws Exception {
+        // poistetaan myöhemmin
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
