@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Miniprojekti</title>
+    </head>
+    <body>
+        <h1 th:text="${book.headline}">$bookheadline</h1>
+        <table>
+            <tr>
+                <th>Headline</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Tags</th>
+                <th>Related courses</th>
+            </tr>
+            <tr>
+                <td th:text="${book.headline}">$bookheadline</td>
+                <td th:text="${book.writer}">$bookauthor</td>
+                <td th:text="${book.isbn}">$bookisbn</td>
+                <td>$tags</td>
+                <td>$courses</td>
+            </tr>
+        </table>
+        <h2>Comments</h2>
+        <p th:text="${book.comment}">$comments</p>
+    </body>
+</html>

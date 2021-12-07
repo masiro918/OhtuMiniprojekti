@@ -20,6 +20,7 @@ import project.db.TableCreator;
 
 import project.db.UserDAO;
 import project.db.ReadingRecommendationDAO;
+import project.domain.BookRecommendation;
 import project.domain.User;
 import project.logic.ReadingRecommendationService;
 
@@ -59,22 +60,6 @@ public class Main {
 
         get("/", (req,res) -> new ModelAndView(new HashMap<>(), "index"), new ThymeleafTemplateEngine());
         get("/list", (req,res) -> {
-            // Proof of concept. Poistetaan, kun blogien hakeminen tietokannasta onnistuu.
-            
-            HashMap<String,String> testBlog1 = new HashMap<>();
-            testBlog1.put("headline", "Blog 1");
-            testBlog1.put("type", "blog");
-            testBlog1.put("url", "https://test.blog.com");
-            testBlog1.put("writer", "Bob the Blogger");
-            recService.createRecommendation(testBlog1);
-            
-            HashMap<String,String> testBlog2 = new HashMap<>();
-            testBlog2.put("headline", "Blog 2");
-            testBlog2.put("type", "blog");
-            testBlog2.put("url", "https://test.blog2.org");
-            testBlog2.put("writer", "Ann the Author");
-            recService.createRecommendation(testBlog2);
-            
             HashMap map = new HashMap<>();
             map.put("recommendations", recService.loadRecommendations());
             return new ModelAndView(map, "list");
@@ -121,6 +106,14 @@ public class Main {
             }
             return new ModelAndView(new HashMap<>(), "index");
         }, new ThymeleafTemplateEngine());
+        
+        get("/post/book", (req,res) -> {
+            String cookie = req.cookie("login");
+            if (cookie != null) {
+                return new ModelAndView(new HashMap<>(), "postbook");
+            }
+            return new ModelAndView(new HashMap<>(), "index");
+        }, new ThymeleafTemplateEngine());
 
         post("/post", (req,res) -> {
             String cookie = req.cookie("login");
@@ -135,9 +128,9 @@ public class Main {
             info.put("type", req.queryParamOrDefault("type", null));
             info.put("headline", req.queryParamOrDefault("headline", null));
             info.put("writer", req.queryParamOrDefault("writer", null));
-            if (type == "blog") {
+            if (type.equals("blog")) {
                 info.put("url", req.queryParamOrDefault("url", null));
-            } else if (type == "book") {
+            } else if (type.equals("book")) {
                 info.put("ISBN", req.queryParamOrDefault("ISBN", null));
             }
             recService.createRecommendation(info);
@@ -157,11 +150,18 @@ public class Main {
 
         get("/list/blog/:id", (req,res) -> {
             int id = Integer.parseInt(req.params(":id"));
-            // Metodia toistaiseksi ei olemassa
             BlogRecommendation blog = recService.findBlogId(id);
             HashMap map = new HashMap<>();
             map.put("blog", blog);
             return new ModelAndView(map, "blog");
+        }, new ThymeleafTemplateEngine());
+        
+        get("/list/book/:id", (req,res) -> {
+            int id = Integer.parseInt(req.params(":id"));
+            BookRecommendation book = recService.findBookId(id);
+            HashMap map = new HashMap<>();
+            map.put("book", book);
+            return new ModelAndView(map, "book");
         }, new ThymeleafTemplateEngine());
 
         get("/search", (req,res) -> {

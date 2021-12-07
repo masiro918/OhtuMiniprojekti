@@ -200,6 +200,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      * @return haettu blogivinkki
      * @throws Exception
      */
+    @Override
     public BlogRecommendation getBlog(int id) throws Exception {
         this.createConnection();
         String sqlComment = "SELECT * FROM ReadingRecommendations WHERE id=? AND type=?;";
@@ -215,6 +216,30 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         rs.close();
         this.closeConnection();
         return blog;
+    }
+    
+    /**
+     * 
+     * @param id haettavan kirjavinkin id
+     * @return haettu kirja
+     * @throws Exception 
+     */
+    @Override
+    public BookRecommendation getBook(int id) throws Exception {
+        this.createConnection();
+        String sqlComment = "SELECT * FROM ReadingRecommendations WHERE id=? AND type=?";
+        PreparedStatement ps = this.connection.prepareStatement(sqlComment);
+        ps.setInt(1,id);
+        ps.setString(2, "book");
+        ResultSet rs = ps.executeQuery();
+        BookRecommendation book = new BookRecommendation(rs.getString("headline"),
+                                                         rs.getString("type"),
+                                                         rs.getString("writer"));
+        book.setISBN(rs.getString("ISBN"));
+        book.setId(id);
+        rs.close();
+        this.closeConnection();
+        return book;
     }
 
     /**

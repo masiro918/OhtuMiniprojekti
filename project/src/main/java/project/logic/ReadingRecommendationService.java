@@ -301,4 +301,12 @@ public class ReadingRecommendationService {
             return null;
         }
     }
+    
+    public BookRecommendation findBookId(int id) {
+        try {
+            return this.recommendationDb.getBook(id);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
