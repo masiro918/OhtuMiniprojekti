@@ -60,7 +60,8 @@ public class Main {
         TableCreator tc = new TableCreator();
         tc.createUser();
         tc.createReadingRecommendations();
-        tc.createCommments();
+        tc.createTags();
+        tc.createRelatedCourses();
         
         port(getHerokuAssignedPort());
 
