@@ -50,11 +50,19 @@ public class Main {
             //Tämä tulee käyttöön user story testeissä
             auth = new AuthenticationService(userDao);
         }
-        recService = new ReadingRecommendationService(null, new SQLReadingDAO());
+
+        //User story testejä varten
+        if(recommendationsDao == null) {
+            recommendationsDao = new SQLReadingDAO();
+        }
+
+
+        recService = new ReadingRecommendationService(null, recommendationsDao);
         TableCreator tc = new TableCreator();
         tc.createUser();
         tc.createReadingRecommendations();
-        tc.createCommments();
+        tc.createTags();
+        tc.createRelatedCourses();
         
         port(getHerokuAssignedPort());
 

@@ -68,20 +68,29 @@ public class ReadingRecommendationService {
      * blog
      */
     public boolean addBlog(HashMap<String, String> info) {
+        String url = info.get("url");
+        if (url == null || url.equals("")) {
+            return false;
+        }
+        String headline = info.get("headline");
+        if (headline == null || headline.equals("")) {
+            return false;
+        }
         try {
-            String headline = info.get("headline");
-            BlogRecommendation r = new BlogRecommendation(headline, "blog", info.get("url"));
+            BlogRecommendation r = new BlogRecommendation(headline, "blog", url);
             if (info.containsKey("writer")) {
                 r.setWriter(info.get("writer"));
             }
             if (info.containsKey("tags")) {
-                String[] tags = info.get("tags").split(";");
+                String tagsNoSpaces = info.get("tags").replaceAll("\\s+",""); // Oletuksena, etta tagit tallennettu muodossa 'tag1, tag2, tag3'
+                String[] tags = tagsNoSpaces.split(",");
                 for (String tag : tags) {
                     r.addTags(tag);
                 }
             }
             if (info.containsKey("courses")) {
-                String[] courses = info.get("courses").split(";");
+                String coursesNoSpaces = info.get("courses").replaceAll("\\s+","");
+                String[] courses = coursesNoSpaces.split(",");
                 for (String course : courses) {
                     r.addCourse(course);
                 }
@@ -100,20 +109,29 @@ public class ReadingRecommendationService {
      * book
      */
     public boolean addBook(HashMap<String, String> info) {
+        String headline = info.get("headline");
+        if (headline == null || headline.equals("")) {
+            return false;
+        }
+        String writer = info.get("writer");
+        if (writer == null || writer.equals("")) {
+            return false;
+        }
         try {
-            String headline = info.get("headline");
-            BookRecommendation r = new BookRecommendation(headline, "book", info.get("writer"));
+            BookRecommendation r = new BookRecommendation(headline, "book", writer);
             if (info.containsKey("ISBN")) {
                 r.setISBN(info.get("ISBN"));
             }
             if (info.containsKey("tags")) {
-                String[] tags = info.get("tags").split(";");
+                String tagsNoSpaces = info.get("tags").replaceAll("\\s+","");
+                String[] tags = tagsNoSpaces.split(",");
                 for (String tag : tags) {
                     r.addTags(tag);
                 }
             }
             if (info.containsKey("courses")) {
-                String[] courses = info.get("courses").split(";");
+                String coursesNoSpaces = info.get("courses").replaceAll("\\s+","");
+                String[] courses = coursesNoSpaces.split(",");
                 for (String course : courses) {
                     r.addCourse(course);
                 }
@@ -132,22 +150,33 @@ public class ReadingRecommendationService {
      * podcast
      */
     public boolean addPodcast(HashMap<String, String> info) {
+        String headline = info.get("headline");
+        if (headline == null || headline.equals("")) {
+            return false;
+        }
+        String podcastName = info.get("podcastName");
+        if (podcastName == null || headline.equals("")) {
+            return false;
+        }
+        String description = info.get("description");
+        if (description == null || headline.equals("")) {
+            return false;
+        }
         try {
-            String headline = info.get("headline");
-            String podcastName = info.get("podcastName");
-            String description = info.get("description");
             PodcastRecommendation r = new PodcastRecommendation(headline, "podcast", podcastName, description);
             if (info.containsKey("writer")) {
                 r.setWriter(info.get("writer"));
             }
             if (info.containsKey("tags")) {
-                String[] tags = info.get("tags").split(";");
+                String tagsNoSpaces = info.get("tags").replaceAll("\\s+","");
+                String[] tags = tagsNoSpaces.split(",");
                 for (String tag : tags) {
                     r.addTags(tag);
                 }
             }
             if (info.containsKey("courses")) {
-                String[] courses = info.get("courses").split(";");
+                String coursesNoSpaces = info.get("courses").replaceAll("\\s+","");
+                String[] courses = coursesNoSpaces.split(",");
                 for (String course : courses) {
                     r.addCourse(course);
                 }
