@@ -61,12 +61,31 @@ public class SQLReadingDAOTest {
             //int id = this.sqlReadingDAO.getLastIdReading();
             BlogRecommendation br2 = this.sqlReadingDAO.getBlog(1);
 
-            System.out.println(br2.getHeadline());
+            //System.out.println(br2.getHeadline());
             if (br2.getHeadline().equals("headline-test")) {
                 success = true;
             }
         } catch (Exception e) {
-            System.err.println("virhe: " + e.getMessage());
+            //System.err.println("virhe: " + e.getMessage());
+        }
+        assertTrue(success);
+    }
+
+    @Test
+    public void deleteBlogTest() throws Exception {
+        boolean success = false;
+        this.sqlReadingDAO.setUserId(999);
+
+        BlogRecommendation br = new BlogRecommendation("test", "blog", "http://url-test.url/");
+        br.setWriter("test-writer");
+
+        try {
+            this.sqlReadingDAO.addBlog(br);
+            this.sqlReadingDAO.remove(br);
+            success = true;
+        } catch (Exception e) {
+            //System.err.println("writer: " + br.getWriter());
+            //System.err.println("virhe: " + e.getMessage());
         }
         assertTrue(success);
     }
