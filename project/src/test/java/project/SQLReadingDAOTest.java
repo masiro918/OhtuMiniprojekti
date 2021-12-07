@@ -6,6 +6,7 @@ import project.logic.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.beans.Transient;
 import java.rmi.server.RMIClassLoader;
 import java.util.ArrayList;
 import static org.junit.Assert.*;
@@ -49,7 +50,25 @@ public class SQLReadingDAOTest {
 
         assertEquals(br2.getURL(), "http://url.url/");
     }
+    
+    @Test
+    public void addCourseTest() throws Exception {
+        boolean success = false;
+        String course = "testi-kurssi";
 
+        try {
+            this.sqlReadingDAO.addCourse(course, 9999);
+            String getCourse = this.sqlReadingDAO.getCourse(9999);
+
+            if (getCourse != null) {
+                success = true;
+            }
+        } catch (Exception e) {
+
+        }
+        assertTrue(success);
+    }
+    
     @Test
     public void loadAllTest() throws Exception {
         BlogRecommendation br3 = null, br4 = null;

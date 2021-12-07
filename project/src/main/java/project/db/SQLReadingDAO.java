@@ -218,6 +218,25 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     }
 
     /**
+     * Hakee kurssin ReadingRecommendations-olion id:n mukaan
+     * @param id ReadingRecommendations-olion id
+     * @return ReadingRecommendations-olioon liitetty kurssi
+     * @throws Exception
+     */
+    public String getCourse(int id) throws Exception {
+        this.createConnection();
+        String sql = "SELECT * FROM RelatedCourses WHERE readingRecommendation_id=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        String course = rs.getString("course");
+        rs.close();
+        ps.close();
+        this.closeConnection();
+        return course;
+    }
+
+    /**
      * Poistaa blogi-vinkit tietokannasta.
      *
      * @param blogRecommendation poistettava olio
