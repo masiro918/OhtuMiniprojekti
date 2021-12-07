@@ -244,13 +244,14 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      */
     private void removeBlog(BlogRecommendation blogRecommendation) throws Exception {
         this.createConnection();
-        String sql = "DELETE FROM ReadingRecommendations WHERE url=? writer=? headline=? user_id=?;";
+        String sql = "DELETE FROM ReadingRecommendations WHERE url=? AND writer=? AND headline=? AND user_id=?;";
         PreparedStatement ps = this.connection.prepareStatement(sql);
         ps.setString(1, blogRecommendation.getURL());
         ps.setString(2, blogRecommendation.getWriter());
         ps.setString(3, blogRecommendation.getHeadline());
         ps.setInt(4, this.userId);
         ps.executeUpdate();
+        ps.close();
         this.closeConnection();
     }
 
@@ -398,6 +399,27 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.close();
 
         this.closeConnection();
+    }
+
+    /**
+     * Hakee tietokannasta lukuvinkkejä headline mukaan.
+     * @param headline haettava headline
+     * @return haetut lukuvinkit
+     * @throws Exception
+     */
+    public ArrayList<ReadingRecommendation> findByHeadline(String headline) throws Exception {
+        ArrayList readingRecommendations = this.loadAll();
+        ArrayList<ReadingRecommendation> findedRecommendations = new ArrayList<>();
+
+        for (Object readingRecommendation : readingRecommendations) {
+            ReadingRecommendation rr = (ReadingRecommendation)readingRecommendation;
+
+            if (rr.getHeadline().contains(headline)) {
+                findedRecommendations.add(rr);
+            }
+        }
+
+        return findedRecommendations;
     }
 
     @Override
