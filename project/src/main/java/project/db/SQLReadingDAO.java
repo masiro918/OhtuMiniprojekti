@@ -401,6 +401,27 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.closeConnection();
     }
 
+    /**
+     * Hakee tietokannasta lukuvinkkejä headline mukaan.
+     * @param headline haettava headline
+     * @return haetut lukuvinkit
+     * @throws Exception
+     */
+    public ArrayList<ReadingRecommendation> findByHeadline(String headline) throws Exception {
+        ArrayList readingRecommendations = this.loadAll();
+        ArrayList<ReadingRecommendation> findedRecommendations = new ArrayList<>();
+
+        for (Object readingRecommendation : readingRecommendations) {
+            ReadingRecommendation rr = (ReadingRecommendation)readingRecommendation;
+
+            if (rr.getHeadline().equals(headline)) {
+                findedRecommendations.add(rr);
+            }
+        }
+
+        return findedRecommendations;
+    }
+
     @Override
     public ArrayList<ReadingRecommendationInterface> loadAll() throws Exception {
         ArrayList<ReadingRecommendationInterface> recommendations = new ArrayList<>();
