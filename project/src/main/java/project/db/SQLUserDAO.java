@@ -44,9 +44,9 @@ public class SQLUserDAO implements UserDAO {
             System.out.println(user.getUsername());
 
             pstmt.executeUpdate();
-            connection.commit();
             this.closeConnection();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("Kayttajan tallennus epaonnistui.");
         }
     }
