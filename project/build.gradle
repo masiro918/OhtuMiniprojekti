@@ -47,8 +47,17 @@ dependencies {
 test {
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
+    finalizedBy jacocoTestReport // report is always generated after tests run
 }
 
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['com/jpasikainen/tira/gui/**', 'com/jpasikainen/tira/Game.class'])
+        }))
+    }
+}
 checkstyle {
     ignoreFailures = true
     checkstyleMain.source = "src"
