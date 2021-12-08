@@ -13,3 +13,6 @@ Asenna [Gradle](https://gradle.org/) käyttöjärjestelmällesi sopivalla tavall
 * Ominaisuus on onnistuneesti itegroitu osaksi muuta ohjelmisto
 * Kirjoitettu koodi vastaa user storyssa haluttua toiminnallisuutta
 * Sprintin backlog on päivitetty asianmukaisesti
+
+### Testikattavuus
+![](project/docs/jacoco.png)
