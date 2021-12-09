@@ -82,7 +82,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.setInt(9, this.userId);
 
         ps.executeUpdate();
-
+        ps.close();
         this.closeConnection();
 
         // haetaan juuri lisätyn lukuvinkin id
@@ -127,7 +127,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
             ps.setInt(6, this.userId);
 
             ps.executeUpdate();
-
+            ps.close();
             this.closeConnection();
 
             Integer readingId = getLastIdReading();
@@ -176,7 +176,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
             ps.setInt(7, this.userId);
 
             ps.executeUpdate();
-
+            ps.close();
             this.closeConnection();
 
             Integer readingId = getLastIdReading();
@@ -260,6 +260,22 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.closeConnection();
         return course;
     }
+    
+    public ArrayList<String> getAllCourses(int id) throws Exception {
+        ArrayList<String> courses = new ArrayList<>();
+        this.createConnection();
+        String sql = "SELECT * FROM RelatedCourses WHERE readingRecommendation_id=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            courses.add(rs.getString("course"));
+        }
+        rs.close();
+        ps.close();
+        this.closeConnection();
+        return courses;
+    }
 
     /**
      * Poistaa blogi-vinkit tietokannasta.
@@ -290,6 +306,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.setString(3, bookRecommendation.getHeadline());
         ps.setInt(4, this.userId);
         ps.executeUpdate();
+        ps.close();
         this.closeConnection();
     }
     
@@ -302,6 +319,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.setString(3, podcastRecommendation.getPodcastName());
         ps.setInt(4, this.userId);
         ps.executeUpdate();
+        ps.close();
         this.closeConnection();
     }
 
@@ -381,9 +399,9 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         while (rs.next()) {
             id = rs.getInt("id");
         }
-
+        rs.close();
         this.closeConnection();
-
+        
         return id;
     }
 
@@ -482,6 +500,14 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         
         rs.close();
         this.closeConnection();
+        
+        for (ReadingRecommendationInterface r : recommendations) {
+            int id = r.getId();
+            for (String course : getAllCourses(id)) {
+                r.addCourse(course);
+            }
+        }
+        
         return recommendations;
     }
 }

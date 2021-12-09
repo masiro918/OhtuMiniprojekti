@@ -126,4 +126,25 @@ public class SQLReadingDAOTest {
             assertTrue(false);
         }
     }
+    
+    @Test
+    public void getAllCoursesReturnsAllCourses() {
+        BlogRecommendation blog = new BlogRecommendation("headline", "blog", "url");
+        String course1 = "course1";
+        String course2 = "course2";
+        blog.addCourse(course1);
+        blog.addCourse(course2);
+        
+        try {
+            this.sqlReadingDAO.add(blog);
+            int id = this.sqlReadingDAO.getLastIdReading();
+            ArrayList<String> courses = this.sqlReadingDAO.getAllCourses(id);
+            
+            assertTrue(courses.contains(course1));
+            assertTrue(courses.contains(course2));
+            
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
 }
