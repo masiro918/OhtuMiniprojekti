@@ -110,10 +110,12 @@ public class ReadingRecommendationServiceTest {
 
     //RemoveRecommendations tests
     @Test
-    public void removeRecommendationReducesSizeIfHeadlineIsFound() {
-        recommendations.add(new ReadingRecommendation("Bonus", "book"));
+    public void removeRecommendationReducesSizeIfRecommendationIsFound() {
+        BookRecommendation book = new BookRecommendation("Bonus", "book", "Writer");
+        book.setISBN("1234");
+        recommendations.add(book);
         recommendations.add(recommendation);
-        service.removeRecommendation("Bonus");
+        service.removeRecommendation(book);
 
         assertEquals(1, recommendations.size());
     }
@@ -122,16 +124,18 @@ public class ReadingRecommendationServiceTest {
     public void removeRecommendationDoesNothingIfNotFound() {
         recommendations.add(new ReadingRecommendation("Bonus", "book"));
         recommendations.add(recommendation);
-        service.removeRecommendation("Not here");
+        service.removeRecommendation(new BookRecommendation("Other", "book", "Writer"));
 
         assertEquals(2, recommendations.size());
     }
 
     @Test
     public void removeRecommendationRemovesCorrectRecommendation() {
-        recommendations.add(new ReadingRecommendation("Bonus", "book"));
+        BookRecommendation book = new BookRecommendation("Bonus", "book", "Writer");
+        book.setISBN("1234");
+        recommendations.add(book);
         recommendations.add(recommendation);
-        service.removeRecommendation("Bonus");
+        service.removeRecommendation(book);
 
         String headline = recommendations.get(0).getHeadline();
 
