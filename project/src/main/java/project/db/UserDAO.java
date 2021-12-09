@@ -11,21 +11,21 @@ public interface UserDAO {
      * @param user lisättävä olio
      *  @throws Exception
      */
-    void add(UserInterface user);
+    public void add(UserInterface user);
 
-    ArrayList<UserInterface> fetchAllUsers();
+    public ArrayList<UserInterface> fetchAllUsers();
 
     /**
      * Hae käyttäjän tiedot tietokannasta.
      * @throws Exception
      */
-    boolean login(UserInterface user) throws Exception;
+    public boolean login(UserInterface user) throws Exception;
 
     /**
      * Poistaa käyttäjän tietokannasta.
      * @param user poistettava olio
      * @throws Exception
      */
-    void remove(UserInterface user) throws Exception;
+    public void remove(UserInterface user) throws Exception;
     
 }

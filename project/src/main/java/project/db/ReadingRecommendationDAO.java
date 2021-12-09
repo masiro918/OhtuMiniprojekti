@@ -7,10 +7,10 @@ import project.domain.BookRecommendation;
 import project.domain.ReadingRecommendationInterface;
 
 public interface ReadingRecommendationDAO {
-    void add(ReadingRecommendationInterface r) throws Exception;
-    void remove(ReadingRecommendationInterface r) throws Exception;
-    ArrayList<ReadingRecommendationInterface> loadAll() throws Exception;
-    BlogRecommendation getBlog(int id) throws Exception;
-    BookRecommendation getBook(int id) throws Exception;
-    void setUserId(int id);
+    public void add(ReadingRecommendationInterface r) throws Exception;
+    public void remove(ReadingRecommendationInterface r) throws Exception;
+    public ArrayList<ReadingRecommendationInterface> loadAll() throws Exception;
+    public BlogRecommendation getBlog(int id) throws Exception;
+    public BookRecommendation getBook(int id) throws Exception;
+    public void setUserId(int id);
 }

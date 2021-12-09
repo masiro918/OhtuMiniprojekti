@@ -452,9 +452,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ArrayList<ReadingRecommendationInterface> recommendations = new ArrayList<>();
         this.createConnection();
         
-        //TODO: kayta this.userId oikean kayttajan lukuvinkkien hakemiseen!
-        
-        String sqlComment = "SELECT * FROM ReadingRecommendations;";
+        String sqlComment = "SELECT * FROM ReadingRecommendations WHERE user_id="+this.userId;
         ResultSet rs = this.statement.executeQuery(sqlComment);
         while (rs.next()) {
             String headline = rs.getString("headline");
@@ -472,10 +470,6 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
                 book.setId(rs.getInt("id"));
                 recommendations.add(book);
             }
-//            ReadingRecommendation recommendation = new ReadingRecommendation(rs.getString("headline"),
-//                    rs.getString("type"));
-//            recommendation.setId(rs.getInt("id"));
-//            recommendations.add(recommendation);
         }
         rs.close();
         this.closeConnection();
