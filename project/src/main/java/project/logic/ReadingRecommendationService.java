@@ -229,7 +229,7 @@ public class ReadingRecommendationService {
      *
      * @param headline the headline of a reading recommendation that is wanted.
      * @return reading recommendation if found, null if not found
-     */
+     */    
     public ReadingRecommendationInterface findRecommendation(String headline) {
         try {
             for (ReadingRecommendationInterface r : loadRecommendations()) {
@@ -241,6 +241,28 @@ public class ReadingRecommendationService {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    
+    /**
+     * Etsii kaikki, joilla on haettava headline
+     *
+     * @param headline haettava headline
+     * @return reading recommendations if found, null if not found
+     */
+    public ArrayList<ReadingRecommendationInterface> findRecommendations(String headline) {
+        ArrayList<ReadingRecommendationInterface> findedRecommendations = new ArrayList<>();
+        try {
+            for (ReadingRecommendationInterface r : loadRecommendations()) {
+                if (r.getHeadline().equals(headline)) {
+                    findedRecommendations.add(r);
+                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+
+        return findedRecommendations;
     }
 
     /**
