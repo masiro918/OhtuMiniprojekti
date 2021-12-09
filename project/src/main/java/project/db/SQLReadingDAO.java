@@ -462,15 +462,24 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
                 BlogRecommendation blog = new BlogRecommendation(headline, type, rs.getString("url"));
                 blog.setWriter(rs.getString("writer"));
                 blog.setId(rs.getInt("id"));
+                blog.setComment(rs.getString("comment"));
                 recommendations.add(blog);
                 
             } else if (type.equals("book")) {
                 BookRecommendation book = new BookRecommendation(headline, type, rs.getString("isbn"));
                 book.setWriter(rs.getString("writer"));
                 book.setId(rs.getInt("id"));
+                book.setComment(rs.getString("comment"));
                 recommendations.add(book);
+                
+            } else if (type.equals("podcast")) {
+                PodcastRecommendation podcast = new PodcastRecommendation(headline, type, rs.getString("podcastName"), rs.getString("description"));
+                podcast.setWriter(rs.getString("writer"));
+                podcast.setComment(rs.getString("comment"));
+                recommendations.add(podcast);
             }
         }
+        
         rs.close();
         this.closeConnection();
         return recommendations;
