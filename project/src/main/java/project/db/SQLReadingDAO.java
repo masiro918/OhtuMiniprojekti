@@ -15,7 +15,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     private Connection connection = null;
     private Statement statement = null;
-    
+
     private int userId;
 
     /**
@@ -24,7 +24,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     public SQLReadingDAO() {
         this.userId = 0;
     }
-    
+
     @Override
     public void setUserId(int id) {
         this.userId = id;
@@ -100,6 +100,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     /**
      * Lisää uuden kirjavinkin.
+     *
      * @param book lisättävä kirjavikko
      */
     public void addBook(BookRecommendation book) {
@@ -144,9 +145,10 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         }
 
     }
-    
+
     /**
      * Adds a new podcast recommendation.
+     *
      * @param podcast added podcast
      */
     public void addPodcast(PodcastRecommendation podcast) {
@@ -188,7 +190,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
             for (String course : courses) {
                 addCourse(course, readingId);
             }
-            
+
         } catch (Exception e) {
 
         }
@@ -196,6 +198,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
 
     /**
      * Hakee blogivinkin id:n perusteella.
+     *
      * @param id haettavan blogivinkin id
      * @return haettu blogivinkki
      * @throws Exception
@@ -205,45 +208,58 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.createConnection();
         String sqlComment = "SELECT * FROM ReadingRecommendations WHERE id=? AND type=?;";
         PreparedStatement ps = this.connection.prepareStatement(sqlComment);
-        ps.setInt(1,id);
-        ps.setString(2,"blog");
+        ps.setInt(1, id);
+        ps.setString(2, "blog");
         ResultSet rs = ps.executeQuery();
         BlogRecommendation blog = new BlogRecommendation(rs.getString("headline"),
-                                                         rs.getString("type"),
-                                                         rs.getString("url"));
+                rs.getString("type"),
+                rs.getString("url"));
         blog.setWriter(rs.getString("writer"));
         blog.setId(id);
         rs.close();
         this.closeConnection();
+        for (String tag : getAllTags(id)) {
+            blog.addTags(tag);
+        }
+        for (String course : getAllCourses(id)) {
+            blog.addCourse(course);
+        }
         return blog;
     }
-    
+
     /**
-     * 
+     *
      * @param id haettavan kirjavinkin id
      * @return haettu kirja
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public BookRecommendation getBook(int id) throws Exception {
         this.createConnection();
         String sqlComment = "SELECT * FROM ReadingRecommendations WHERE id=? AND type=?";
         PreparedStatement ps = this.connection.prepareStatement(sqlComment);
-        ps.setInt(1,id);
+        ps.setInt(1, id);
         ps.setString(2, "book");
         ResultSet rs = ps.executeQuery();
         BookRecommendation book = new BookRecommendation(rs.getString("headline"),
-                                                         rs.getString("type"),
-                                                         rs.getString("writer"));
+                rs.getString("type"),
+                rs.getString("writer"));
         book.setISBN(rs.getString("ISBN"));
         book.setId(id);
         rs.close();
         this.closeConnection();
+        for (String tag : getAllTags(id)) {
+            book.addTags(tag);
+        }
+        for (String course : getAllCourses(id)) {
+            book.addCourse(course);
+        }
         return book;
     }
 
     /**
      * Hakee kurssin ReadingRecommendations-olion id:n mukaan
+     *
      * @param id ReadingRecommendations-olion id
      * @return ReadingRecommendations-olioon liitetty kurssi
      * @throws Exception
@@ -260,7 +276,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.closeConnection();
         return course;
     }
-    
+
     public ArrayList<String> getAllCourses(int id) throws Exception {
         ArrayList<String> courses = new ArrayList<>();
         this.createConnection();
@@ -296,7 +312,6 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.closeConnection();
     }
 
-
     private void removeBook(BookRecommendation bookRecommendation) throws Exception {
         this.createConnection();
         String sql = "DELETE FROM ReadingRecommendations WHERE ISBN=? writer=? headline=? user_id=?;";
@@ -309,7 +324,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.close();
         this.closeConnection();
     }
-    
+
     private void removePodcast(PodcastRecommendation podcastRecommendation) throws Exception {
         this.createConnection();
         String sql = "DELETE FROM ReadingRecommendations WHERE type=? headline=? podcastName=? user_id=?;";
@@ -324,13 +339,13 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     }
 
     @Override
-    public void remove(ReadingRecommendationInterface r) throws Exception{
+    public void remove(ReadingRecommendationInterface r) throws Exception {
         String type = r.getType();
         if (type == "blog") {
             removeBlog((BlogRecommendation) r);
         } else if (type == "book") {
             removeBook((BookRecommendation) r);
-        } if (type == "podcast") {
+        } else if (type == "podcast") {
             removePodcast((PodcastRecommendation) r);
         }
     }
@@ -401,7 +416,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         }
         rs.close();
         this.closeConnection();
-        
+
         return id;
     }
 
@@ -415,7 +430,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     public void addTag(String tag, int reading_id) throws Exception {
         this.createConnection();
 
-        String sql = "INSERT INTO Tags (comment, readingRecommendation_id) values (?, ?);";
+        String sql = "INSERT INTO Tags (tag, readingRecommendation_id) values (?, ?);";
         PreparedStatement ps = this.connection.prepareStatement(sql);
         ps.setString(1, tag);
         ps.setInt(2, reading_id);
@@ -423,6 +438,22 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.close();
 
         this.closeConnection();
+    }
+    
+    public ArrayList<String> getAllTags(int readingId) throws Exception {
+        ArrayList<String> tags = new ArrayList<>();
+        this.createConnection();
+        String sql = "SELECT * FROM Tags WHERE readingRecommendation_id=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setInt(1, readingId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            tags.add(rs.getString("tag"));
+        }
+        rs.close();
+        ps.close();
+        this.closeConnection();
+        return tags;
     }
 
     /**
@@ -455,7 +486,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ArrayList<ReadingRecommendation> findedRecommendations = new ArrayList<>();
 
         for (Object readingRecommendation : readingRecommendations) {
-            ReadingRecommendation rr = (ReadingRecommendation)readingRecommendation;
+            ReadingRecommendation rr = (ReadingRecommendation) readingRecommendation;
 
             if (rr.getHeadline().contains(headline)) {
                 findedRecommendations.add(rr);
@@ -469,27 +500,27 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     public ArrayList<ReadingRecommendationInterface> loadAll() throws Exception {
         ArrayList<ReadingRecommendationInterface> recommendations = new ArrayList<>();
         this.createConnection();
-        
-        String sqlComment = "SELECT * FROM ReadingRecommendations WHERE user_id="+this.userId;
+
+        String sqlComment = "SELECT * FROM ReadingRecommendations WHERE user_id=" + this.userId;
         ResultSet rs = this.statement.executeQuery(sqlComment);
         while (rs.next()) {
             String headline = rs.getString("headline");
             String type = rs.getString("type");
-            
+
             if (type.equals("blog")) {
                 BlogRecommendation blog = new BlogRecommendation(headline, type, rs.getString("url"));
                 blog.setWriter(rs.getString("writer"));
                 blog.setId(rs.getInt("id"));
                 blog.setComment(rs.getString("comment"));
                 recommendations.add(blog);
-                
+
             } else if (type.equals("book")) {
                 BookRecommendation book = new BookRecommendation(headline, type, rs.getString("isbn"));
                 book.setWriter(rs.getString("writer"));
                 book.setId(rs.getInt("id"));
                 book.setComment(rs.getString("comment"));
                 recommendations.add(book);
-                
+
             } else if (type.equals("podcast")) {
                 PodcastRecommendation podcast = new PodcastRecommendation(headline, type, rs.getString("podcastName"), rs.getString("description"));
                 podcast.setWriter(rs.getString("writer"));
@@ -497,17 +528,20 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
                 recommendations.add(podcast);
             }
         }
-        
+
         rs.close();
         this.closeConnection();
         
         for (ReadingRecommendationInterface r : recommendations) {
             int id = r.getId();
+            for (String tag : getAllTags(id)) {
+                r.addTags(tag);
+            }
             for (String course : getAllCourses(id)) {
                 r.addCourse(course);
             }
         }
-        
+
         return recommendations;
     }
 }

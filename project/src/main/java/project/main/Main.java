@@ -141,6 +141,8 @@ public class Main {
             } else if (type.equals("book")) {
                 info.put("ISBN", req.queryParamOrDefault("ISBN", null));
             }
+            info.put("tags", req.queryParamOrDefault("tags", null));
+            info.put("courses", req.queryParamOrDefault("related_courses", null));
             recService.createRecommendation(info);
             return "{\"message\":\"Success\"}";
         });

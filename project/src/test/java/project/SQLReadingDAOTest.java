@@ -147,4 +147,25 @@ public class SQLReadingDAOTest {
             assertTrue(false);
         }
     }
+    
+    @Test
+    public void getAllTagsReturnsAllTags() {
+        BlogRecommendation blog = new BlogRecommendation("headline", "blog", "url");
+        String tag1 = "tag1";
+        String tag2 = "tag2";
+        blog.addTags(tag1);
+        blog.addTags(tag2);
+        
+        try {
+            this.sqlReadingDAO.add(blog);
+            int id = this.sqlReadingDAO.getLastIdReading();
+            ArrayList<String> tags = this.sqlReadingDAO.getAllTags(id);
+            
+            assertTrue(tags.contains(tag1));
+            assertTrue(tags.contains(tag2));
+            
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
 }
