@@ -187,8 +187,7 @@ public class ReadingRecommendationService {
      *
      * @param headline the headline of the recommendation that is to be removed
      */
-    public boolean removeRecommendation(String headline) {
-        ReadingRecommendationInterface r = findRecommendation(headline);
+    public boolean removeRecommendation(ReadingRecommendationInterface r) {
         try {
             this.recommendationDb.remove(r);
             return true;
