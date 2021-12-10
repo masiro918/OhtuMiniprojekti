@@ -41,7 +41,7 @@ public class TableCreator {
         //pstmt.executeQuery();
         String sql = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username STRING, password STRING);";
         if (heroku) {
-            sql = "CREATE TABLE IF NOT EXISTS Users (id SERIAL, username STRING, password STRING);";
+            sql = "CREATE TABLE IF NOT EXISTS Users (id SERIAL, username TEXT, password TEXT);";
         }
         this.statement.execute(sql);
         this.closeConnection();
@@ -57,8 +57,8 @@ public class TableCreator {
         String sql = "CREATE TABLE IF NOT EXISTS ReadingRecommendations (id INTEGER PRIMARY KEY AUTOINCREMENT, headline STRING, type STRING,"
                 + "url STRING, isbn STRING, writer STRING, podcastName STRING, description STRING, comment STRING, user_id INTEGER);";
         if (heroku) {
-            sql = "CREATE TABLE IF NOT EXISTS ReadingRecommendations (id SERIAL, headline STRING, type STRING,"
-                    + "url STRING, isbn STRING, writer STRING, podcastName STRING, description STRING, comment STRING, user_id INTEGER);";
+            sql = "CREATE TABLE IF NOT EXISTS ReadingRecommendations (id SERIAL, headline TEXT, type TEXT,"
+                    + "url TEXT, isbn TEXT, writer TEXT, podcastName TEXT, description TEXT, comment TEXT, user_id INTEGER);";
         }
         this.statement.execute(sql);
         this.closeConnection();
@@ -72,7 +72,7 @@ public class TableCreator {
         this.createConnection();
         String sql = "CREATE TABLE IF NOT EXISTS RelatedCourses (id INTEGER PRIMARY KEY AUTOINCREMENT, course STRING, readingRecommendation_id INTEGER);";
         if (heroku) {
-            sql = "CREATE TABLE IF NOT EXISTS RelatedCourses (id SERIAL, course STRING, readingRecommendation_id INTEGER);";
+            sql = "CREATE TABLE IF NOT EXISTS RelatedCourses (id SERIAL, course TEXT, readingRecommendation_id INTEGER);";
         }
         this.statement.execute(sql);
         this.closeConnection();
@@ -86,7 +86,7 @@ public class TableCreator {
         this.createConnection();
         String sql = "CREATE TABLE IF NOT EXISTS Tags (id INTEGER PRIMARY KEY AUTOINCREMENT, tag STRING, readingRecommendation_id INTEGER);";
         if (heroku) {
-            sql = "CREATE TABLE IF NOT EXISTS Tags (id SERIAL, tag STRING, readingRecommendation_id INTEGER);";
+            sql = "CREATE TABLE IF NOT EXISTS Tags (id SERIAL, tag TEXT, readingRecommendation_id INTEGER);";
         }
         this.statement.execute(sql);
         this.closeConnection();
@@ -100,7 +100,7 @@ public class TableCreator {
         this.createConnection();
         String sql = "CREATE TABLE IF NOT EXISTS Comments (id INTEGER PRIMARY KEY AUTOINCREMENT, comment STRING, readingRecommendation_id INTEGER);";
         if (heroku) {
-            sql = "CREATE TABLE IF NOT EXISTS Comments (id SERIAL, comment STRING, readingRecommendation_id INTEGER);";
+            sql = "CREATE TABLE IF NOT EXISTS Comments (id SERIAL, comment TEXT, readingRecommendation_id INTEGER);";
         }
         this.statement.execute(sql);
         this.closeConnection();
