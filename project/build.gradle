@@ -64,5 +64,18 @@ checkstyle {
     // checkstyleMain.exclude('some/path/*.java')
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'project.main.Main'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
