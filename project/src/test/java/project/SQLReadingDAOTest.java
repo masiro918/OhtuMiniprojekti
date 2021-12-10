@@ -81,7 +81,8 @@ public class SQLReadingDAOTest {
 
         try {
             this.sqlReadingDAO.addBlog(br);
-            this.sqlReadingDAO.remove(br);
+            int lastId = this.sqlReadingDAO.getLastIdReading();
+            this.sqlReadingDAO.remove(lastId);
             success = true;
         } catch (Exception e) {
             //System.err.println("writer: " + br.getWriter());

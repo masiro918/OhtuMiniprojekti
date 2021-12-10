@@ -22,10 +22,10 @@ public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
     }
 
     @Override
-    public void remove(ReadingRecommendationInterface r) throws Exception {
+    public void remove(int recommendationId) throws Exception {
         int index = -1;
         for (int i = 0; i < this.fakeRecommendations.size(); i++) {
-            if (this.fakeRecommendations.get(i).getHeadline().equals(r.getHeadline())) {
+            if (this.fakeRecommendations.get(i).getId() == recommendationId) {
                 index = i;
                 break;
             }

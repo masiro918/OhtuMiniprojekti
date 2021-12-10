@@ -345,15 +345,23 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     }
 
     @Override
-    public void remove(ReadingRecommendationInterface r) throws Exception {
-        String type = r.getType();
-        if (type == "blog") {
-            removeBlog((BlogRecommendation) r);
-        } else if (type == "book") {
-            removeBook((BookRecommendation) r);
-        } else if (type == "podcast") {
-            removePodcast((PodcastRecommendation) r);
-        }
+    public void remove(int recommendationId) throws Exception {
+//        String type = r.getType();
+//        if (type == "blog") {
+//            removeBlog((BlogRecommendation) r);
+//        } else if (type == "book") {
+//            removeBook((BookRecommendation) r);
+//        } else if (type == "podcast") {
+//            removePodcast((PodcastRecommendation) r);
+//        }
+        this.createConnection();
+        String sql = "DELETE FROM ReadingRecommendations WHERE id=? AND user_id=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setInt(1, recommendationId);
+        ps.setInt(2, this.userId);
+        ps.executeUpdate();
+        ps.close();
+        this.closeConnection();
     }
 
     /**

@@ -89,42 +89,45 @@ public class ReadingRecommendationServiceTest {
         assertEquals(book.getPrint(), addedBook.getPrint());
     }
 
-    //FindIndex tests
-    @Test
-    public void findIndexReturnsIndexIfRecommendationIsThere() {
-        recommendations.add(new ReadingRecommendation("Bonus", "book"));
-        recommendations.add(recommendation);
-        int index = service.findIndex("Basic");
-
-        assertEquals(1, index);
-    }
-
-    @Test
-    public void findIndexReturnsNegativeOneIfRecommendationNotFound() {
-        recommendations.add(new ReadingRecommendation("Bonus", "book"));
-        recommendations.add(recommendation);
-        int index = service.findIndex("Not there");
-
-        assertEquals(-1, index);
-    }
+//    //FindIndex tests
+//    @Test
+//    public void findIndexReturnsIndexIfRecommendationIsThere() {
+//        recommendations.add(new ReadingRecommendation("Bonus", "book"));
+//        recommendations.add(recommendation);
+//        int index = service.findIndex("Basic");
+//
+//        assertEquals(1, index);
+//    }
+//
+//    @Test
+//    public void findIndexReturnsNegativeOneIfRecommendationNotFound() {
+//        recommendations.add(new ReadingRecommendation("Bonus", "book"));
+//        recommendations.add(recommendation);
+//        int index = service.findIndex("Not there");
+//
+//        assertEquals(-1, index);
+//    }
 
     //RemoveRecommendations tests
     @Test
-    public void removeRecommendationReducesSizeIfRecommendationIsFound() {
+    public void removeRecommendationRemovesRecommendationFromDatabase() {
         BookRecommendation book = new BookRecommendation("Bonus", "book", "Writer");
-        book.setISBN("1234");
+        int randomId = 4;
+        book.setId(randomId);
         recommendations.add(book);
         recommendations.add(recommendation);
-        service.removeRecommendation(book);
-
-        assertEquals(1, recommendations.size());
+        service.removeRecommendation(randomId);
+        assertTrue(recommendations.contains(recommendation));
+        assertFalse(recommendations.contains(book));
     }
 
     @Test
     public void removeRecommendationDoesNothingIfNotFound() {
-        recommendations.add(new ReadingRecommendation("Bonus", "book"));
+        ReadingRecommendation r = new ReadingRecommendation("Bonus", "book");
+        r.setId(2);
+        recommendations.add(r);
         recommendations.add(recommendation);
-        service.removeRecommendation(new BookRecommendation("Other", "book", "Writer"));
+        service.removeRecommendation(1);
 
         assertEquals(2, recommendations.size());
     }
@@ -132,10 +135,10 @@ public class ReadingRecommendationServiceTest {
     @Test
     public void removeRecommendationRemovesCorrectRecommendation() {
         BookRecommendation book = new BookRecommendation("Bonus", "book", "Writer");
-        book.setISBN("1234");
+        book.setId(1);
         recommendations.add(book);
         recommendations.add(recommendation);
-        service.removeRecommendation(book);
+        service.removeRecommendation(1);
 
         String headline = recommendations.get(0).getHeadline();
 

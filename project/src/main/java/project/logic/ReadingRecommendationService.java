@@ -187,9 +187,9 @@ public class ReadingRecommendationService {
      *
      * @param headline the headline of the recommendation that is to be removed
      */
-    public boolean removeRecommendation(ReadingRecommendationInterface r) {
+    public boolean removeRecommendation(int recommendationId) {
         try {
-            this.recommendationDb.remove(r);
+            this.recommendationDb.remove(recommendationId);
             return true;
         } catch (Exception e) {
             return false;
@@ -264,30 +264,31 @@ public class ReadingRecommendationService {
         return findedRecommendations;
     }
 
-    /**
-     * Returns the index of the wanted reading recommendation in the
-     * recommendations list.
-     *
-     * @param headline headline of the reading recommendation that is searched
-     * for.
-     * @return index of the reading recommendation as int, negative if not
-     * found.
-     */
-    public int findIndex(String headline) {
-        try {
-            int index = -1;
-            ArrayList<ReadingRecommendationInterface> recommendations = loadRecommendations();
-            for (int i = 0; i < recommendations.size(); i++) {
-                if (recommendations.get(i).getHeadline().equals(headline)) {
-                    index = i;
-                    break;
-                }
-            }
-            return index;
-        } catch (Exception e) {
-            return -1;
-        }
-    }
+    // POISTETAAN!
+//    /**
+//     * Returns the index of the wanted reading recommendation in the
+//     * recommendations list.
+//     *
+//     * @param headline headline of the reading recommendation that is searched
+//     * for.
+//     * @return index of the reading recommendation as int, negative if not
+//     * found.
+//     */
+//    public int findIndex(String headline) {
+//        try {
+//            int index = -1;
+//            ArrayList<ReadingRecommendationInterface> recommendations = loadRecommendations();
+//            for (int i = 0; i < recommendations.size(); i++) {
+//                if (recommendations.get(i).getHeadline().equals(headline)) {
+//                    index = i;
+//                    break;
+//                }
+//            }
+//            return index;
+//        } catch (Exception e) {
+//            return -1;
+//        }
+//    }
 
     /**
      * Contains some serious spaghetti.
