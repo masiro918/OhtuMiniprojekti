@@ -16,7 +16,11 @@ public class SQLUserDAO implements UserDAO {
     private Connection connection = null;
 
     public SQLUserDAO() {
-
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        // Postgres Heroku
+        if (processBuilder.environment().get("JDBC_DATABASE_URL") != null) {
+            this.dbUrl = System.getenv("JDBC_DATABASE_URL");
+        }
     }
 
     /**

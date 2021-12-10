@@ -16,6 +16,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     private Connection connection = null;
     private Statement statement = null;
 
+    private String dbUrl = "jdbc:sqlite:database.db";
     private int userId;
 
     /**
@@ -23,6 +24,11 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      */
     public SQLReadingDAO() {
         this.userId = 0;
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        // Postgres Heroku
+        if (processBuilder.environment().get("JDBC_DATABASE_URL") != null) {
+            this.dbUrl = System.getenv("JDBC_DATABASE_URL");
+        }
     }
 
     @Override
@@ -356,7 +362,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
      * @throws Exception
      */
     private void createConnection() throws Exception {
-        this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+        this.connection = DriverManager.getConnection(dbUrl);
         this.statement = connection.createStatement();
     }
 
