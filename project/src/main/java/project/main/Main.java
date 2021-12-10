@@ -96,7 +96,7 @@ public class Main {
            )) {
                return "{\"message\":\"Success\"}";
            }
-            return "{\"message\":\"Failure\"}";
+            return "{\"message\":\"Failure: " + auth.getErrorMessages() + "\"}";
         });
 
         get("/post", (req, res) -> {
@@ -143,8 +143,10 @@ public class Main {
             }
             info.put("tags", req.queryParamOrDefault("tags", null));
             info.put("courses", req.queryParamOrDefault("related_courses", null));
-            recService.createRecommendation(info);
-            return "{\"message\":\"Success\"}";
+            if (recService.createRecommendation(info)) {
+                return "{\"message\":\"Success\"}";
+            }
+            return "{\"message\":\"Something went wrong.\"}";
         });
 
         get("/:user/home", (req, res) -> {

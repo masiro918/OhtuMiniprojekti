@@ -48,6 +48,7 @@ public class SQLUserDAO implements UserDAO {
             System.out.println(user.getUsername());
 
             pstmt.executeUpdate();
+            pstmt.close();
             this.closeConnection();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -68,6 +69,7 @@ public class SQLUserDAO implements UserDAO {
         pstmt.setString(1, user.getUsername());
 
         pstmt.executeUpdate();
+        pstmt.close();
         this.closeConnection();
     }
 
@@ -105,10 +107,11 @@ public class SQLUserDAO implements UserDAO {
                 user.setId(userId);
                 users.add(user);
             }
-            
+            pstmt.close();
+            rs.close();
             this.closeConnection();
         } catch (Exception e) {
-            System.out.println("Kayttajien haku ei onnistunut.");
+            return users;
         }
         return users;
     }

@@ -69,11 +69,11 @@ public class ReadingRecommendationService {
      */
     public boolean addBlog(HashMap<String, String> info) {
         String url = info.get("url");
-//        if (url == null) {
-//            return false;
-//        }
+        if (url == null || url.isBlank()) {
+            return false;
+        }
         String headline = info.get("headline");
-        if (headline == null) {
+        if (headline == null || headline.isBlank()) {
             return false;
         }
         try {
@@ -108,11 +108,11 @@ public class ReadingRecommendationService {
      */
     public boolean addBook(HashMap<String, String> info) {
         String headline = info.get("headline");
-        if (headline == null) {
+        if (headline == null || headline.isBlank()) {
             return false;
         }
         String writer = info.get("writer");
-        if (writer == null) {
+        if (writer == null || writer.isBlank()) {
             return false;
         }
         try {
@@ -147,15 +147,15 @@ public class ReadingRecommendationService {
      */
     public boolean addPodcast(HashMap<String, String> info) {
         String headline = info.get("headline");
-        if (headline == null) {
+        if (headline == null || headline.isBlank()) {
             return false;
         }
         String podcastName = info.get("podcastName");
-        if (podcastName == null) {
+        if (podcastName == null || podcastName.isBlank()) {
             return false;
         }
         String description = info.get("description");
-        if (description == null) {
+        if (description == null || description.isBlank()) {
             return false;
         }
         try {

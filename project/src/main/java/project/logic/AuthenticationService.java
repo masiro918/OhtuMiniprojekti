@@ -6,13 +6,20 @@ import project.db.UserDAO;
 import project.domain.User;
 
 /**
- * A class responsible for handling useraccount functions (create a user, log user in, save users).
+ * A class responsible for handling user account functions (create a user, log user in, save users).
  */
 public class AuthenticationService {
     private UserDAO userDb;
+    private ArrayList<String> errorMessages;
     
     public AuthenticationService(UserDAO userdao) {
         this.userDb = userdao;
+        this.errorMessages = new ArrayList<String>();
+    }
+    
+    public String getErrorMessages() {
+        String print = "" + this.errorMessages;
+        return print.substring(1, print.length() - 1);
     }
     
     /**
@@ -79,19 +86,20 @@ public class AuthenticationService {
      * @return true if both username and password are acceptable, otherwise false
      */
     public boolean creationStatus(String username, String password) {
-        if (invalidUsername(username)) { //epakelpo kayttajanimi, TODO: virheviesti
-            return false;
+        this.errorMessages = new ArrayList<>();
+        if (invalidUsername(username)) {
+            this.errorMessages.add("username must be at least 3 characters long and contain only letters");
         }
         
-        if (invalidPassword(password)) { //epakelpo salasana, TODO: virheviesti
-            return false;
+        if (invalidPassword(password)) {
+            this.errorMessages.add("password must be at least 8 characters long and must include numbers or special characters");
         }
         
-        if (findUser(username) != null) { //kayttajanimi otettu, TODO: virheviesti
-            return false;
+        if (findUser(username) != null) {
+            this.errorMessages.add("username is taken");
         }
         
-        return true;
+        return this.errorMessages.isEmpty();
     }
     
     /**
