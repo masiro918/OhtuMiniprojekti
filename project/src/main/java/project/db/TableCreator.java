@@ -15,9 +15,17 @@ import java.io.*;
 public class TableCreator {
     private Connection connection = null;
     private Statement statement = null;
-    
+    private String url = "jdbc:sqlite:database.db";
+
+    /**
+     * Constructor.
+     */
     public TableCreator() {
-        
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        // Postgres Heroku
+        if (processBuilder.environment().get("JDBC_DATABASE_URL") != null) {
+            this.url = System.getenv("JDBC_DATABASE_URL");
+        }
     }
 
     /**
@@ -81,7 +89,7 @@ public class TableCreator {
     }
     
     private void createConnection() throws SQLException {
-        this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+        this.connection = DriverManager.getConnection(url);
         this.statement = connection.createStatement();
     }
     
