@@ -17,8 +17,8 @@
                 <td th:text="${blog.headline}">$blogheadline</td>
                 <td th:text="${blog.writer}">$blogauthor</td>
                 <td><a th:href="${blog.url}">URL</a></td>
-                <td>$tags</td>
-                <td>$courses</td>
+                <td th:text="${blog.printTags()}">$tags</td>
+                <td th:text="${blog.printRelatedCourses()}">$courses</td>
             </tr>
         </table>
         <h2>Comments</h2>

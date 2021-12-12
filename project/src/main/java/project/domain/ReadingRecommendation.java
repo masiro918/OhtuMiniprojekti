@@ -135,7 +135,7 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
             for (String course : this.relatedCourses) {
                 savedCourses += course + ";";
             }
-            info.put("tags", savedCourses);
+            info.put("courses", savedCourses);
         }
         return info;
     }

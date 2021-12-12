@@ -17,8 +17,8 @@
                 <td th:text="${book.headline}">$bookheadline</td>
                 <td th:text="${book.writer}">$bookauthor</td>
                 <td th:text="${book.isbn}">$bookisbn</td>
-                <td>$tags</td>
-                <td>$courses</td>
+                <td th:text="${book.printTags()}">$tags</td>
+                <td th:text="${book.printRelatedCourses()}">$courses</td>
             </tr>
         </table>
         <h2>Comments</h2>
