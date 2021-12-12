@@ -5,6 +5,7 @@ import project.domain.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.stream.Stream;
 
 /**
@@ -221,6 +222,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
                 rs.getString("type"),
                 rs.getString("url"));
         blog.setWriter(rs.getString("writer"));
+        blog.setComment(rs.getString("comment"));
         blog.setId(id);
         rs.close();
         this.closeConnection();
@@ -251,6 +253,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
                 rs.getString("type"),
                 rs.getString("writer"));
         book.setISBN(rs.getString("ISBN"));
+        book.setComment(rs.getString("comment"));
         book.setId(id);
         rs.close();
         this.closeConnection();
@@ -261,6 +264,32 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
             book.addCourse(course);
         }
         return book;
+    }
+    
+    @Override
+    public PodcastRecommendation getPodcast(int id) throws Exception {
+        this.createConnection();
+        String sqlComment = "SELECT * FROM ReadingRecommendations WHERE id=? AND type=?";
+        PreparedStatement ps = this.connection.prepareStatement(sqlComment);
+        ps.setInt(1, id);
+        ps.setString(2, "podcast");
+        ResultSet rs = ps.executeQuery();
+        PodcastRecommendation podcast = new PodcastRecommendation(rs.getString("headline"),
+                rs.getString("type"),
+                rs.getString("podcastName"),
+                rs.getString("description"));
+        podcast.setWriter(rs.getString("writer"));
+        podcast.setComment(rs.getString("comment"));
+        podcast.setId(id);
+        rs.close();
+        this.closeConnection();
+        for (String tag : getAllTags(id)) {
+            podcast.addTags(tag);
+        }
+        for (String course : getAllCourses(id)) {
+            podcast.addCourse(course);
+        }
+        return podcast;
     }
 
     /**
@@ -388,28 +417,25 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
     }
 
     /**
-     * Lisää kommentin Comments-tauluun, ja palauttaa lisätyn kommentin
+     * Lisää kommentin lukuvinkille
      * id-tunnisteen.
      *
      * @param commentStr
+     * @param readingRecommendationId
      * @throws Exception
-     * @return luodun kommentin id
      */
-    public int addComment(String commentStr) throws Exception {
+    @Override
+    public void addComment(String commentStr, int readingRecommendationId) throws Exception {
         String content = commentStr;
 
         this.createConnection();
-        String sql = "INSERT INTO Comments (comment) values (?);";
+        String sql = "UPDATE ReadingRecommendations SET comment=? WHERE id=?";
         PreparedStatement ps = this.connection.prepareStatement(sql);
         ps.setString(1, content);
+        ps.setInt(2, readingRecommendationId);
         ps.executeUpdate();
         ps.close();
         this.closeConnection();
-
-        // haetaan juuri lisätyn kommentin id
-        int id = getLastIdReading();
-
-        return id;
     }
 
     /**
@@ -539,6 +565,7 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
                 PodcastRecommendation podcast = new PodcastRecommendation(headline, type, rs.getString("podcastName"), rs.getString("description"));
                 podcast.setWriter(rs.getString("writer"));
                 podcast.setComment(rs.getString("comment"));
+                podcast.setId(rs.getInt("id"));
                 recommendations.add(podcast);
             }
         }
@@ -557,5 +584,26 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         }
 
         return recommendations;
+    }
+
+    @Override
+    public HashMap<String, String> findById(int id) throws Exception {
+        this.createConnection();
+        String sqlComment = "SELECT * FROM ReadingRecommendations WHERE id=?";
+        PreparedStatement ps = this.connection.prepareStatement(sqlComment);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        HashMap<String, String> recInfo = new HashMap<>();
+        recInfo.put("headline", rs.getString("headline"));
+        recInfo.put("type", rs.getString("type"));
+        recInfo.put("url", rs.getString("url"));
+        recInfo.put("isbn", rs.getString("isbn"));
+        recInfo.put("writer", rs.getString("writer"));
+        recInfo.put("podcastName", rs.getString("podcastName"));
+        recInfo.put("description", rs.getString("description"));
+        recInfo.put("comment", rs.getString("comment"));
+        rs.close();
+        this.closeConnection();
+        return recInfo;
     }
 }

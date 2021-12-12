@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Miniprojekti</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <a href="/post">Peruuta</a>
+    <h1>Lisää Podcast</h1>
+    <form action="/post" method="POST">
+        <input type="hidden" value="podcast" name="type" /> <br>
+        <input type="text" name="name" placeholder="Podcast name" required /> <br>
+        <input type="text" name="description" placeholder="Podcast description" required /> <br>
+        <input type="text" name="headline" placeholder="Headline" required /> <br>
+        <input type="text" name="writer" placeholder="Writer" required /> <br>
+        <input type="text" name="tags" placeholder="tag1, tag2" /> <br>
+        <input type="text" name="related_courses" placeholder="Related courses" /> <br>
+        <input type="submit" name="add" value="Lisää Podcast" />
+    </form>
+</body>
+</html>

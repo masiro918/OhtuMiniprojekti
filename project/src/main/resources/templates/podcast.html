@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title th:text="${podcast.headline}">$podcastheadline</title>
+        <title>Miniprojekti</title>
     </head>
     <body>
-        <h1>Blog: <span th:text="${podcast.headline}">$podcastheadline</span></h1>
+        <a href="/list">Return to list</a>
+        <h1 th:text="${podcast.headline}">$podcastheadline</h1>
         <table>
             <tr>
                 <th>Headline</th>
                 <th>Author</th>
-                <th>URL</th>
+                <th>Podcast name</th>
                 <th>Tags</th>
                 <th>Related courses</th>
             </tr>
             <tr>
                 <td th:text="${podcast.headline}">$podcastheadline</td>
                 <td th:text="${podcast.writer}">$podcastauthor</td>
-                <td><a th:href="${podcast.url}">URL</a></td>
-                <td>$tags</td>
-                <td>$courses</td>
+                <td th:text="${podcast.podcastName}">$podcastname</td>
+                <td th:text="${podcast.printTags()}">$tags</td>
+                <td th:text="${podcast.printRelatedCourses()}">$courses</td>
             </tr>
         </table>
         <h2>Comments</h2>
         <p th:text="${podcast.comment}">$comments</p>
+        <form th:action="@{~/addcomment/{recommendationId}(recommendationId=${podcast.id})}" method="POST">
+            <input type="text" name="comment" th:value="${podcast.comment}" />
+            <input type="submit" name="add" value="Lisää kommentti" />
+        </form>
     </body>
 </html>

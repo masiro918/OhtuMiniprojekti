@@ -2,9 +2,11 @@
 package project;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import project.db.ReadingRecommendationDAO;
 import project.domain.BlogRecommendation;
 import project.domain.BookRecommendation;
+import project.domain.PodcastRecommendation;
 import project.domain.ReadingRecommendationInterface;
 
 public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
@@ -54,6 +56,21 @@ public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
     @Override
     public BookRecommendation getBook(int id) throws Exception {
         // poistetaan myöhemmin
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public HashMap<String, String> findById(int id) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addComment(String commentStr, int readingRecommendationId) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public PodcastRecommendation getPodcast(int id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

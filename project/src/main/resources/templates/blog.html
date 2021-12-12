@@ -4,6 +4,7 @@
         <title>Miniprojekti</title>
     </head>
     <body>
+        <a href="/list">Return to list</a>
         <h1 th:text="${blog.headline}">$blogheadline</h1>
         <table>
             <tr>
@@ -23,5 +24,9 @@
         </table>
         <h2>Comments</h2>
         <p th:text="${blog.comment}">$comments</p>
+        <form th:action="@{~/addcomment/{recommendationId}(recommendationId=${blog.id})}" method="POST">
+            <input type="text" name="comment" th:value="${blog.comment}" />
+            <input type="submit" name="add" value="Lisää kommentti" />
+        </form>
     </body>
 </html>

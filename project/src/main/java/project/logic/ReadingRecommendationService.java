@@ -58,6 +58,8 @@ public class ReadingRecommendationService {
             return addBlog(info);
         } else if (type.equals("book")) {
             return addBook(info);
+        } else if (type.equals("podcast")) {
+            return addPodcast(info);
         }
         return false;
     }
@@ -194,6 +196,15 @@ public class ReadingRecommendationService {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    public boolean addComment(String comment, int recommendationId) {
+        try {
+            this.recommendationDb.addComment(comment, recommendationId);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -351,6 +362,23 @@ public class ReadingRecommendationService {
     public BookRecommendation findBookId(int id) {
         try {
             return this.recommendationDb.getBook(id);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    public PodcastRecommendation findPodcastId(int id) {
+        try {
+            return this.recommendationDb.getPodcast(id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+    
+    public HashMap<String, String> findRecommendationById(int id) {
+        try {
+            return this.recommendationDb.findById(id);
         } catch (Exception e) {
             return null;
         }
