@@ -11,6 +11,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.sound.sampled.SourceDataLine;
+
 import project.domain.User;
 import project.domain.ReadingRecommendationInterface;
 
@@ -160,6 +163,29 @@ public class ReadingRecommendationServiceTest {
         ReadingRecommendationInterface recom = service.findRecommendation("Not there");
 
         assertNull(recom);
+    }
+
+    @Test
+    public void findRecommendationsTest() {
+        recommendations.add(recommendation);
+
+        ReadingRecommendationInterface rri1 = new ReadingRecommendation("Basic", "podcast");
+        ReadingRecommendationInterface rri2 = new ReadingRecommendation("Non-basic", "book");
+
+        recommendations.add(rri1);
+        recommendations.add(rri2);
+        ArrayList readingrecommendations = service.findRecommendations("Basic");
+        //ArrayList readingrecommendations = service.loadRecommendations();
+
+        //System.out.println("###########################");
+        for (Object o : readingrecommendations) {
+            ReadingRecommendationInterface rri = (ReadingRecommendationInterface)o;
+            System.out.println(rri.getHeadline());
+        }
+        //System.out.println("###########################");
+
+        int results = readingrecommendations.size();
+        assertEquals(results, 2);
     }
 
     //ShowRecommendation tests
