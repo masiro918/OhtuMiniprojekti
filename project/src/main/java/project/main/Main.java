@@ -99,6 +99,7 @@ public class Main {
                 res.redirect("/");
            }
             return "{\"message\":\"Failure: " + auth.getErrorMessages() + "\"}";
+            //return "Failure: " + auth.getErrorMessages() + ". <a href=\"/signup\">Please try again</a>.";
         });
 
         get("/post", (req, res) -> {

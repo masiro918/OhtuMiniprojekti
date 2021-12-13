@@ -127,7 +127,7 @@ public class Stepdefs {
 
     @Then("signup is successful")
     public void signupIsSuccessful() {
-        assertTrue(driver.getPageSource().contains("Success"));
+        assertTrue(driver.getPageSource().contains("Front page"));
     }
 
     @Then("signup fails")
@@ -194,6 +194,20 @@ public class Stepdefs {
         findElementAndSubmit("add");
     }
 
+    @When("given invalid podcast, missing the description")
+    public void invalidPodcastMissingDesc() {
+        findElementAndSendData("name", "podcast name");
+        findElementAndSendData("headline", "hl");
+        findElementAndSubmit("add");
+    }
+
+    @When("given invalid podcast, missing the headline")
+    public void invalidPodcastMissingHeadline() {
+        findElementAndSendData("name", "Podcast name");
+        findElementAndSendData("description", "desc");
+        findElementAndSubmit("add");
+    }
+
     @Then("new blog recommendation is added")
     public void blogIsAdded() {
         assertTrue(driver.getPageSource().contains("Success"));
@@ -211,12 +225,20 @@ public class Stepdefs {
 
     @Then("new podcast recommendation is added")
     public void podcastIsAdded() {
-        assertTrue(driver.getPageSource().contains("Succes"));
+        assertTrue(driver.getPageSource().contains("Success"));
     }
 
     @Then("user is returned to the mainpage")
     public void returnedToMain() {
         assertTrue(driver.getPageSource().contains("Front page"));
+    }
+
+    @Then("added recommendation headline {string} is on the list")
+    public void recommendationIsOnTheList(String headline) {
+        String listUrl = url +"/list";
+        driver.get(listUrl);
+        WebElement elem = driver.findElement(By.name("recommendations"));
+        assertTrue(elem.getText().contains(headline));
     }
 
     @After
