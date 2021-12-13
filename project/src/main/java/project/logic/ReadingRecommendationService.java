@@ -15,10 +15,12 @@ public class ReadingRecommendationService {
 
     private UserInterface user;
     private ReadingRecommendationDAO recommendationDb;
+    private RecommendationCreator creator;
 
     public ReadingRecommendationService(UserInterface user, ReadingRecommendationDAO recommendationDb) {
         this.user = user;
         this.recommendationDb = recommendationDb;
+        this.creator = new RecommendationCreator();
     }
 
     /**
@@ -47,29 +49,45 @@ public class ReadingRecommendationService {
     }
 
     /**
-     * Creates a new reading recommendation for the user.
+     * Adds a new reading recommendation for the user.
      *
      * @param info a HashMap that contains all provided information of the
      * reading recommendation
      */
     public boolean createRecommendation(HashMap<String, String> info) {
         String type = info.get("type");
+        ReadingRecommendation r = null;
         if (type.equals("blog")) {
-            return addBlog(info);
+            if (!checkBlogInfo(info)) {
+                return false;
+            }
+            r = this.creator.createNewBlog(info);
         } else if (type.equals("book")) {
-            return addBook(info);
+            if (!checkBookInfo(info)) {
+                return false;
+            }
+            r = this.creator.createNewBook(info);
         } else if (type.equals("podcast")) {
-            return addPodcast(info);
+            if (!checkPodcastInfo(info)) {
+                return false;
+            }
+            r = this.creator.createNewPodcast(info);
         }
-        return false;
+        
+        try {
+            this.recommendationDb.add(r);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
-     * Creates and adds a new blog recommendation for the user.
+     * Check if provided information for new blog is valid.
      *
      * @param info a HashMap that contains all provided information of the blog
      */
-    public boolean addBlog(HashMap<String, String> info) {
+    public boolean checkBlogInfo(HashMap<String, String> info) {
         String url = info.get("url");
         if (url == null || url.isBlank()) {
             return false;
@@ -78,37 +96,15 @@ public class ReadingRecommendationService {
         if (headline == null || headline.isBlank()) {
             return false;
         }
-        try {
-            BlogRecommendation r = new BlogRecommendation(headline, "blog", url);
-            if (info.containsKey("writer")) {
-                r.setWriter(info.get("writer"));
-            }
-            if (info.containsKey("tags")) {
-                String[] tags = info.get("tags").split(", "); // Oletuksena, etta tagit tallennettu muodossa 'tag1, tag2, tag3'
-                for (String tag : tags) {
-                    r.addTags(tag);
-                }
-            }
-            if (info.containsKey("courses")) {
-                String[] courses = info.get("courses").split(", ");
-                for (String course : courses) {
-                    r.addCourse(course);
-                }
-            }
-            showRecommendation(r);
-            this.recommendationDb.add(r);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return true;
     }
 
     /**
-     * Creates and adds a new book recommendation for the user.
+     * Check if provided information for new book is valid.
      *
      * @param info a HashMap that contains all provided information of the book
      */
-    public boolean addBook(HashMap<String, String> info) {
+    public boolean checkBookInfo(HashMap<String, String> info) {
         String headline = info.get("headline");
         if (headline == null || headline.isBlank()) {
             return false;
@@ -117,37 +113,16 @@ public class ReadingRecommendationService {
         if (writer == null || writer.isBlank()) {
             return false;
         }
-        try {
-            BookRecommendation r = new BookRecommendation(headline, "book", writer);
-            if (info.containsKey("ISBN")) {
-                r.setISBN(info.get("ISBN"));
-            }
-            if (info.containsKey("tags")) {
-                String[] tags = info.get("tags").split(", ");
-                for (String tag : tags) {
-                    r.addTags(tag);
-                }
-            }
-            if (info.containsKey("courses")) {
-                String[] courses = info.get("courses").split(", ");
-                for (String course : courses) {
-                    r.addCourse(course);
-                }
-            }
-            this.recommendationDb.add(r);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return true;
     }
 
     /**
-     * Creates and adds a new podcast recommendation for the user.
+     * Check if provided information for new podcast is valid.
      *
      * @param info a HashMap that contains all provided information of the
      * podcast
      */
-    public boolean addPodcast(HashMap<String, String> info) {
+    public boolean checkPodcastInfo(HashMap<String, String> info) {
         String headline = info.get("headline");
         if (headline == null || headline.isBlank()) {
             return false;
@@ -160,34 +135,14 @@ public class ReadingRecommendationService {
         if (description == null || description.isBlank()) {
             return false;
         }
-        try {
-            PodcastRecommendation r = new PodcastRecommendation(headline, "podcast", podcastName, description);
-            if (info.containsKey("writer")) {
-                r.setWriter(info.get("writer"));
-            }
-            if (info.containsKey("tags")) {
-                String[] tags = info.get("tags").split(", ");
-                for (String tag : tags) {
-                    r.addTags(tag);
-                }
-            }
-            if (info.containsKey("courses")) {
-                String[] courses = info.get("courses").split(", ");
-                for (String course : courses) {
-                    r.addCourse(course);
-                }
-            }
-            this.recommendationDb.add(r);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return true;
     }
 
     /**
      * Removes a reading recommendation from the user.
      *
-     * @param headline the headline of the recommendation that is to be removed
+     * @param recommendationId the id of the recommendation that is to be removed
+     * @return true if recommendation was successfully removed, otherwise false
      */
     public boolean removeRecommendation(int recommendationId) {
         try {
