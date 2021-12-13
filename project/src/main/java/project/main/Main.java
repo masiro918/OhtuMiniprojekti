@@ -87,14 +87,14 @@ public class Main {
             return "{\"message\":\"Success\"}";
             }
         );
-
+        
         get("/signup", (req,res) -> new ModelAndView(new HashMap<>(), "signup"), new ThymeleafTemplateEngine());
         post("/signup", (req, res) -> {
            if (auth.createUser(
                req.queryParamOrDefault("username", null),
                req.queryParamOrDefault("password", null)
            )) {
-               return "{\"message\":\"Success\"}";
+                res.redirect("/");
            }
             return "{\"message\":\"Failure: " + auth.getErrorMessages() + "\"}";
         });
