@@ -6,6 +6,7 @@ Feature: As a user I can add blog as a reading recommendation
         And blogpost is selected
         When given valid blog headline "Test", writer "tester" and url "something"
         Then new blog recommendation is added
+        And added recommendation headline "Test" is on the list
 
     Scenario: cannot see post page if not logged in
         Given post is selected

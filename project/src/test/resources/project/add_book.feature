@@ -6,3 +6,4 @@ Feature: As a user I can add a book as a reading recommendation
         And bookpost is selected
         When given valid book with headline "book headline", writer "tester" and ISBN "something"
         Then new book recommendation is added
+        And added recommendation headline "book headline" is on the list

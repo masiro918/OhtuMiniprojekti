@@ -225,12 +225,20 @@ public class Stepdefs {
 
     @Then("new podcast recommendation is added")
     public void podcastIsAdded() {
-        assertTrue(driver.getPageSource().contains("Succes"));
+        assertTrue(driver.getPageSource().contains("Success"));
     }
 
     @Then("user is returned to the mainpage")
     public void returnedToMain() {
         assertTrue(driver.getPageSource().contains("Front page"));
+    }
+
+    @Then("added recommendation headline {string} is on the list")
+    public void recommendationIsOnTheList(String headline) {
+        String listUrl = url +"/list";
+        driver.get(listUrl);
+        WebElement elem = driver.findElement(By.name("recommendations"));
+        assertTrue(elem.getText().contains(headline));
     }
 
     @After
