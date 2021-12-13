@@ -127,7 +127,7 @@ public class Stepdefs {
 
     @Then("signup is successful")
     public void signupIsSuccessful() {
-        assertTrue(driver.getPageSource().contains("Success"));
+        assertTrue(driver.getPageSource().contains("Front page"));
     }
 
     @Then("signup fails")
@@ -191,6 +191,20 @@ public class Stepdefs {
     public void invalidPodcastMissingName() {
         findElementAndSendData("description", "desc");
         findElementAndSendData("headline", "hl");
+        findElementAndSubmit("add");
+    }
+
+    @When("given invalid podcast, missing the description")
+    public void invalidPodcastMissingDesc() {
+        findElementAndSendData("name", "podcast name");
+        findElementAndSendData("headline", "hl");
+        findElementAndSubmit("add");
+    }
+
+    @When("given invalid podcast, missing the headline")
+    public void invalidPodcastMissingHeadline() {
+        findElementAndSendData("name", "Podcast name");
+        findElementAndSendData("description", "desc");
         findElementAndSubmit("add");
     }
 
