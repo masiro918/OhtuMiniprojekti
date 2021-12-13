@@ -327,6 +327,72 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.closeConnection();
         return courses;
     }
+    
+    public void updateTags(ReadingRecommendationInterface r) throws Exception {
+        removeTags(r.getId());
+        for (String tag : r.getTags()) {
+            addTag(tag, r.getId());
+        }
+    }
+    
+    public void updateCourses(ReadingRecommendationInterface r) throws Exception {
+        removeCourses(r.getId());
+        for (String course : r.getRelatedCourses()) {
+            addCourse(course, r.getId());
+        }
+    }
+    
+    @Override
+    public void updateBlog(BlogRecommendation blog) throws Exception {
+        this.createConnection();
+        String sql = "UPDATE ReadingRecommendations SET headline=?, url=?, writer=? WHERE id=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, blog.getHeadline());
+        ps.setString(2, blog.getURL());
+        ps.setString(3, blog.getWriter());
+        ps.setInt(4, blog.getId());
+        ps.executeUpdate();
+        ps.close();
+        this.closeConnection();
+        
+        updateTags(blog);
+        updateCourses(blog);
+    }
+    
+    @Override
+    public void updateBook(BookRecommendation book) throws Exception {
+        this.createConnection();
+        String sql = "UPDATE ReadingRecommendations SET headline=?, isbn=?, writer=? WHERE id=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, book.getHeadline());
+        ps.setString(2, book.getISBN());
+        ps.setString(3, book.getWriter());
+        ps.setInt(4, book.getId());
+        ps.executeUpdate();
+        ps.close();
+        this.closeConnection();
+        
+        updateTags(book);
+        updateCourses(book);
+    }
+    
+    @Override
+    public void updatePodcast(PodcastRecommendation podcast) throws Exception {
+        this.createConnection();
+        String sql = "UPDATE ReadingRecommendations SET headline=?, writer=?, podcastName=?, description=? WHERE id=?;";
+        PreparedStatement ps = this.connection.prepareStatement(sql);
+        ps.setString(1, podcast.getHeadline());
+        ps.setString(2, podcast.getWriter());
+        ps.setString(3, podcast.getPodcastName());
+        ps.setString(4, podcast.getDescription());
+        ps.setInt(5, podcast.getId());
+        ps.executeUpdate();
+        ps.close();
+        this.closeConnection();
+        
+        updateTags(podcast);
+        updateCourses(podcast);
+    }
 
     /**
      * Poistaa blogi-vinkit tietokannasta.

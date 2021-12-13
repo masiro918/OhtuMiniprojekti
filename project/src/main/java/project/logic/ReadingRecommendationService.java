@@ -74,7 +74,7 @@ public class ReadingRecommendationService {
             }
             r = this.creator.createNewPodcast(info);
         }
-        
+
         try {
             this.recommendationDb.add(r);
             return true;
@@ -139,10 +139,94 @@ public class ReadingRecommendationService {
         return true;
     }
 
+    public boolean updateBlog(BlogRecommendation blog, String headline, String url, String writer, String tags, String courses) {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("url", url);
+        info.put("headline", headline);
+        if (!checkBlogInfo(info)) {
+            return false;
+        }
+        blog.setUrl(url);
+        blog.setWriter(writer);
+        blog.setHeadline(headline);
+        updateTags(blog, tags);
+        updateCourses(blog, courses);
+        
+        try {
+            this.recommendationDb.updateBlog(blog);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    public boolean updateBook(BookRecommendation book, String headline, String isbn, String writer, String tags, String courses) {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("writer", writer);
+        info.put("headline", headline);
+        if (!checkBookInfo(info)) {
+            return false;
+        }
+        book.setWriter(writer);
+        book.setHeadline(headline);
+        book.setISBN(isbn);
+        updateTags(book, tags);
+        updateCourses(book, courses);
+        try {
+            this.recommendationDb.updateBook(book);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    public boolean updatePodcast(PodcastRecommendation podcast, String headline, String writer, String podcastName, String description, String tags, String courses) {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("headline", headline);
+        info.put("podcastName", podcastName);
+        info.put("description", description);
+        if (!checkPodcastInfo(info)) {
+            return false;
+        }
+        podcast.setWriter(writer);
+        podcast.setHeadline(headline);
+        podcast.setPodcastName(podcastName);
+        podcast.setDescription(description);
+        updateTags(podcast, tags);
+        updateCourses(podcast, courses);
+        try {
+            this.recommendationDb.updatePodcast(podcast);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    public void updateTags(ReadingRecommendationInterface r, String tags) {
+        r.setTags(new ArrayList<String>());
+        String[] newTags = tags.split(", ");
+        for (String tag : newTags) {
+            r.addTags(tag);
+        }
+        
+    }
+    
+    public void updateCourses(ReadingRecommendationInterface r, String courses) {
+        r.setRelatedCourses(new ArrayList<String>());
+        String[] newCourses = courses.split(", ");
+        for (String course : newCourses) {
+            r.addCourse(course);
+        }
+    }
+
     /**
      * Removes a reading recommendation from the user.
      *
-     * @param recommendationId the id of the recommendation that is to be removed
+     * @param recommendationId the id of the recommendation that is to be
+     * removed
      * @return true if recommendation was successfully removed, otherwise false
      */
     public boolean removeRecommendation(int recommendationId) {
@@ -153,7 +237,7 @@ public class ReadingRecommendationService {
             return false;
         }
     }
-    
+
     public boolean addComment(String comment, int recommendationId) {
         try {
             this.recommendationDb.addComment(comment, recommendationId);
@@ -189,8 +273,7 @@ public class ReadingRecommendationService {
             return "Something went wrong";
         }
     }
-    
-    
+
     /**
      * Etsii kaikki, joilla on haettava headline
      *
@@ -225,16 +308,14 @@ public class ReadingRecommendationService {
             for (int i = 0; i < recommendations.size(); i++) {
                 try {
                     Method method = recommendations.get(i).getClass().getMethod("getWriter");
-                    String recommendationsWriter = (String)method.invoke(recommendations.get(i));
+                    String recommendationsWriter = (String) method.invoke(recommendations.get(i));
                     if (recommendationsWriter.equals(writer)) {
                         indexes.add(i);
                     }
                 } catch (Exception e) {
                     // recommendation does not have a writer
                 }
-                
-                
-                
+
 //                String type = recommendations.get(i).getType();
 //                if (type.equals("blog")) {
 //                    BlogRecommendation blog = (BlogRecommendation) recommendations.get(i);
@@ -252,7 +333,6 @@ public class ReadingRecommendationService {
 //                        indexes.add(i);
 //                    }
 //                }
-
             }
             return indexes;
         } catch (Exception e) {
@@ -287,7 +367,7 @@ public class ReadingRecommendationService {
             return null;
         }
     }
-    
+
     public BookRecommendation findBookId(int id) {
         try {
             return this.recommendationDb.getBook(id);
@@ -295,7 +375,7 @@ public class ReadingRecommendationService {
             return null;
         }
     }
-    
+
     public PodcastRecommendation findPodcastId(int id) {
         try {
             return this.recommendationDb.getPodcast(id);
@@ -304,7 +384,7 @@ public class ReadingRecommendationService {
             return null;
         }
     }
-    
+
     public HashMap<String, String> findRecommendationById(int id) {
         try {
             return this.recommendationDb.findById(id);

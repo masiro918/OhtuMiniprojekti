@@ -245,4 +245,30 @@ public class SQLReadingDAOTest {
             assertTrue(false);
         }
     }
+    
+    @Test
+    public void updateBlogUpdatesBlogInformation() {
+        BlogRecommendation blog = new BlogRecommendation("OldHeadline", "blog", "OldUrl");
+        blog.setWriter("OldWriter");
+        
+        try {
+            this.sqlReadingDAO.addBlog(blog);
+            int id = this.sqlReadingDAO.getLastIdReading();
+            blog.setId(id);
+            
+            blog.setHeadline("NewHeadline");
+            blog.setUrl("NewUrl");
+            blog.setWriter("NewWriter");
+            this.sqlReadingDAO.updateBlog(blog);
+            
+            BlogRecommendation updatedBlog = this.sqlReadingDAO.getBlog(id);
+            
+            assertEquals("NewHeadline", updatedBlog.getHeadline());
+            assertEquals("NewUrl", updatedBlog.getURL());
+            assertEquals("NewWriter", updatedBlog.getWriter());
+            
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
 }

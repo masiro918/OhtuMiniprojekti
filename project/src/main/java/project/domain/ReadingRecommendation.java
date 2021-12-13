@@ -39,6 +39,11 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
     }
     
     @Override
+    public void setHeadline(String headline) {
+        this.headline = headline;
+    }
+    
+    @Override
     public String getHeadline() {
         return this.headline;
     }
@@ -66,6 +71,11 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
     @Override
     public ArrayList<String> getRelatedCourses() {
         return this.relatedCourses;
+    }
+    
+    @Override
+    public void setRelatedCourses(ArrayList<String> courses) {
+        this.relatedCourses = courses;
     }
     
     /**
@@ -97,6 +107,11 @@ public class ReadingRecommendation implements ReadingRecommendationInterface {
     @Override
     public ArrayList<String> getTags() {
         return this.tags;
+    }
+    
+    @Override
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
     }
     
     /**

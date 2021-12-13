@@ -18,4 +18,7 @@ public interface ReadingRecommendationDAO {
     public BookRecommendation getBook(int id) throws Exception;
     public PodcastRecommendation getPodcast(int id) throws Exception;
     public void setUserId(int id);
+    public void updateBlog(BlogRecommendation blog) throws Exception;
+    public void updateBook(BookRecommendation book) throws Exception;
+    public void updatePodcast(PodcastRecommendation podcast) throws Exception;
 }
