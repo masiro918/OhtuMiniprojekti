@@ -391,6 +391,37 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         ps.executeUpdate();
         ps.close();
         this.closeConnection();
+        
+        removeTags(recommendationId);
+        removeCourses(recommendationId);
+    }
+    
+    public void removeTags(int recommendationId) {
+        try {
+            this.createConnection();
+            String sql = "DELETE FROM Tags WHERE readingRecommendation_id=?;";
+            PreparedStatement ps = this.connection.prepareStatement(sql);
+            ps.setInt(1, recommendationId);
+            ps.executeUpdate();
+            ps.close();
+            this.closeConnection();
+        } catch (Exception e) {
+            
+        }
+    }
+    
+    public void removeCourses(int recommendationId) {
+        try {
+            this.createConnection();
+            String sql = "DELETE FROM RelatedCourses WHERE readingRecommendation_id=?;";
+            PreparedStatement ps = this.connection.prepareStatement(sql);
+            ps.setInt(1, recommendationId);
+            ps.executeUpdate();
+            ps.close();
+            this.closeConnection();
+        } catch (Exception e) {
+            
+        }
     }
 
     /**

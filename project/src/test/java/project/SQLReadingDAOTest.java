@@ -185,8 +185,62 @@ public class SQLReadingDAOTest {
     @Test
     public void noHeadlineIsReturnedIfNotFound() {
         try {
-            ArrayList<ReadingRecommendation> hl = this.sqlReadingDAO.findByHeadline("testi");
+            ArrayList<ReadingRecommendation> hl = this.sqlReadingDAO.findByHeadline("Not there");
             assertTrue(hl.size() == 0);
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+    
+    @Test
+    public void removeTagsDeletesCorrectTags() {
+        String tag1 = "tag1";
+        String tag2 = "tag2";
+        String tag3 = "tag3";
+        
+        try {
+            this.sqlReadingDAO.addTag(tag1, 0);
+            this.sqlReadingDAO.addTag(tag2, 0);
+            this.sqlReadingDAO.addTag(tag3, 1);
+            
+            this.sqlReadingDAO.removeTags(0);
+            
+            ArrayList<String> tags = this.sqlReadingDAO.getAllTags(0);
+            
+            assertFalse(tags.contains(tag1));
+            assertFalse(tags.contains(tag2));
+            
+            tags = this.sqlReadingDAO.getAllTags(1);
+            
+            assertTrue(tags.contains(tag3));
+            
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+    
+    @Test
+    public void removeCoursesRemovesCorrectCourses() {
+        String course1 = "course1";
+        String course2 = "course2";
+        String course3 = "course3";
+        
+        try {
+            this.sqlReadingDAO.addCourse(course1, 0);
+            this.sqlReadingDAO.addCourse(course2, 0);
+            this.sqlReadingDAO.addCourse(course3, 1);
+            
+            this.sqlReadingDAO.removeCourses(0);
+            
+            ArrayList<String> courses = this.sqlReadingDAO.getAllCourses(0);
+            
+            assertFalse(courses.contains(course1));
+            assertFalse(courses.contains(course2));
+            
+            courses = this.sqlReadingDAO.getAllCourses(1);
+            
+            assertTrue(courses.contains(course3));
+            
         } catch (Exception e) {
             assertTrue(false);
         }
