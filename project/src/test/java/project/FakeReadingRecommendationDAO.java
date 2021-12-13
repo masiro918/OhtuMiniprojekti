@@ -21,6 +21,7 @@ public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
     @Override
     public void add(ReadingRecommendationInterface r) throws Exception {
         this.fakeRecommendations.add(r);
+        r.setId(this.fakeRecommendations.size());
     }
 
     @Override
@@ -66,7 +67,11 @@ public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
 
     @Override
     public void addComment(String commentStr, int readingRecommendationId) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (ReadingRecommendationInterface r : this.fakeRecommendations) {
+            if (r.getId() == readingRecommendationId) {
+                r.setComment(commentStr);
+            }
+        }
     }
 
     @Override

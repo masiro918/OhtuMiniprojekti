@@ -245,4 +245,86 @@ public class ReadingRecommendationServiceTest {
         assertEquals("Testbook", recoms.get(0).getHeadline());
         assertEquals("Testbook Vol.2", recoms.get(1).getHeadline());
     }
+    //checkBlogInfo tests
+    @Test
+    public void checkBlogInfoReturnsFalseIfUrlIsEmpty() {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("type", "blog");
+        info.put("headline", "headline");
+        info.put("url", " ");
+        assertFalse(service.checkBlogInfo(info));
+    }
+    
+    @Test
+    public void checkBlogInfoReturnsFalseIfUrlIsNull() {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("type", "blog");
+        info.put("headline", "headline");
+        info.put("url", null);
+        assertFalse(service.checkBlogInfo(info));
+    }
+    
+    //checkBookInfo tests
+    @Test
+    public void checkBookInfoReturnsFalseIfHeadlineIsEmpty() {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("type", "book");
+        info.put("headline", " ");
+        info.put("writer", "writer");
+        assertFalse(service.checkBookInfo(info));
+    }
+    
+    @Test
+    public void checkBookInfoReturnsFalseIfWriterIsEmpty() {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("type", "book");
+        info.put("headline", "headline");
+        info.put("writer", " ");
+        assertFalse(service.checkBookInfo(info));
+    }
+    
+    //checkPodcastInfo tests
+    @Test
+    public void checkPodcastInfoReturnsFalseIfHeadlineIsEmpty() {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("type", "podcast");
+        info.put("headline", " ");
+        info.put("podcastName", "name");
+        info.put("description", "description");
+        assertFalse(service.checkPodcastInfo(info));
+    }
+    
+    @Test
+    public void checkPodcastInfoReturnsFalseIfPodcastNameIsEmpty() {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("type", "podcast");
+        info.put("headline", "headline");
+        info.put("podcastName", " ");
+        info.put("description", "description");
+        assertFalse(service.checkPodcastInfo(info));
+    }
+    
+    @Test
+    public void checkPodcastInfoReturnsFalseIfDescriptionIsEmpty() {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("type", "podcast");
+        info.put("headline", "headline");
+        info.put("podcastName", "podcastName");
+        info.put("description", " ");
+        assertFalse(service.checkPodcastInfo(info));
+    }
+    
+    //addComment test
+    @Test
+    public void addCommentAddsCommentForReadingRecommendation() {
+        HashMap<String, String> info = new HashMap<>();
+        info.put("headline", "headline");
+        info.put("type", "blog");
+        info.put("url", "url");
+        service.createRecommendation(info);
+        int id = service.loadRecommendations().get(0).getId();
+        service.addComment("Kommentti", id);
+        
+        assertEquals("Kommentti", service.loadRecommendations().get(0).getComment());
+    }
 }
