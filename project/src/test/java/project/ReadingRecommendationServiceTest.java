@@ -150,19 +150,18 @@ public class ReadingRecommendationServiceTest {
 
     //FindRecommendation tests
     @Test
-    public void findRecommendationReturnsCorrectRecommendation() {
+    public void findRecommendationsReturnsCorrectRecommendation() {
         recommendations.add(recommendation);
-        ReadingRecommendationInterface recom = service.findRecommendation("Basic");
+        ArrayList<ReadingRecommendationInterface> recom = service.findRecommendations("Basic");
 
-        assertEquals("Basic", recom.getHeadline());
+        assertEquals("Basic", recom.get(0).getHeadline());
     }
 
     @Test
-    public void findRecommendationReturnsNullIfNotFound() {
+    public void findRecommendationsReturnsEmptyListIfNotFound() {
         recommendations.add(recommendation);
-        ReadingRecommendationInterface recom = service.findRecommendation("Not there");
 
-        assertNull(recom);
+        assertTrue(service.findRecommendations("Not there").isEmpty());
     }
 
     @Test
@@ -178,10 +177,10 @@ public class ReadingRecommendationServiceTest {
         //ArrayList readingrecommendations = service.loadRecommendations();
 
         //System.out.println("###########################");
-        for (Object o : readingrecommendations) {
-            ReadingRecommendationInterface rri = (ReadingRecommendationInterface)o;
-            System.out.println(rri.getHeadline());
-        }
+//        for (Object o : readingrecommendations) {
+//            ReadingRecommendationInterface rri = (ReadingRecommendationInterface)o;
+//            System.out.println(rri.getHeadline());
+//        }
         //System.out.println("###########################");
 
         int results = readingrecommendations.size();
@@ -204,5 +203,46 @@ public class ReadingRecommendationServiceTest {
         
         assertEquals("No recommendations", ans);
     }
-
+    
+    //FindByWriter tests
+    @Test
+    public void findIndexesByWriterReturnsCorrectRecommendations() {
+        this.recommendations.add(new BookRecommendation("Testbook", "book", "W. R. Iter"));
+        this.recommendations.add(new BookRecommendation("Testbook Vol.2", "book", "W. R. Iter"));
+        this.recommendations.add(new BookRecommendation("Book about Nothing", "book", "Nobody"));
+        
+        ArrayList<Integer> indexes = service.findIndexesByWriter("W. R. Iter");
+        assertEquals("Testbook", this.recommendations.get(indexes.get(0)).getHeadline());
+        assertEquals("Testbook Vol.2", this.recommendations.get(indexes.get(1)).getHeadline());
+    }
+    
+    @Test
+    public void findIndexesByWriterIgnoresRecommendationsWithoutWriter() {
+        this.recommendations.add(new BookRecommendation("Testbook", "book", "W. R. Iter"));
+        this.recommendations.add(new ReadingRecommendation("Plain", "default"));
+        this.recommendations.add(new BookRecommendation("Testbook Vol.2", "book", "W. R. Iter"));
+        
+        ArrayList<Integer> indexes = service.findIndexesByWriter("W. R. Iter");
+        assertTrue(indexes.size() == 2);
+    }
+    
+    @Test
+    public void findIndexesByWriterReturnsEmptyListIfNoneAreFound() {
+        this.recommendations.add(new BookRecommendation("Book about Nothing", "book", "Nobody"));
+        assertTrue(service.findIndexesByWriter("Nonexistent Writer").isEmpty());
+    }
+    
+    @Test
+    public void findRecommendationsByIDsReturnsCorrectRecommendationsWithFindIndexesByWriter() {
+        BookRecommendation book1 = new BookRecommendation("Testbook", "book", "W. R. Iter");
+        BookRecommendation book2 = new BookRecommendation("Testbook Vol.2", "book", "W. R. Iter");
+        this.recommendations.add(book1);
+        this.recommendations.add(book2);
+        this.recommendations.add(new BookRecommendation("Book about Nothing", "book", "Nobody"));
+        
+        ArrayList<Integer> indexes = service.findIndexesByWriter("W. R. Iter");
+        ArrayList<ReadingRecommendationInterface> recoms = service.findRecommendationsByIDs(indexes);
+        assertEquals("Testbook", recoms.get(0).getHeadline());
+        assertEquals("Testbook Vol.2", recoms.get(1).getHeadline());
+    }
 }

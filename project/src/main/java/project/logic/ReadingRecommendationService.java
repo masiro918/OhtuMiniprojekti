@@ -2,6 +2,7 @@ package project.logic;
 
 import java.awt.print.Book;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import project.db.ReadingRecommendationDAO;
@@ -188,25 +189,6 @@ public class ReadingRecommendationService {
             return "Something went wrong";
         }
     }
-
-    /**
-     * Finds and returns a reading recommendation based on headline.
-     *
-     * @param headline the headline of a reading recommendation that is wanted.
-     * @return reading recommendation if found, null if not found
-     */    
-    public ReadingRecommendationInterface findRecommendation(String headline) {
-        try {
-            for (ReadingRecommendationInterface r : loadRecommendations()) {
-                if (r.getHeadline().equals(headline)) {
-                    return r;
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
     
     
     /**
@@ -230,32 +212,6 @@ public class ReadingRecommendationService {
         return findedRecommendations;
     }
 
-    // POISTETAAN!
-//    /**
-//     * Returns the index of the wanted reading recommendation in the
-//     * recommendations list.
-//     *
-//     * @param headline headline of the reading recommendation that is searched
-//     * for.
-//     * @return index of the reading recommendation as int, negative if not
-//     * found.
-//     */
-//    public int findIndex(String headline) {
-//        try {
-//            int index = -1;
-//            ArrayList<ReadingRecommendationInterface> recommendations = loadRecommendations();
-//            for (int i = 0; i < recommendations.size(); i++) {
-//                if (recommendations.get(i).getHeadline().equals(headline)) {
-//                    index = i;
-//                    break;
-//                }
-//            }
-//            return index;
-//        } catch (Exception e) {
-//            return -1;
-//        }
-//    }
-
     /**
      * Contains some serious spaghetti.
      *
@@ -267,23 +223,35 @@ public class ReadingRecommendationService {
             ArrayList<Integer> indexes = new ArrayList<>();
             ArrayList<ReadingRecommendationInterface> recommendations = loadRecommendations();
             for (int i = 0; i < recommendations.size(); i++) {
-                String type = recommendations.get(i).getType();
-                if (type.equals("blog")) {
-                    BlogRecommendation blog = (BlogRecommendation) recommendations.get(i);
-                    if (blog.getWriter().equals(writer)) {
+                try {
+                    Method method = recommendations.get(i).getClass().getMethod("getWriter");
+                    String recommendationsWriter = (String)method.invoke(recommendations.get(i));
+                    if (recommendationsWriter.equals(writer)) {
                         indexes.add(i);
                     }
-                } else if (type.equals("book")) {
-                    BookRecommendation book = (BookRecommendation) recommendations.get(i);
-                    if (book.getWriter().equals(writer)) {
-                        indexes.add(i);
-                    }
-                } else if (type.equals("podcast")) {
-                    PodcastRecommendation podcast = (PodcastRecommendation) recommendations.get(i);
-                    if (podcast.getWriter().equals(writer)) {
-                        indexes.add(i);
-                    }
+                } catch (Exception e) {
+                    // recommendation does not have a writer
                 }
+                
+                
+                
+//                String type = recommendations.get(i).getType();
+//                if (type.equals("blog")) {
+//                    BlogRecommendation blog = (BlogRecommendation) recommendations.get(i);
+//                    if (blog.getWriter().equals(writer)) {
+//                        indexes.add(i);
+//                    }
+//                } else if (type.equals("book")) {
+//                    BookRecommendation book = (BookRecommendation) recommendations.get(i);
+//                    if (book.getWriter().equals(writer)) {
+//                        indexes.add(i);
+//                    }
+//                } else if (type.equals("podcast")) {
+//                    PodcastRecommendation podcast = (PodcastRecommendation) recommendations.get(i);
+//                    if (podcast.getWriter().equals(writer)) {
+//                        indexes.add(i);
+//                    }
+//                }
 
             }
             return indexes;
@@ -293,17 +261,23 @@ public class ReadingRecommendationService {
     }
 
     public ArrayList<ReadingRecommendationInterface> findRecommendationsByIDs(ArrayList<Integer> indexes) {
-        try {
-            // TODO: Change to support all types
-            ArrayList<ReadingRecommendationInterface> recs = new ArrayList<>();
-            for (int index : indexes) {
-                recs.add(this.findBlogId(index));
-            }
-            return recs;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
+        ArrayList<ReadingRecommendationInterface> recommendations = loadRecommendations();
+        ArrayList<ReadingRecommendationInterface> returnList = new ArrayList<>();
+        for (Integer i : indexes) {
+            returnList.add(recommendations.get(i));
         }
+        return returnList;
+//        try {
+//            // TODO: Change to support all types
+//            ArrayList<ReadingRecommendationInterface> recs = new ArrayList<>();
+//            for (int index : indexes) {
+//                recs.add(this.findBlogId(index));
+//            }
+//            return recs;
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return null;
+//        }
     }
 
     public BlogRecommendation findBlogId(int id) {
