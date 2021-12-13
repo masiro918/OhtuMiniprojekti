@@ -169,4 +169,26 @@ public class SQLReadingDAOTest {
             assertTrue(false);
         }
     }
+
+    @Test
+    public void correctHeadlineIsReturned() {
+        try {
+            this.sqlReadingDAO.add(new BlogRecommendation("testi", "blog", ""));
+            ArrayList<ReadingRecommendation> hl = this.sqlReadingDAO.findByHeadline("testi");
+            assertTrue(hl.size() == 1);
+            assertEquals(hl.get(0).getHeadline(), "testi");
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void noHeadlineIsReturnedIfNotFound() {
+        try {
+            ArrayList<ReadingRecommendation> hl = this.sqlReadingDAO.findByHeadline("testi");
+            assertTrue(hl.size() == 0);
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
 }

@@ -150,6 +150,11 @@ public class Stepdefs {
     public void bookPostIsSelected() {
         clickPostType("kirja");
     }
+
+    @Given("podcastpost is selected")
+    public void podcastPostIsSelected() {
+        clickPostType("podcast");
+    }
  
     @When("given valid blog headline {string}, writer {string} and url {string}")
     public void validBlogData(String headline, String writer, String url) {
@@ -164,7 +169,6 @@ public class Stepdefs {
         findElementAndSendData("url", "Some url");
         findElementAndSendData("writer", "tester");
         findElementAndSubmit("add");
-        System.out.println(driver.getPageSource());
     }
 
     @When("given valid book with headline {string}, writer {string} and ISBN {string}")
@@ -172,6 +176,21 @@ public class Stepdefs {
         findElementAndSendData("headline", headline);
         findElementAndSendData("writer", writer);
         findElementAndSendData("ISBN", isbn);
+        findElementAndSubmit("add");
+    }
+
+    @When("given valid podcast with name {string}, description {string} and headline {string}")
+    public void validPodcastData(String name, String desc, String headline) {
+        findElementAndSendData("name", name);
+        findElementAndSendData("description", desc);
+        findElementAndSendData("headline", headline);
+        findElementAndSubmit("add");
+    }
+
+    @When("given invalid podcast, missing the name")
+    public void invalidPodcastMissingName() {
+        findElementAndSendData("description", "desc");
+        findElementAndSendData("headline", "hl");
         findElementAndSubmit("add");
     }
 
@@ -187,7 +206,12 @@ public class Stepdefs {
 
     @Then("adding reading recommendation fails")
     public void recommendationAddingFails() {
-        assertTrue(driver.getPageSource().contains("Failure"));
+        assertTrue(driver.getPageSource().contains("Something went wrong"));
+    }
+
+    @Then("new podcast recommendation is added")
+    public void podcastIsAdded() {
+        assertTrue(driver.getPageSource().contains("Succes"));
     }
 
     @Then("user is returned to the mainpage")

@@ -21,6 +21,8 @@ import project.db.TableCreator;
 import project.db.UserDAO;
 import project.db.ReadingRecommendationDAO;
 import project.domain.BookRecommendation;
+import project.domain.PodcastRecommendation;
+import project.domain.ReadingRecommendation;
 import project.domain.User;
 import project.logic.ReadingRecommendationService;
 
@@ -122,6 +124,14 @@ public class Main {
             }
             return new ModelAndView(new HashMap<>(), "index");
         }, new ThymeleafTemplateEngine());
+        
+        get("/post/podcast", (req,res) -> {
+            String cookie = req.cookie("login");
+            if (cookie != null) {
+                return new ModelAndView(new HashMap<>(), "postpodcast");
+            }
+            return new ModelAndView(new HashMap<>(), "index");
+        }, new ThymeleafTemplateEngine());
 
         post("/post", (req,res) -> {
             String cookie = req.cookie("login");
@@ -140,10 +150,27 @@ public class Main {
                 info.put("url", req.queryParamOrDefault("url", null));
             } else if (type.equals("book")) {
                 info.put("ISBN", req.queryParamOrDefault("ISBN", null));
+            } else if (type.equals("podcast")) {
+                info.put("podcastName", req.queryParamOrDefault("name", null));
+                info.put("description", req.queryParamOrDefault("description", null));
             }
             info.put("tags", req.queryParamOrDefault("tags", null));
             info.put("courses", req.queryParamOrDefault("related_courses", null));
             if (recService.createRecommendation(info)) {
+                return "{\"message\":\"Success\"}";
+            }
+            return "{\"message\":\"Something went wrong.\"}";
+        });
+        
+        post("/addcomment/:id", (req,res) -> {
+            String cookie = req.cookie("login");
+            if (cookie == null) {
+                return new ModelAndView(new HashMap<>(), "index");
+            }
+            int id = Integer.parseInt(req.params(":id"));
+            HashMap<String, String> info = recService.findRecommendationById(id);
+            info.put("comment", req.queryParamOrDefault("comment", null));
+            if (recService.addComment(info.get("comment"), id)) {
                 return "{\"message\":\"Success\"}";
             }
             return "{\"message\":\"Something went wrong.\"}";
@@ -174,6 +201,14 @@ public class Main {
             HashMap map = new HashMap<>();
             map.put("book", book);
             return new ModelAndView(map, "book");
+        }, new ThymeleafTemplateEngine());
+        
+        get("/list/podcast/:id", (req,res) -> {
+            int id = Integer.parseInt(req.params(":id"));
+            PodcastRecommendation podcast = recService.findPodcastId(id);
+            HashMap map = new HashMap();
+            map.put("podcast", podcast);
+            return new ModelAndView(map, "podcast");
         }, new ThymeleafTemplateEngine());
 
         get("/search", (req,res) -> {

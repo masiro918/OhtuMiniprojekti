@@ -16,4 +16,4 @@ Feature: As a user I can add blog as a reading recommendation
         And post is selected
         And blogpost is selected
         When given invalid blog, missing the headline
-        #Then adding reading recommendation fails
+        Then adding reading recommendation fails
