@@ -45,14 +45,14 @@ public class SQLUserDAO implements UserDAO {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
 
-            System.out.println(user.getUsername());
+            //System.out.println(user.getUsername());
 
             pstmt.executeUpdate();
             pstmt.close();
             this.closeConnection();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Kayttajan tallennus epaonnistui.");
+            //System.out.println(e.getMessage());
+            //System.out.println("Kayttajan tallennus epaonnistui.");
         }
     }
 
