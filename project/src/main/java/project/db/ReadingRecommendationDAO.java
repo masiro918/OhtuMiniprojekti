@@ -12,6 +12,7 @@ public interface ReadingRecommendationDAO {
     public void add(ReadingRecommendationInterface r) throws Exception;
     public void remove(int readingId) throws Exception;
     public ArrayList<ReadingRecommendationInterface> loadAll() throws Exception;
+    public ArrayList<ReadingRecommendationInterface> findByApproximateHeadline(String headline) throws Exception;
     public HashMap<String, String> findById(int id) throws Exception;
     public void addComment(String commentStr, int readingRecommendationId) throws Exception;
     public BlogRecommendation getBlog(int id) throws Exception;

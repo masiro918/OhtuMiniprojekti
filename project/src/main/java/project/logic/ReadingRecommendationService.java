@@ -5,6 +5,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import project.db.ReadingRecommendationDAO;
 import project.domain.*;
 
@@ -81,6 +83,16 @@ public class ReadingRecommendationService {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    public boolean deleteRecommendation(int id) {
+        try {
+            this.recommendationDb.remove(id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -338,6 +350,16 @@ public class ReadingRecommendationService {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    public ArrayList<ReadingRecommendationInterface> findRecommendationsByApproximateHeadline(String headline) {
+        ArrayList<ReadingRecommendationInterface> recommendations = new ArrayList<>();
+        try {
+            recommendations = this.recommendationDb.findByApproximateHeadline(headline);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return recommendations;
     }
 
     public ArrayList<ReadingRecommendationInterface> findRecommendationsByIDs(ArrayList<Integer> indexes) {

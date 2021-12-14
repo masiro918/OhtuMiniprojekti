@@ -1,5 +1,4 @@
 package project.main;
-import java.util.List;
 import project.db.SQLUserDAO;
 import static spark.Spark.*;
 
@@ -8,23 +7,19 @@ import project.logic.AuthenticationService;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import spark.ModelAndView;
 
-// /list-sivun proof of concept. Poistetaan, kun blogien hakeminen tietokannasta onnistuu.
 import project.db.SQLReadingDAO;
-import project.domain.ReadingRecommendationInterface;
 import project.domain.BlogRecommendation;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import project.db.TableCreator;
 
 import project.db.UserDAO;
 import project.db.ReadingRecommendationDAO;
 import project.domain.BookRecommendation;
 import project.domain.PodcastRecommendation;
-import project.domain.ReadingRecommendation;
 import project.domain.User;
 import project.logic.ReadingRecommendationService;
+import spark.Spark;
 
 public class Main {
 
@@ -45,7 +40,7 @@ public class Main {
     private static int defaultPort = 5000;
 
     public static void main(String args[]) throws Exception{
-
+        Spark.staticFiles.location("/static");
         if(userDao == null) {
             auth = new AuthenticationService(new SQLUserDAO());
         } else {
@@ -214,6 +209,21 @@ public class Main {
             return new ModelAndView(map, "signup");
             //return "{\"message\":\"Something went wrong.\"}";
         });
+        
+        post("/delete/:id", (req,res) -> {
+           String cookie = req.cookie("login");
+            if (cookie == null) {
+                return "{\"message\":\"No permission.\"}";
+            }
+            int id = Integer.parseInt(req.params(":id"));
+            
+            if (recService.removeRecommendation(id)) {
+                res.redirect("/list");
+                return "{\"message\":\"Success\"}";
+            } else {
+                return "{\"message\":\"Something went wrong.\"}";
+            }
+        });
 
         get("/:user/home", (req, res) -> {
             HashMap map = new HashMap<>();
@@ -263,17 +273,24 @@ public class Main {
                 return new ModelAndView(new HashMap<>(), "index");
             }
             String writer = req.queryParamOrDefault("writer", null);
+            String headline = req.queryParamOrDefault("headline", null);
             HashMap map = new HashMap();
-            if (writer == null) {
+            if (writer == null && headline == null) {
                 map.put("message", "Ei tuloksia.");
                 return new ModelAndView(map, "search");
             }
-            ArrayList<Integer> indexes = recService.findIndexesByWriter(writer);
-            if (indexes.isEmpty()) {
-                map.put("message", "Ei tuloksia.");
-                return new ModelAndView(map, "search");
+            ArrayList<Integer> indexes = new ArrayList<>();
+            if (headline == null) {
+                indexes = recService.findIndexesByWriter(writer);
+                if (indexes.isEmpty()) {
+                    map.put("message", "Ei tuloksia.");
+                    return new ModelAndView(map, "search");
+                }
+                map.put("recommendations", recService.findRecommendationsByIDs(indexes));
+            } else {
+                map.put("recommendations", recService.findRecommendationsByApproximateHeadline(headline));
             }
-            map.put("recommendations", recService.findRecommendationsByIDs(indexes));
+            
             return new ModelAndView(map, "list");
         }, new ThymeleafTemplateEngine());
     }

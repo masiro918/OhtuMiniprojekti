@@ -703,4 +703,50 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
         this.closeConnection();
         return recInfo;
     }
+
+    @Override
+    public ArrayList<ReadingRecommendationInterface> findByApproximateHeadline(String headline) throws Exception {
+        this.createConnection();
+        ArrayList<ReadingRecommendationInterface> readingRecommendations = new ArrayList<>();
+        String sqlComment = "SELECT * FROM ReadingRecommendations WHERE headline LIKE ?";
+        PreparedStatement ps = this.connection.prepareStatement(sqlComment);
+        ps.setString(1, "%" + headline + "%");
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            ReadingRecommendationInterface recommendation = createRecommendations(rs);
+            readingRecommendations.add(recommendation);
+        }
+        rs.close();
+        this.closeConnection();
+        return readingRecommendations;
+    }
+    
+    private ReadingRecommendationInterface createRecommendations(ResultSet rs) throws Exception {
+        String headline = rs.getString("headline");
+        String type = rs.getString("type");
+
+        if (type.equals("blog")) {
+            BlogRecommendation blog = new BlogRecommendation(headline, type, rs.getString("url"));
+            blog.setWriter(rs.getString("writer"));
+            blog.setId(rs.getInt("id"));
+            blog.setComment(rs.getString("comment"));
+            return blog;
+
+        } else if (type.equals("book")) {
+            BookRecommendation book = new BookRecommendation(headline, type, rs.getString("isbn"));
+            book.setWriter(rs.getString("writer"));
+            book.setId(rs.getInt("id"));
+            book.setComment(rs.getString("comment"));
+            return book;
+
+        } else if (type.equals("podcast")) {
+            PodcastRecommendation podcast = new PodcastRecommendation(headline, type, rs.getString("podcastName"), rs.getString("description"));
+            podcast.setWriter(rs.getString("writer"));
+            podcast.setComment(rs.getString("comment"));
+            podcast.setId(rs.getInt("id"));
+            return podcast;
+        }
+        
+        return null;
+    }
 }

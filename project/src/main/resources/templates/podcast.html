@@ -22,6 +22,9 @@
                 <td th:text="${podcast.printRelatedCourses()}">$courses</td>
             </tr>
         </table>
+        <form th:action="@{~/delete/{recommendationId}(recommendationId=${podcast.id})}" method="POST">
+            <input type="submit" name="delete" value="Poista lukuvinkki" />
+        </form>
         <h2>Comments</h2>
         <p th:text="${podcast.comment}">$comments</p>
         <form th:action="@{~/addcomment/{recommendationId}(recommendationId=${podcast.id})}" method="POST">

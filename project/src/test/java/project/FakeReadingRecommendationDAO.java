@@ -147,4 +147,9 @@ public class FakeReadingRecommendationDAO implements ReadingRecommendationDAO {
         }
     }
 
+    @Override
+    public ArrayList<ReadingRecommendationInterface> findByApproximateHeadline(String headline) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

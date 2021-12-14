@@ -3,12 +3,14 @@
 <head>
     <title>Miniprojekti</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="/js/DisableField.js"></script>
 </head>
 <body>
     <a href="/">Takaisin</a>
     <span th:text="${message}">$message</span>
     <form action="/search" method="POST">
-        <input type="text" placeholder="writer" name="writer">
+        <input type="text" placeholder="headline" name="headline" id="headline" onchange="disableField()">
+        <input type="text" placeholder="writer" name="writer" id="writer" onchange="disableField()">
         <input type="submit" value="Search"/>
     </form>
 </body>
