@@ -5,13 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<span th:text="${message}">$message</span>
-<form action="/login" method="POST">
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username" required/><br>
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password" required/><br><br>
-    <input type="submit" name="login" value="Login">
-</form>
+    <a href="/">Peruuta</a>
+    <span th:text="${message}">$message</span>
+    <form action="/login" method="POST">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required/><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required/><br><br>
+        <input type="submit" name="login" value="Login">
+    </form>
 </body>
 </html>

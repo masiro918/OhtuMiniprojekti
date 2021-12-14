@@ -75,18 +75,14 @@ public class Main {
             return new ModelAndView(map, "list");
         }, new ThymeleafTemplateEngine());
 
-        get("/login", (req,res) -> {
-            HashMap map = new HashMap();
-            map.put("message", "");
-            return new ModelAndView(map, "login");
-        }, new ThymeleafTemplateEngine());
+        get("/login", (req,res) -> new ModelAndView(new HashMap(), "login"), new ThymeleafTemplateEngine());
         post("/login", (req, res) -> {
             String user = req.queryParamOrDefault("username", null);
             String pass = req.queryParamOrDefault("password", null);
             User loggedIn = (User) auth.login(user, pass);
             HashMap map = new HashMap();
             if (loggedIn == null) {
-                map.put("message", "Wrong password or username!");
+                map.put("message", "Väärä käyttäjänimi tai salasana!");
                 return new ModelAndView(map, "login");
             }
             recService.setUser(loggedIn);
@@ -103,9 +99,10 @@ public class Main {
            )) {
                 res.redirect("/");
            }
-            return "{\"message\":\"Failure: " + auth.getErrorMessages() + "\"}";
-            //return "Failure: " + auth.getErrorMessages() + ". <a href=\"/signup\">Please try again</a>.";
-        });
+           HashMap map = new HashMap();
+           map.put("message", "Käyttäjänimi on varattu tai salasana ei täytä kaikkia ehtoja!");
+           return new ModelAndView(map, "/signup");
+        }, new ThymeleafTemplateEngine());
 
         get("/post", (req, res) -> {
             String cookie = req.cookie("login");
