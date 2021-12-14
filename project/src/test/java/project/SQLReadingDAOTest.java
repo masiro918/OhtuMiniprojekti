@@ -271,4 +271,60 @@ public class SQLReadingDAOTest {
             assertTrue(false);
         }
     }
+    
+    @Test
+    public void updateBookUpdatesBookInformation() {
+        BookRecommendation book = new BookRecommendation("Old Book", "book", "Old Writer");
+        book.setISBN("12345");
+        
+        try {
+            this.sqlReadingDAO.addBook(book);
+            int id = this.sqlReadingDAO.getLastIdReading();
+            book.setId(id);
+            
+            book.setHeadline("New Headline");
+            book.setWriter("New Writer");
+            book.setISBN("54321");
+            
+            this.sqlReadingDAO.updateBook(book);
+            
+            BookRecommendation updatedBook = this.sqlReadingDAO.getBook(id);
+            
+            assertEquals("New Headline", updatedBook.getHeadline());
+            assertEquals("New Writer", updatedBook.getWriter());
+            assertEquals("54321", updatedBook.getISBN());
+            
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+    
+    @Test
+    public void updatePodcastUpdatesPodcastInformation() {
+        PodcastRecommendation podcast = new PodcastRecommendation("Old Headline", "podcast", "Old PodcastName", "Old Description");
+        podcast.setWriter("Old Writer");
+        
+        try {
+            this.sqlReadingDAO.addPodcast(podcast);
+            int id = this.sqlReadingDAO.getLastIdReading();
+            podcast.setId(id);
+            
+            podcast.setHeadline("New Headline");
+            podcast.setPodcastName("New PodcastName");
+            podcast.setDescription("New Description");
+            podcast.setWriter("New Writer");
+            
+            this.sqlReadingDAO.updatePodcast(podcast);
+            
+            PodcastRecommendation updatedPodcast = this.sqlReadingDAO.getPodcast(id);
+            
+            assertEquals("New Headline", updatedPodcast.getHeadline());
+            assertEquals("New PodcastName", updatedPodcast.getPodcastName());
+            assertEquals("New Description", updatedPodcast.getDescription());
+            assertEquals("New Writer", updatedPodcast.getWriter());
+            
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
 }

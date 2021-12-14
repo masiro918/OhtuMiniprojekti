@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.sound.sampled.SourceDataLine;
+import project.domain.PodcastRecommendation;
 
 import project.domain.User;
 import project.domain.ReadingRecommendationInterface;
@@ -326,5 +327,97 @@ public class ReadingRecommendationServiceTest {
         service.addComment("Kommentti", id);
         
         assertEquals("Kommentti", service.loadRecommendations().get(0).getComment());
+    }
+    
+    //switching user works
+    //testaa lahinna testiluokkaa FakeUserDao
+    @Test
+    public void setUserChangesUser() {
+        User user1 = new User("One", "password1");
+        user1.setId(1);
+        User user2 = new User("Two", "password2");
+        user2.setId(2);
+        
+        HashMap<String, String> blog1 = new HashMap<>();
+        blog1.put("headline", "Blog of user1");
+        blog1.put("type", "blog");
+        blog1.put("url", "fakeUrl");
+        
+        HashMap<String, String> blog2 = new HashMap<>();
+        blog2.put("headline", "Second Fake Blog");
+        blog2.put("type", "blog");
+        blog2.put("url", "url");
+        
+        service.setUser(user1);
+        service.createRecommendation(blog1);
+        
+        assertTrue(service.loadRecommendations().get(0).getHeadline().equals("Blog of user1"));
+        
+        service.setUser(user2);
+        service.createRecommendation(blog2);
+        
+        assertTrue(service.loadRecommendations().get(0).getHeadline().equals("Second Fake Blog"));
+    }
+    
+    //update tests
+    //update blog
+    @Test
+    public void updateBlogReturnsFalseForEmptyUrl() {
+        service.createRecommendation(blogInfo);
+        BlogRecommendation blog = (BlogRecommendation)service.findRecommendations("Blog headline").get(0);
+        assertFalse(this.service.updateBlog(blog, "New Headline", " ", "New Writer", "tags", "courses"));
+    }
+    
+    @Test
+    public void updateBlogReturnsFalseForEmptyHeadline() {
+        service.createRecommendation(blogInfo);
+        BlogRecommendation blog = (BlogRecommendation)service.findRecommendations("Blog headline").get(0);
+        assertFalse(this.service.updateBlog(blog, " ", "newUrl", "New Writer", "tags", "courses"));
+    }
+    
+    @Test
+    public void updateBlogUpdatesBlogInformationCorrectly() {
+        service.createRecommendation(blogInfo);
+        BlogRecommendation blog = (BlogRecommendation)service.findRecommendations("Blog headline").get(0);
+        this.service.updateBlog(blog, "New Headline", "newUrl", "New Writer", "tags", "courses");
+        BlogRecommendation updatedBlog = (BlogRecommendation)service.loadRecommendations().get(0);
+        
+        assertEquals("New Headline", updatedBlog.getHeadline());
+        assertEquals("newUrl", updatedBlog.getURL());
+        assertEquals("New Writer", updatedBlog.getWriter());
+    }
+    
+    //update book
+    @Test
+    public void updateBookUpdatesBookInformationCorrectly() {
+        service.createRecommendation(bookInfo);
+        BookRecommendation book = (BookRecommendation)service.findRecommendations("Book headline").get(0);
+        this.service.updateBook(book, "New Headline", "54321", "New Writer", "tags", "courses");
+        BookRecommendation updatedBook = (BookRecommendation)service.loadRecommendations().get(0);
+        
+        assertEquals("New Headline", updatedBook.getHeadline());
+        assertEquals("54321", updatedBook.getISBN());
+        assertEquals("New Writer", updatedBook.getWriter());
+    }
+    
+    //update podcast
+    @Test
+    public void updatePodcastUpdatesPodcastInformationCorrectly() {
+        HashMap<String, String> podcastInfo = new HashMap<>();
+        podcastInfo.put("headline", "Old Headline");
+        podcastInfo.put("type", "podcast");
+        podcastInfo.put("writer", "Old Writer");
+        podcastInfo.put("podcastName", "Old Podcast Name");
+        podcastInfo.put("description", "Old Description");
+        
+        service.createRecommendation(podcastInfo);
+        PodcastRecommendation podcast = (PodcastRecommendation)service.findRecommendations("Old Headline").get(0);
+        service.updatePodcast(podcast, "New Headline", "New Writer", "New PodcastName", "New Description", "tags", "courses");
+        PodcastRecommendation updatedPodcast = (PodcastRecommendation)service.loadRecommendations().get(0);
+        
+        assertEquals("New Headline", updatedPodcast.getHeadline());
+        assertEquals("New Writer", updatedPodcast.getWriter());
+        assertEquals("New PodcastName", updatedPodcast.getPodcastName());
+        assertEquals("New Description", updatedPodcast.getDescription());
     }
 }
