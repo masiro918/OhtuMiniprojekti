@@ -72,7 +72,7 @@ public class Stepdefs {
 
     @Then("login fails")
     public void loginFails() {
-        assertTrue(driver.getPageSource().contains("Wrong username or password"));
+        assertTrue(driver.getPageSource().contains("Väärä käyttäjänimi tai salasana!"));
     }
 
     //Listing steps
@@ -132,7 +132,7 @@ public class Stepdefs {
 
     @Then("signup fails")
     public void signupFails() {
-        assertTrue(driver.getPageSource().contains("Failure"));
+        assertTrue(driver.getPageSource().contains("Käyttäjänimi on varattu tai salasana ei täytä kaikkia ehtoja!"));
     }
 
     //Recommendation adding steps
@@ -210,22 +210,22 @@ public class Stepdefs {
 
     @Then("new blog recommendation is added")
     public void blogIsAdded() {
-        assertTrue(driver.getPageSource().contains("Success"));
+        assertTrue(driver.getPageSource().contains("blog"));
     }
 
     @Then("new book recommendation is added")
     public void bookIsAdded() {
-        assertTrue(driver.getPageSource().contains("Success"));
+        assertTrue(driver.getPageSource().contains("book"));
     }
 
     @Then("adding reading recommendation fails")
     public void recommendationAddingFails() {
-        assertTrue(driver.getPageSource().contains("Something went wrong"));
+        assertTrue(driver.getPageSource().contains("Jokin meni vikaan"));
     }
 
     @Then("new podcast recommendation is added")
     public void podcastIsAdded() {
-        assertTrue(driver.getPageSource().contains("Success"));
+        assertTrue(driver.getPageSource().contains("podcast"));
     }
 
     @Then("user is returned to the mainpage")
