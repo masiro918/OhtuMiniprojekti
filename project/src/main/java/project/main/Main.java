@@ -108,6 +108,17 @@ public class Main {
            return new ModelAndView(map, "signup");
         }, new ThymeleafTemplateEngine());
 
+        get("/logout", (req, res) -> {
+            String cookie = req.cookie("login");
+            if (cookie != null) {
+                res.removeCookie("login");
+                res.redirect("/");
+            } 
+            HashMap map = new HashMap();
+            map.put("message", "Evästettä ei löytynyt!");
+            return new ModelAndView(map, "signup");
+        }, new ThymeleafTemplateEngine());
+
         get("/post", (req, res) -> {
             String cookie = req.cookie("login");
             if (cookie != null) {
