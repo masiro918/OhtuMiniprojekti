@@ -75,20 +75,25 @@ public class Main {
             return new ModelAndView(map, "list");
         }, new ThymeleafTemplateEngine());
 
-        get("/login", (req,res) -> new ModelAndView(new HashMap<>(), "login"), new ThymeleafTemplateEngine());
+        get("/login", (req,res) -> {
+            HashMap map = new HashMap();
+            map.put("message", "");
+            return new ModelAndView(map, "login");
+        }, new ThymeleafTemplateEngine());
         post("/login", (req, res) -> {
             String user = req.queryParamOrDefault("username", null);
             String pass = req.queryParamOrDefault("password", null);
             User loggedIn = (User) auth.login(user, pass);
+            HashMap map = new HashMap();
             if (loggedIn == null) {
-                return "{\"message\":\"Wrong username or password\"}";
+                map.put("message", "Wrong password or username!");
+                return new ModelAndView(map, "login");
             }
             recService.setUser(loggedIn);
             res.cookie("login", user);
             res.redirect(String.format("/%s/home", user));
-            return "{\"message\":\"Success\"}";
-            }
-        );
+            return new ModelAndView(map, "index");
+        }, new ThymeleafTemplateEngine());
         
         get("/signup", (req,res) -> new ModelAndView(new HashMap<>(), "signup"), new ThymeleafTemplateEngine());
         post("/signup", (req, res) -> {
