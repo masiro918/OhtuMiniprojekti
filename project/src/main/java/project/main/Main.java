@@ -180,11 +180,25 @@ public class Main {
             }
             int id = Integer.parseInt(req.params(":id"));
             HashMap<String, String> info = recService.findRecommendationById(id);
+            
+            String type = info.get("type");
+
             info.put("comment", req.queryParamOrDefault("comment", null));
             if (recService.addComment(info.get("comment"), id)) {
-                return "{\"message\":\"Success\"}";
+                //return "{\"message\":\"Success\"}";
+                if (type.equals("book")) {
+                    res.redirect("/list/book/" + id);
+                } else if (type.equals("podcast")) {
+                    res.redirect("/list/podcast/" + id);
+                } else if (type.equals("blog")) {
+                    res.redirect("/list/blog/" + id);
+                }
             }
-            return "{\"message\":\"Something went wrong.\"}";
+
+            HashMap map = new HashMap();
+            map.put("message", "Something went wrong.");
+            return new ModelAndView(map, "signup");
+            //return "{\"message\":\"Something went wrong.\"}";
         });
 
         get("/:user/home", (req, res) -> {
