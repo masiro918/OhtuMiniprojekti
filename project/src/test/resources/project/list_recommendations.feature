@@ -8,3 +8,9 @@ Feature: As a user I can see all the recommendations
         When given valid blog headline "Fullstack", writer "Mluukai" and url "helsinki.fi"
         Then recommendation with headline "Fullstack" is on the list
 
+    Scenario: user can see all recommendations
+        Given user is logged in
+        And list is selected
+        Then recommendations page is shown
+        And all recommendations are shown
+
