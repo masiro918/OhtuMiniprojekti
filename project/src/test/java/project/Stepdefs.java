@@ -93,7 +93,6 @@ public class Stepdefs {
     public void recommendationsListed() {
         assertTrue(driver.getPageSource().contains("Headline"));
         assertTrue(driver.getPageSource().contains("Type"));
-        System.out.println(driver.getPageSource());
     }
 
     @Then("all recommendations are shown")
@@ -109,6 +108,19 @@ public class Stepdefs {
         WebElement elem = driver.findElement(By.name("recommendations"));
         assertTrue(elem.getText().contains("Fullstack"));
     }
+
+    @When("recommendation link with id 1")
+    public void recommendationLinkClick() {
+        url += "/list/blog/1";
+        driver.get(url);
+    }
+
+    @Then("recommendation page is shown for headline {string}")
+    public void recommendationPageIsShown(String headline) {
+        assertTrue(driver.getPageSource().contains(headline));
+        assertTrue(driver.getPageSource().contains("Comments"));
+    }
+
 
     //Signup steps
     @Given("signup is selected")
