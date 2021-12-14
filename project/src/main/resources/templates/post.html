@@ -6,7 +6,7 @@
 </head>
 <body>
 <span th:text="${message}">$message</span>
-<a href="/">Takaisin</a>
+<a th:href="@{'~/' + ${username} + '/home'}">Takaisin</a>
 <ul>
     <li><a name="blogi" href="/post/blog">blogi</a></li>
     <li><a name="kirja" href="/post/book">kirja</a></li>

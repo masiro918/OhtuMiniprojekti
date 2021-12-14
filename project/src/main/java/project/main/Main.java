@@ -76,6 +76,7 @@ public class Main {
                 return new ModelAndView(map, "index");
             }
             map.put("recommendations", recService.loadRecommendations());
+            map.put("username", cookie);
             return new ModelAndView(map, "list");
         }, new ThymeleafTemplateEngine());
 
@@ -116,13 +117,15 @@ public class Main {
             } 
             HashMap map = new HashMap();
             map.put("message", "Evästettä ei löytynyt!");
-            return new ModelAndView(map, "signup");
+            return new ModelAndView(map, "login");
         }, new ThymeleafTemplateEngine());
 
         get("/post", (req, res) -> {
             String cookie = req.cookie("login");
             if (cookie != null) {
-                return new ModelAndView(new HashMap<>(), "post");
+                HashMap map = new HashMap();
+                map.put("username", cookie);
+                return new ModelAndView(map, "post");
             }
             return new ModelAndView(new HashMap<>(), "index");
         }, new ThymeleafTemplateEngine());
