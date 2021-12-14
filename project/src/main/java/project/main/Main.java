@@ -70,7 +70,11 @@ public class Main {
 
         get("/", (req,res) -> new ModelAndView(new HashMap<>(), "index"), new ThymeleafTemplateEngine());
         get("/list", (req,res) -> {
+            String cookie = req.cookie("login");
             HashMap map = new HashMap<>();
+            if (cookie == null) {
+                return new ModelAndView(map, "/index");
+            }
             map.put("recommendations", recService.loadRecommendations());
             return new ModelAndView(map, "list");
         }, new ThymeleafTemplateEngine());
@@ -138,12 +142,14 @@ public class Main {
 
         post("/post", (req,res) -> {
             String cookie = req.cookie("login");
+            HashMap map = new HashMap();
             if (cookie == null) {
-                return new ModelAndView(new HashMap<>(), "index");
+                return new ModelAndView(map, "index");
             }
             String type = req.queryParamOrDefault("type", null);
             if (type == null) {
-                return "{\"message\":\"Failure\"}";
+                map.put("message", "Vinkkauksen tyyppi on virheellinen");
+                return new ModelAndView(map, "/post");
             }
             HashMap<String, String> info = new HashMap<>();
             info.put("type", req.queryParamOrDefault("type", null));
@@ -160,10 +166,11 @@ public class Main {
             info.put("tags", req.queryParamOrDefault("tags", null));
             info.put("courses", req.queryParamOrDefault("related_courses", null));
             if (recService.createRecommendation(info)) {
-                return "{\"message\":\"Success\"}";
+                return new ModelAndView(map, "/list");
             }
-            return "{\"message\":\"Something went wrong.\"}";
-        });
+            map.put("message", "Jokin meni vikaan");
+            return new ModelAndView(map, "/post");
+        }, new ThymeleafTemplateEngine());
         
         post("/addcomment/:id", (req,res) -> {
             String cookie = req.cookie("login");
