@@ -73,7 +73,7 @@ public class Main {
             String cookie = req.cookie("login");
             HashMap map = new HashMap<>();
             if (cookie == null) {
-                return new ModelAndView(map, "/index");
+                return new ModelAndView(map, "index");
             }
             map.put("recommendations", recService.loadRecommendations());
             return new ModelAndView(map, "list");
@@ -105,7 +105,7 @@ public class Main {
            }
            HashMap map = new HashMap();
            map.put("message", "Käyttäjänimi on varattu tai salasana ei täytä kaikkia ehtoja!");
-           return new ModelAndView(map, "/signup");
+           return new ModelAndView(map, "signup");
         }, new ThymeleafTemplateEngine());
 
         get("/post", (req, res) -> {
@@ -149,7 +149,7 @@ public class Main {
             String type = req.queryParamOrDefault("type", null);
             if (type == null) {
                 map.put("message", "Vinkkauksen tyyppi on virheellinen");
-                return new ModelAndView(map, "/post");
+                return new ModelAndView(map, "post");
             }
             HashMap<String, String> info = new HashMap<>();
             info.put("type", req.queryParamOrDefault("type", null));
@@ -166,10 +166,11 @@ public class Main {
             info.put("tags", req.queryParamOrDefault("tags", null));
             info.put("courses", req.queryParamOrDefault("related_courses", null));
             if (recService.createRecommendation(info)) {
-                return new ModelAndView(map, "/list");
+                map.put("recommendations", recService.loadRecommendations());
+                return new ModelAndView(map, "list");
             }
             map.put("message", "Jokin meni vikaan");
-            return new ModelAndView(map, "/post");
+            return new ModelAndView(map, "post");
         }, new ThymeleafTemplateEngine());
         
         post("/addcomment/:id", (req,res) -> {
@@ -194,7 +195,7 @@ public class Main {
                 map.put("username", user);
                 return new ModelAndView(map, "home");
             }
-            return null;
+            return new ModelAndView(new HashMap<>(), "home");
         }, new ThymeleafTemplateEngine());
 
         get("/list/blog/:id", (req,res) -> {
@@ -234,14 +235,16 @@ public class Main {
                 return new ModelAndView(new HashMap<>(), "index");
             }
             String writer = req.queryParamOrDefault("writer", null);
+            HashMap map = new HashMap();
             if (writer == null) {
-                return null;//"{\"message\":\"Failure\"}";
+                map.put("message", "Ei tuloksia.");
+                return new ModelAndView(map, "search");
             }
             ArrayList<Integer> indexes = recService.findIndexesByWriter(writer);
             if (indexes.isEmpty()) {
-                return null;//"{\"message\":\"Found nothing\"}";
+                map.put("message", "Ei tuloksia.");
+                return new ModelAndView(map, "search");
             }
-            HashMap map = new HashMap<>();
             map.put("recommendations", recService.findRecommendationsByIDs(indexes));
             return new ModelAndView(map, "list");
         }, new ThymeleafTemplateEngine());

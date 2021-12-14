@@ -5,6 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+    <a href="/">Takaisin</a>
+    <span th:text="${message}">$message</span>
     <form action="/search" method="POST">
         <input type="text" placeholder="writer" name="writer">
         <input type="submit" value="Search"/>
