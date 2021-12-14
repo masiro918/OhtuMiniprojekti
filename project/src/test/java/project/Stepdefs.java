@@ -44,6 +44,14 @@ public class Stepdefs {
         findElementAndSubmit("login");
     }
 
+    @Given("username {string} with password {string} is logged in")
+    public void loginUser(String username, String password) {
+        clickLink("Login");
+        findElementAndSendData("username", username);
+        findElementAndSendData("password", password);
+        findElementAndSubmit("login");
+    }
+
     @When("given correct credentials username {string} and password {string}")
     public void correctUsernameAndPassword(String username, String password) {
         findElementAndSendData("username", username);
@@ -85,6 +93,7 @@ public class Stepdefs {
     public void recommendationsListed() {
         assertTrue(driver.getPageSource().contains("Headline"));
         assertTrue(driver.getPageSource().contains("Type"));
+        System.out.println(driver.getPageSource());
     }
 
     @Then("all recommendations are shown")
@@ -93,6 +102,12 @@ public class Stepdefs {
 
         assertTrue(elem.getText().contains("Blog 1"));
         assertTrue(elem.getText().contains("Book 1"));
+    }
+
+    @Then("recommendation with headline {string} is on the list")
+    public void recommendationWithHeadlineOnTheList(String headline) {
+        WebElement elem = driver.findElement(By.name("recommendations"));
+        assertTrue(elem.getText().contains("Fullstack"));
     }
 
     //Signup steps
@@ -184,6 +199,20 @@ public class Stepdefs {
         findElementAndSendData("name", name);
         findElementAndSendData("description", desc);
         findElementAndSendData("headline", headline);
+        findElementAndSubmit("add");
+    }
+
+    @When("given invalid book, missing the headline")
+    public void invalidBookMissingHeadline() {
+        findElementAndSendData("ISBN", "isbn");
+        findElementAndSendData("writer", "writer");
+        findElementAndSubmit("add");
+    }
+
+    @When("given invalid book, missing the writer")
+    public void invalidBookMissingWriter() {
+        findElementAndSendData("ISBN", "isbn");
+        findElementAndSendData("headline", "hl");
         findElementAndSubmit("add");
     }
 
