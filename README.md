@@ -14,5 +14,7 @@ Asenna [Gradle](https://gradle.org/) käyttöjärjestelmällesi sopivalla tavall
 * Kirjoitettu koodi vastaa user storyssa haluttua toiminnallisuutta
 * Sprintin backlog on päivitetty asianmukaisesti
 
+[Hyväksymistestit](/project/src/test/resources/project)
+
 ### Testikattavuus
 ![](project/docs/jacoco.png)
