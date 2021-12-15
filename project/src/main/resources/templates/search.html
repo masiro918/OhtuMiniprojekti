@@ -4,9 +4,10 @@
     <title>Miniprojekti</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type="text/javascript" src="/js/DisableField.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-    <a href="/">Takaisin</a>
+    <a th:href="@{'~/' + ${username} + '/home'}">Takaisin</a>
     <span th:text="${message}">$message</span>
     <form action="/search" method="POST">
         <input type="text" placeholder="headline" name="headline" id="headline" onchange="disableField()">

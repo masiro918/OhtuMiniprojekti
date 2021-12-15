@@ -3,14 +3,15 @@
 <head>
     <title>Miniprojekti</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-<span th:text="${message}">$message</span>
-<a th:href="@{'~/' + ${username} + '/home'}">Takaisin</a>
-<ul>
-    <li><a name="blogi" href="/post/blog">blogi</a></li>
-    <li><a name="kirja" href="/post/book">kirja</a></li>
-    <li><a name="podcast" href="/post/podcast">podcast</a></li>
-</ul>
+    <a th:href="@{'~/' + ${username} + '/home'}">Takaisin</a>
+    <span id="error" th:text="${message}">$message</span>
+    <br>
+    <h1>Valitse jokin seuraavista:</h1>
+    <a name="blogi" href="/post/blog">blogi</a>
+    <a name="kirja" href="/post/book">kirja</a>
+    <a name="podcast" href="/post/podcast">podcast</a>
 </body>
 </html>

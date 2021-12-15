@@ -3,10 +3,11 @@
 <head>
     <title>Miniprojekti</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
     <a href="/">Takaisin</a>
-    <span th:text="${message}">$message</span>
+    <span id="error" th:text="${message}">$message</span>
     <form action="/login" method="POST">
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username" required/><br>

@@ -1,0 +1,29 @@
+body {
+    margin: 1% 20%;
+}
+
+* {
+    font-family: 'arial';
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    margin-right: 8px;
+    display: inline-block;
+    text-align: center;
+    padding: 4px 8px;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+input {
+    margin-bottom: 8px;
+    padding: 4px;
+}
+
+#error {
+    color: red;
+    display: block;
+    font-size: 2em;
+}
