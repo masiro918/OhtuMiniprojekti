@@ -652,8 +652,8 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
                 recommendations.add(blog);
 
             } else if (type.equals("book")) {
-                BookRecommendation book = new BookRecommendation(headline, type, rs.getString("isbn"));
-                book.setWriter(rs.getString("writer"));
+                BookRecommendation book = new BookRecommendation(headline, type, rs.getString("writer"));
+                book.setISBN(rs.getString("isbn"));
                 book.setId(rs.getInt("id"));
                 book.setComment(rs.getString("comment"));
                 recommendations.add(book);
@@ -733,8 +733,8 @@ public class SQLReadingDAO implements ReadingRecommendationDAO {
             return blog;
 
         } else if (type.equals("book")) {
-            BookRecommendation book = new BookRecommendation(headline, type, rs.getString("isbn"));
-            book.setWriter(rs.getString("writer"));
+            BookRecommendation book = new BookRecommendation(headline, type, rs.getString("writer"));
+            book.setISBN(rs.getString("isbn"));
             book.setId(rs.getInt("id"));
             book.setComment(rs.getString("comment"));
             return book;
