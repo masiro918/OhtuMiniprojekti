@@ -262,8 +262,12 @@ public class Main {
 
         get("/search", (req,res) -> {
             String cookie = req.cookie("login");
+
+            HashMap map = new HashMap();
+            map.put("username", cookie);
+
             if (cookie != null) {
-                return new ModelAndView(new HashMap<>(), "search");
+                return new ModelAndView(map, "search");
             }
             return new ModelAndView(new HashMap<>(), "index");
         }, new ThymeleafTemplateEngine());
@@ -275,6 +279,9 @@ public class Main {
             String writer = req.queryParamOrDefault("writer", null);
             String headline = req.queryParamOrDefault("headline", null);
             HashMap map = new HashMap();
+
+            map.put("username", cookie);
+
             if (writer == null && headline == null) {
                 map.put("message", "Ei tuloksia.");
                 return new ModelAndView(map, "search");
