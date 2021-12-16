@@ -4,6 +4,7 @@ Ohjelmistotuotanto -kurssin miniprojekti.
 * https://lukuvinkkari.herokuapp.com/
 * [Backlogs](https://docs.google.com/spreadsheets/d/1zMZLNlYGwX-m3twzQNW3tNYmuiA_tdQAyQ39ud-nQAU/edit#gid=1129168387)
 * [Lisenssi](https://github.com/masiro918/OhtuMiniprojekti/blob/main/LICENSE)
+* [Raportti](https://docs.google.com/document/d/1WLXKfqOu9sNQQmkot91YwDqGEONVb_jdTIoJYW5BxeQ/edit)
 
 ### Asennus- ja käyttöohje
 Asenna [Gradle](https://gradle.org/) käyttöjärjestelmällesi sopivalla tavalla. Tämän jälkeen mene hakemistoon *project* ja suorita komento `gradle run` tai vastaava. Tämän jälkeen avaa haluamasi verkkoselain ja navigoi osoitteeseen `localhost:5000`.
