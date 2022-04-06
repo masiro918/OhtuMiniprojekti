@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class SQLUserDAO implements UserDAO {
     private String dbUrl = "jdbc:sqlite:database.db";
-    private Connection connection = null;
+    private Connection conn = null;
 
     public SQLUserDAO() {
         ProcessBuilder processBuilder = new ProcessBuilder();
@@ -41,7 +41,7 @@ public class SQLUserDAO implements UserDAO {
         try {
             this.createConnection();
 
-            PreparedStatement pstmt = connection.prepareStatement("INSERT INTO Users (username, password) VALUES (?, ?);");
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Users (username, password) VALUES (?, ?);");
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
 
@@ -65,7 +65,7 @@ public class SQLUserDAO implements UserDAO {
     public void remove(UserInterface user) throws Exception {
         this.createConnection();
 
-        PreparedStatement pstmt = connection.prepareStatement("DELETE FROM Users WHERE username=?");
+        PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Users WHERE username=?");
         pstmt.setString(1, user.getUsername());
 
         pstmt.executeUpdate();
@@ -81,7 +81,7 @@ public class SQLUserDAO implements UserDAO {
     public boolean login(UserInterface user) throws Exception {
         this.createConnection();
 
-        PreparedStatement pstmt = connection.prepareStatement("SELECT username, password FROM Users WHERE username=? AND password=?");
+        PreparedStatement pstmt = conn.prepareStatement("SELECT username, password FROM Users WHERE username=? AND password=?");
         pstmt.setString(1, user.getUsername());
         pstmt.setString(2, user.getPassword());
 
@@ -97,7 +97,7 @@ public class SQLUserDAO implements UserDAO {
         try {
             this.createConnection();
 
-            PreparedStatement pstmt = connection.prepareStatement("SELECT id, username, password FROM Users");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT id, username, password FROM Users");
 
             ResultSet rs = pstmt.executeQuery();
             
@@ -121,7 +121,7 @@ public class SQLUserDAO implements UserDAO {
      * @throws Exception
      */
     private void createConnection() throws Exception {
-        this.connection = DriverManager.getConnection(dbUrl);
+        this.conn = DriverManager.getConnection(dbUrl);
     }
 
     /**
@@ -129,7 +129,7 @@ public class SQLUserDAO implements UserDAO {
      * @throws Exception
      */
     private void closeConnection() throws Exception {
-        this.connection.close();
-        this.connection = null;
+        this.conn.close();
+        this.conn = null;
     }
 }
