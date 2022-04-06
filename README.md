@@ -19,3 +19,4 @@ Asenna [Gradle](https://gradle.org/) käyttöjärjestelmällesi sopivalla tavall
 
 ### Testikattavuus
 ![](project/docs/jacoco.png)
+
