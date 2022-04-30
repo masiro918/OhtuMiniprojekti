@@ -59,26 +59,26 @@ public class ReadingRecommendationService {
      */
     public boolean createRecommendation(HashMap<String, String> info) {
         String type = info.get("type");
-        ReadingRecommendation r = null;
+        ReadingRecommendation recommendation = null;
         if (type.equals("blog")) {
             if (!checkBlogInfo(info)) {
                 return false;
             }
-            r = this.creator.createNewBlog(info);
+            recommendation = this.creator.createNewBlog(info);
         } else if (type.equals("book")) {
             if (!checkBookInfo(info)) {
                 return false;
             }
-            r = this.creator.createNewBook(info);
+            recommendation = this.creator.createNewBook(info);
         } else if (type.equals("podcast")) {
             if (!checkPodcastInfo(info)) {
                 return false;
             }
-            r = this.creator.createNewPodcast(info);
+            recommendation = this.creator.createNewPodcast(info);
         }
 
         try {
-            this.recommendationDb.add(r);
+            this.recommendationDb.add(recommendation);
             return true;
         } catch (Exception e) {
             return false;
